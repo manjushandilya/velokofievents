@@ -1,0 +1,983 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Hungry Velos</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                <!-- Topbar Navbar -->
+                <ul class="navbar-nav ml-auto">
+                    <div class="topbar-divider d-none d-sm-block"></div>
+
+                    <!-- Nav Item - User Information -->
+                    <li class="nav-item dropdown no-arrow">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small"
+                                  th:text="${leaderBoard.athleteProfile.firstname + ' ' + leaderBoard.athleteProfile.lastname}"/>
+                            <img class="img-profile rounded-circle" th:src="${leaderBoard.athleteProfile.profile_medium}"/>
+                        </a>
+                    </li>
+                </ul>
+
+            </nav>
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <h1 class="h3 mb-2 text-gray-800">Hungry Velos Challenge Q1 2021</h1>
+                <p class="mb-4">
+                    Hungry Velos is a month long challenge to encourage the cyclist in you!
+                    Here's the story so far:
+                </p>
+
+                <!-- Content Row -->
+                <div class="row">
+
+                    <div class="col-xl-2 col-md-6 mb-4">
+                        <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            Distance
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800"
+                                             th:text="${leaderBoard.totalDistance} + ' kms'"/>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-bicycle fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-2 col-md-6 mb-4">
+                        <div class="card border-left-success shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                            Elevation Gain
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800"
+                                             th:text="${leaderBoard.totalElevation} + ' mts'"/>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-rocket fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-2 col-md-6 mb-4">
+                        <div class="card border-left-info shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Rides
+                                        </div>
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col">
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800"
+                                                     th:text="${leaderBoard.totalRides}"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-calculator fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-2 col-md-6 mb-4">
+                        <div class="card border-left-warning shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                            Moving Time
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800"
+                                             th:text="${leaderBoard.movingTimeInHumanReadableFormat}"/>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-cogs fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-2 col-md-6 mb-4">
+                        <div class="card border-left-danger shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                            Rider Average
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800"
+                                             th:text="${leaderBoard.riderAverage + ' kms'}"/>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-user fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-2 col-md-6 mb-4">
+                        <div class="card border-left-secondary shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-gray text-uppercase mb-1">
+                                            Riders
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800"
+                                             th:text="${leaderBoard.riderCount}"/>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-users fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Row -->
+                <div class="row">
+
+                    <div class="col-lg-4 mb-4">
+
+                        <!-- Pie Chart -->
+                        <div>
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Team Distance</h6>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="chart-pie pt-4 pb-2">
+                                        <canvas id="teamDistanceChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 mb-4">
+
+                        <!-- Pie Chart -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Team Elevation</h6>
+                            </div>
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <div class="chart-pie pt-4 pb-2">
+                                    <canvas id="teamElevationChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 mb-4">
+
+                        <!-- Pie Chart -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Team Rides</h6>
+                            </div>
+
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <div class="chart-pie pt-4 pb-2">
+                                    <canvas id="teamRidesChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Row -->
+                <div class="row">
+
+                    <div class="col-lg-4 mb-4">
+
+                        <!-- Bar Chart -->
+                        <div>
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Team Average Distance</h6>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="chart-pie pt-4 pb-2">
+                                        <canvas id="teamAvgDistanceChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 mb-4">
+
+                        <!-- Bar Chart -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Team Average Elevation</h6>
+                            </div>
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <div class="chart-pie pt-4 pb-2">
+                                    <canvas id="teamAvgElevationChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 mb-4">
+
+                        <!-- Bar Chart -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Team Average Rides</h6>
+                            </div>
+
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <div class="chart-pie pt-4 pb-2">
+                                    <canvas id="teamAvgRidesChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Row - Ms Alemaari and Mr Alemaari -->
+                <div class="row">
+
+                    <!-- Area Chart -->
+                    <div class="col-xl-6 col-lg-7">
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Dropdown -->
+                            <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">Ms. Alemaari</h6>
+                            </div>
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <div class="chart-area">
+                                    <canvas id="msAlemaariChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Area Chart -->
+                    <div class="col-xl-6 col-lg-7">
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Dropdown -->
+                            <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">Mr. Alemaari</h6>
+                            </div>
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <div class="chart-area">
+                                    <canvas id="mrAlemaariChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Row - Bettappa, Bettamma -->
+                <div class="row">
+
+                    <!-- Area Chart -->
+                    <div class="col-xl-6 col-lg-7">
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Dropdown -->
+                            <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">Bettamma</h6>
+                            </div>
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <div class="chart-area">
+                                    <canvas id="bettammaChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Area Chart -->
+                    <div class="col-xl-6 col-lg-7">
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Dropdown -->
+                            <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">Bettappa</h6>
+                            </div>
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <div class="chart-area">
+                                    <canvas id="bettappaChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Row - Minchina Otamma and Michina Otappa -->
+                <div class="row">
+
+                    <!-- Area Chart -->
+                    <div class="col-xl-6 col-lg-7">
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Dropdown -->
+                            <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">Minchina Ota - Female</h6>
+                            </div>
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <div class="chart-area">
+                                    <canvas id="minchinaOtammaChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Area Chart -->
+                    <div class="col-xl-6 col-lg-7">
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Dropdown -->
+                            <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">Minchina Ota - Male</h6>
+                            </div>
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <div class="chart-area">
+                                    <canvas id="minchinaOtappaChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Row - Ms Thulimaga and Mr Thulimaga -->
+                <div class="row">
+
+                    <!-- Area Chart -->
+                    <div class="col-xl-6 col-lg-7">
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Dropdown -->
+                            <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">Thulimaga - Female</h6>
+                            </div>
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <div class="chart-area">
+                                    <canvas id="msThuliMagaChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Area Chart -->
+                    <div class="col-xl-6 col-lg-7">
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Dropdown -->
+                            <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">Thulimaga - Male</h6>
+                            </div>
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <div class="chart-area">
+                                    <canvas id="mrThuliMagaChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xl-6 col-lg-7">
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Dropdown -->
+                            <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">Individual Summary</h6>
+                            </div>
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                        <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Distance</th>
+                                            <th>Elevation</th>
+                                            <th>Average Speed</th>
+                                            <th>Rides</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="athleteSummary : ${leaderBoard.athleteSummaries}">
+                                                <td>
+                                                    <img width="30" height="25"
+                                                         th:src="${athleteSummary.gender == 'M' ? 'img/undraw_profile.svg' : 'img/undraw_profile_1.svg'}"/>
+                                                    <span th:text="${athleteSummary.name}">Name</span>
+                                                    <img width="30" height="25"
+                                                         th:if="${athleteSummary.captain}" src="img/captain.svg"/>
+                                                </td>
+                                                <td><span th:text="${athleteSummary.distance}">Distance</span></td>
+                                                <td><span th:text="${athleteSummary.elevation}">Elevation</span></td>
+                                                <td><span th:text="${athleteSummary.avgSpeed}">Average Speed</span></td>
+                                                <td><span th:text="${athleteSummary.rides}">Rides</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright &copy; velokofi 2021</span>
+                </div>
+            </div>
+        </footer>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Bootstrap core JavaScript-->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="js/sb-admin-2.min.js"></script>
+
+<script src="vendor/chart.js/Chart.min.js"></script>
+
+<script th:inline="javascript">
+    random_rgba = function() {
+        var num = Math.round(0xffffff * Math.random());
+        var r = num >> 16;
+        var g = num >> 8 & 255;
+        var b = num & 255;
+        return 'rgb(' + r + ', ' + g + ', ' + b + ')';
+    }
+
+    var teamDistanceChartConfig = {
+        type: 'pie',
+        data: {
+            datasets: [{
+                data: [
+                    /*[# th:each="team, iterStat: ${leaderBoard.teamDistanceMap}"]*/
+	                    [(${team.value})][(${iterStat.last ? '' : ','})]
+                    /*[/]*/
+                ],
+                backgroundColor: [
+                    /*[# th:each="team, iterStat: ${leaderBoard.teamDistanceMap}"]*/
+                        random_rgba(),
+                    /*[/]*/
+                ],
+                label: 'Distance'
+            }],
+            labels: [
+                /*[# th:each="team, iterStat: ${leaderBoard.teamDistanceMap}"]*/
+	                "[(${team.key})]"[(${iterStat.last ? '' : ','})]
+                /*[/]*/
+            ]
+        },
+        options: {
+            maintainAspectRatio: false,
+            responsive: true,
+        }
+    };
+
+    var teamElevationChartConfig = {
+        type: 'pie',
+        data: {
+            datasets: [{
+                data: [
+                    /*[# th:each="team, iterStat: ${leaderBoard.teamElevationMap}"]*/
+	                    [(${team.value})][(${iterStat.last ? '' : ','})]
+                    /*[/]*/
+                ],
+                backgroundColor: [
+                    /*[# th:each="team, iterStat: ${leaderBoard.teamElevationMap}"]*/
+                        random_rgba(),
+                    /*[/]*/
+                ],
+                label: 'Elevation'
+            }],
+            labels: [
+                /*[# th:each="team, iterStat: ${leaderBoard.teamElevationMap}"]*/
+	                "[(${team.key})]"[(${iterStat.last ? '' : ','})]
+                /*[/]*/
+            ]
+        },
+        options: {
+            maintainAspectRatio: false,
+            responsive: true,
+        }
+    };
+
+    var teamRideCountChartConfig = {
+        type: 'pie',
+        data: {
+            datasets: [{
+                data: [
+                    /*[# th:each="team, iterStat: ${leaderBoard.teamRidesMap}"]*/
+	                    [(${team.value})][(${iterStat.last ? '' : ','})]
+                    /*[/]*/
+                ],
+                backgroundColor: [
+                    /*[# th:each="team, iterStat: ${leaderBoard.teamRidesMap}"]*/
+                        random_rgba(),
+                    /*[/]*/
+                ],
+                label: 'Elevation'
+            }],
+            labels: [
+                /*[# th:each="team, iterStat: ${leaderBoard.teamRidesMap}"]*/
+	                "[(${team.key})]"[(${iterStat.last ? '' : ','})]
+                /*[/]*/
+            ]
+        },
+        options: {
+            maintainAspectRatio: false,
+            responsive: true,
+        }
+    };
+
+    var teamAvgDistanceConfig = {
+        labels: [
+            /*[# th:each="team, iterStat: ${leaderBoard.teamAvgDistanceMap}"]*/
+               "[(${team.key})]"[(${iterStat.last ? '' : ','})]
+            /*[/]*/
+        ],
+        datasets: [{
+            data: [
+                /*[# th:each="team, iterStat: ${leaderBoard.teamAvgDistanceMap}"]*/
+                    [(${team.value})][(${iterStat.last ? '' : ','})]
+                /*[/]*/
+            ],
+            backgroundColor: [
+                /*[# th:each="team, iterStat: ${leaderBoard.teamAvgDistanceMap}"]*/
+                    random_rgba(),
+                /*[/]*/
+            ],
+        }]
+    };
+
+    var teamAvgElevationConfig = {
+        labels: [
+            /*[# th:each="team, iterStat: ${leaderBoard.teamAvgElevationMap}"]*/
+               "[(${team.key})]"[(${iterStat.last ? '' : ','})]
+            /*[/]*/
+        ],
+        datasets: [{
+            data: [
+                /*[# th:each="team, iterStat: ${leaderBoard.teamAvgElevationMap}"]*/
+                    [(${team.value})][(${iterStat.last ? '' : ','})]
+                /*[/]*/
+            ],
+            backgroundColor: [
+                /*[# th:each="team, iterStat: ${leaderBoard.teamAvgElevationMap}"]*/
+                    random_rgba(),
+                /*[/]*/
+            ],
+        }]
+    };
+
+    var teamAvgRidesConfig = {
+        labels: [
+            /*[# th:each="team, iterStat: ${leaderBoard.teamAvgRidesMap}"]*/
+               "[(${team.key})]"[(${iterStat.last ? '' : ','})]
+            /*[/]*/
+        ],
+        datasets: [{
+            data: [
+                /*[# th:each="team, iterStat: ${leaderBoard.teamAvgRidesMap}"]*/
+                    [(${team.value})][(${iterStat.last ? '' : ','})]
+                /*[/]*/
+            ],
+            backgroundColor: [
+                /*[# th:each="team, iterStat: ${leaderBoard.teamAvgRidesMap}"]*/
+                    random_rgba(),
+                /*[/]*/
+            ],
+        }]
+    };
+
+    var msAlemaariChartConfig = {
+        labels: [
+            /*[# th:each="alemaari, iterStat: ${leaderBoard.msAlemaari}"]*/
+                "[(${alemaari.key})]",
+            /*[/]*/
+        ],
+        datasets: [{
+            label: 'Distance',
+            borderColor: random_rgba(),
+            fill: false,
+            data: [
+                /*[# th:each="alemaari, iterStat: ${leaderBoard.msAlemaari}"]*/
+                    [(${alemaari.value})],
+                /*[/]*/
+            ]
+        }]
+    };
+
+    var mrAlemaariChartConfig = {
+        labels: [
+            /*[# th:each="alemaari, iterStat: ${leaderBoard.mrAlemaari}"]*/
+                "[(${alemaari.key})]",
+            /*[/]*/
+        ],
+        datasets: [{
+            label: 'Distance',
+            borderColor: random_rgba(),
+            fill: false,
+            data: [
+                /*[# th:each="alemaari, iterStat: ${leaderBoard.mrAlemaari}"]*/
+                    [(${alemaari.value})],
+                /*[/]*/
+            ]
+        }]
+    };
+
+    var bettammaChartConfig = {
+        labels: [
+            /*[# th:each="amma, iterStat: ${leaderBoard.bettamma}"]*/
+                "[(${amma.key})]",
+            /*[/]*/
+        ],
+        datasets: [{
+            label: 'Elevation Gain',
+            borderColor: random_rgba(),
+            fill: false,
+            data: [
+                /*[# th:each="amma, iterStat: ${leaderBoard.bettamma}"]*/
+                    [(${amma.value})],
+                /*[/]*/
+            ]
+        }]
+    };
+
+    var bettappaChartConfig = {
+        labels: [
+            /*[# th:each="appa, iterStat: ${leaderBoard.bettappa}"]*/
+                "[(${appa.key})]",
+            /*[/]*/
+        ],
+        datasets: [{
+            label: 'Elevation Gain',
+            borderColor: random_rgba(),
+            fill: false,
+            data: [
+                /*[# th:each="bettappa, iterStat: ${leaderBoard.bettappa}"]*/
+                    [(${bettappa.value})],
+                /*[/]*/
+            ]
+        }]
+    };
+
+    var minchinaOtammaChartConfig = {
+        labels: [
+            /*[# th:each="motamma, iterStat: ${leaderBoard.minchinaOtamma}"]*/
+                "[(${motamma.key})]",
+            /*[/]*/
+        ],
+        datasets: [{
+            label: 'Average Speed',
+            borderColor: random_rgba(),
+            fill: false,
+            data: [
+                /*[# th:each="motamma, iterStat: ${leaderBoard.minchinaOtamma}"]*/
+                    [(${motamma.value})],
+                /*[/]*/
+            ]
+        }]
+    };
+
+    var minchinaOtappaChartConfig = {
+        labels: [
+            /*[# th:each="motappa, iterStat: ${leaderBoard.minchinaOtappa}"]*/
+                "[(${motappa.key})]",
+            /*[/]*/
+        ],
+        datasets: [{
+            label: 'Average Speed',
+            borderColor: random_rgba(),
+            fill: false,
+            data: [
+                /*[# th:each="motappa, iterStat: ${leaderBoard.minchinaOtappa}"]*/
+                    [(${motappa.value})],
+                /*[/]*/
+            ]
+        }]
+    };
+
+    var msThuliMagaChartConfig = {
+        labels: [
+            /*[# th:each="thuliMaga, iterStat: ${leaderBoard.msThuliMaga}"]*/
+                "[(${thuliMaga.key})]",
+            /*[/]*/
+        ],
+        datasets: [{
+            label: 'Rides',
+            borderColor: random_rgba(),
+            fill: false,
+            data: [
+                /*[# th:each="thuliMaga, iterStat: ${leaderBoard.msThuliMaga}"]*/
+                    [(${thuliMaga.value})],
+                /*[/]*/
+            ]
+        }]
+    };
+
+    var mrThuliMagaChartConfig = {
+        labels: [
+            /*[# th:each="thuliMaga, iterStat: ${leaderBoard.mrThuliMaga}"]*/
+                "[(${thuliMaga.key})]",
+            /*[/]*/
+        ],
+        datasets: [{
+            label: 'Rides',
+            borderColor: random_rgba(),
+            fill: false,
+            data: [
+                /*[# th:each="thuliMaga, iterStat: ${leaderBoard.mrThuliMaga}"]*/
+                    [(${thuliMaga.value})],
+                /*[/]*/
+            ]
+        }]
+    };
+
+    window.onload = function() {
+        var ctx1 = document.getElementById('teamElevationChart').getContext('2d');
+        window.myPie = new Chart(ctx1, teamElevationChartConfig);
+
+        var ctx2 = document.getElementById('teamDistanceChart').getContext('2d');
+        window.myPie = new Chart(ctx2, teamDistanceChartConfig);
+
+        var ctx3 = document.getElementById('teamRidesChart').getContext('2d');
+        window.myPie = new Chart(ctx3, teamRideCountChartConfig);
+
+        var ctx4 = document.getElementById('teamAvgDistanceChart').getContext('2d');
+        window.myBar = new Chart(ctx4, {
+            type: 'bar',
+            data: teamAvgDistanceConfig,
+            options: {
+                maintainAspectRatio: false,
+                responsive: true,
+                legend: {
+                    display: false,
+                },
+                title: {
+                    display: true,
+                    text: 'Average Distance Per Rider (km)'
+                }
+            }
+        });
+
+        var ctx5 = document.getElementById('teamAvgElevationChart').getContext('2d');
+        window.myBar = new Chart(ctx5, {
+            type: 'bar',
+            data: teamAvgElevationConfig,
+            options: {
+                maintainAspectRatio: false,
+                responsive: true,
+                legend: {
+                    display: false,
+                },
+                title: {
+                    display: true,
+                    text: 'Average Elevation Per Rider (mts)'
+                }
+            }
+        });
+
+        var ctx6 = document.getElementById('teamAvgRidesChart').getContext('2d');
+        window.myBar = new Chart(ctx6, {
+            type: 'bar',
+            data: teamAvgRidesConfig,
+            options: {
+                maintainAspectRatio: false,
+                responsive: true,
+                legend: {
+                    display: false,
+                },
+                title: {
+                    display: true,
+                    text: 'Average Rides Per Rider'
+                }
+            }
+        });
+
+        var ctx7 = document.getElementById('msAlemaariChart').getContext('2d');
+        window.myLine = Chart.Line(ctx7, {
+            data: msAlemaariChartConfig,
+            options: {
+                maintainAspectRatio: false,
+                responsive: true,
+                hoverMode: 'index',
+                stacked: false
+            }
+        });
+
+        var ctx8 = document.getElementById('mrAlemaariChart').getContext('2d');
+        window.myLine = Chart.Line(ctx8, {
+            data: mrAlemaariChartConfig,
+            options: {
+                maintainAspectRatio: false,
+                responsive: true,
+                hoverMode: 'index',
+                stacked: false
+            }
+        });
+
+        var ctx9 = document.getElementById('bettammaChart').getContext('2d');
+        window.myLine = Chart.Line(ctx9, {
+            data: bettammaChartConfig,
+            options: {
+                maintainAspectRatio: false,
+                responsive: true,
+                hoverMode: 'index',
+                stacked: false
+            }
+        });
+
+        var ctx10 = document.getElementById('bettappaChart').getContext('2d');
+        window.myLine = Chart.Line(ctx10, {
+            data: bettappaChartConfig,
+            options: {
+                maintainAspectRatio: false,
+                responsive: true,
+                hoverMode: 'index',
+                stacked: false
+            }
+        });
+
+        var ctx11 = document.getElementById('minchinaOtammaChart').getContext('2d');
+        window.myLine = Chart.Line(ctx11, {
+            data: minchinaOtammaChartConfig,
+            options: {
+                maintainAspectRatio: false,
+                responsive: true,
+                hoverMode: 'index',
+                stacked: false
+            }
+        });
+
+        var ctx12 = document.getElementById('minchinaOtappaChart').getContext('2d');
+        window.myLine = Chart.Line(ctx12, {
+            data: minchinaOtappaChartConfig,
+            options: {
+                maintainAspectRatio: false,
+                responsive: true,
+                hoverMode: 'index',
+                stacked: false
+            }
+        });
+
+        var ctx13 = document.getElementById('msThuliMagaChart').getContext('2d');
+        window.myLine = Chart.Line(ctx13, {
+            data: msThuliMagaChartConfig,
+            options: {
+                maintainAspectRatio: false,
+                responsive: true,
+                hoverMode: 'index',
+                stacked: false
+            }
+        });
+
+        var ctx14 = document.getElementById('mrThuliMagaChart').getContext('2d');
+        window.myLine = Chart.Line(ctx14, {
+            data: mrThuliMagaChartConfig,
+            options: {
+                maintainAspectRatio: false,
+                responsive: true,
+                hoverMode: 'index',
+                stacked: false
+            }
+        });
+    };
+</script>
+
+</body>
+
+</html>
