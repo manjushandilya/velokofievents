@@ -31,10 +31,12 @@ public class ActivityCountTest {
         final List<AthleteActivity> allActivities = new ArrayList<>();
         final Path activitiesDir = Paths.get("src","test", "resources", "activities");
         final File[] files = activitiesDir.toFile().listFiles();
-        for (final File file: files) {
-            final byte[] bytes = Files.readAllBytes(file.toPath());
-            final AthleteActivity[] activities = mapper.readValue(bytes, AthleteActivity[].class);
-            allActivities.addAll(Arrays.asList(activities));
+        if (files != null) {
+            for (final File file : files) {
+                final byte[] bytes = Files.readAllBytes(file.toPath());
+                final AthleteActivity[] activities = mapper.readValue(bytes, AthleteActivity[].class);
+                allActivities.addAll(Arrays.asList(activities));
+            }
         }
 
         System.out.println("allActivities.size(): " + allActivities.size());
