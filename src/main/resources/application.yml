@@ -19,7 +19,8 @@ spring:
             client-secret: c82e3a33a6370664bc5cc688082e041561226a76
             client-authentication-method: POST
             authorization-grant-type: authorization_code
-            redirect-uri: http://31.170.165.24:8080/login/oauth2/code/
+            #redirect-uri: http://31.170.165.24:8080/login/oauth2/code/
+            redirect-uri: http://localhost:8080/login/oauth2/code/
             scope:
               - activity:read,profile:read_all
         provider:
