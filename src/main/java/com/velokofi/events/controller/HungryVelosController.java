@@ -2,6 +2,7 @@ package com.velokofi.events.controller;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.velokofi.events.Application;
 import com.velokofi.events.model.AthleteActivity;
 import com.velokofi.events.model.AthleteProfile;
 import com.velokofi.events.model.AthleteSummary;
@@ -12,12 +13,10 @@ import com.velokofi.events.model.hungryvelos.TeamMember;
 import com.velokofi.events.persistence.AthleteActivityRepository;
 import com.velokofi.events.persistence.OAuthorizedClientRepository;
 import com.velokofi.events.persistence.TeamsRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,34 +26,18 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.velokofi.events.util.Formatter.humanReadableFormat;
-import static com.velokofi.events.util.NumberCruncher.averagingAggregateDouble;
-import static com.velokofi.events.util.NumberCruncher.getAthleteAggregate;
-import static com.velokofi.events.util.NumberCruncher.getAthleteAggregateDouble;
-import static com.velokofi.events.util.NumberCruncher.getNameFromId;
-import static com.velokofi.events.util.NumberCruncher.getTeamMemberCount;
-import static com.velokofi.events.util.NumberCruncher.round;
-import static com.velokofi.events.util.NumberCruncher.summingAggregateDouble;
-import static com.velokofi.events.util.NumberCruncher.summingAggregateLong;
-import static java.util.stream.Collectors.averagingDouble;
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.summingDouble;
-import static java.util.stream.Collectors.summingInt;
-import static java.util.stream.Collectors.summingLong;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
+import static com.velokofi.events.util.NumberCruncher.*;
+import static java.util.stream.Collectors.*;
 
 @RestController
 public final class HungryVelosController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DocumentController.class);
 
     private final RestTemplate restTemplate;
 
@@ -71,7 +54,7 @@ public final class HungryVelosController {
         this.restTemplate = restTemplate;
     }
 
-    @GetMapping("/hungryvelos")
+    @GetMapping("/")
     public ModelAndView build(@RegisteredOAuth2AuthorizedClient final OAuth2AuthorizedClient client,
                               @RequestParam(required = false, defaultValue = "false") boolean debug) throws Exception {
 
@@ -79,7 +62,7 @@ public final class HungryVelosController {
         final List<TeamMember> teamMembers = teams.stream().flatMap(t -> t.getMembers().stream()).collect(toList());
         final Optional<TeamMember> teamMemberLogin = teamMembers.stream().filter(tm -> String.valueOf(tm.getId()).equals(client.getPrincipalName())).findFirst();
 
-        System.out.println("Team member logged in? " + teamMemberLogin.isPresent() + ", strava id: " + client.getPrincipalName());
+        LOG.debug("Team member logged in? " + teamMemberLogin.isPresent() + ", strava id: " + client.getPrincipalName());
 
         final LeaderBoard leaderBoard = new LeaderBoard();
         final ObjectMapper mapper = new ObjectMapper();
@@ -100,22 +83,23 @@ public final class HungryVelosController {
             authorizedClientRepo.save(OAuthorizedClient);
         }
 
-        if (teamMemberLogin.isPresent() && Boolean.getBoolean("events.fetch.activity.on.login")) {
+        if (teamMemberLogin.isPresent() /*&& Boolean.getBoolean("events.fetch.activity.on.login")*/) {
             for (int page = 1; ; page++) {
                 final StringBuilder url = new StringBuilder();
                 url.append("https://www.strava.com/api/v3/athlete/activities");
                 url.append("?per_page=200");
-                url.append("&after=").append("1609631999"); // Start of 3 Jan 2021
+                url.append("&after=").append(Application.START_TIMESTAMP);
+                url.append("&before=").append(Application.END_TIMESTAMP);
                 url.append("&page=").append(page);
 
                 if (debug) {
-                    System.out.println("Hitting url: " + url);
+                    LOG.debug("Hitting url: " + url);
                 }
 
                 final String activitiesResponse = getResponse(tokenValue, url.toString());
 
                 if (debug) {
-                    System.out.println(activitiesResponse);
+                    LOG.debug(activitiesResponse);
                 }
 
                 final AthleteActivity[] activitiesArray = mapper.readValue(activitiesResponse, AthleteActivity[].class);
@@ -132,8 +116,8 @@ public final class HungryVelosController {
         final List<AthleteActivity> activities = athleteActivityRepo.findAll().stream().filter(
                 a -> ((Long) a.getAthlete().getId()) != null
         ).collect(toList());
-        System.out.println("Fetched " + activities.size() + " activities from db...");
-        //System.out.println("Activities: " + activities);
+        LOG.info("Fetched " + activities.size() + " activities from db...");
+        LOG.debug("Activities: " + activities);
 
         { // event totals
             final Double totalDistance = round(activities.stream().collect(summingDouble(a -> a.getDistance())) / 1000);
@@ -161,25 +145,25 @@ public final class HungryVelosController {
             final Map<Long, Double> athleteDistanceMap = activities.stream().collect(
                     groupingBy(a -> a.getAthlete().getId(), summingDouble(a -> a.getDistance() / 1000))
             );
-            //System.out.println("athleteDistanceMap: " + athleteDistanceMap);
+            LOG.debug("athleteDistanceMap: " + athleteDistanceMap);
 
             // Calculate athlete elevation
             final Map<Long, Double> athleteElevationMap = activities.stream().collect(
                     groupingBy(a -> a.getAthlete().getId(), summingDouble(a -> a.getTotal_elevation_gain()))
             );
-            //System.out.println("athleteElevationMap: " + athleteElevationMap);
+            LOG.debug("athleteElevationMap: " + athleteElevationMap);
 
             // Calculate athlete average speed
             final Map<Long, Double> athleteAvgSpeedMap = activities.stream().collect(
                     groupingBy(a -> a.getAthlete().getId(), averagingDouble(a -> a.getAverage_speed() * 3.6))
             );
-            //System.out.println("athleteAvgSpeedMap: " + athleteAvgSpeedMap);
+            LOG.debug("athleteAvgSpeedMap: " + athleteAvgSpeedMap);
 
             // Calculate athlete ride count
             final Map<Long, Long> athleteRideCountMap = activities.stream().collect(
                     groupingBy(a -> a.getAthlete().getId(), Collectors.counting())
             );
-            //System.out.println("athleteRideCountMap: " + athleteRideCountMap);
+            LOG.debug("athleteRideCountMap: " + athleteRideCountMap);
 
             final List<AthleteSummary> athleteSummaries = new ArrayList<>();
             for (final TeamMember tm : teamMembers) {
@@ -205,7 +189,7 @@ public final class HungryVelosController {
             final Map<String, Double> teamDistanceMap = teams.stream().collect(
                     groupingBy(t -> t.getName(), summingDouble(t -> getAthleteAggregateDouble(t, athleteDistanceMap)))
             );
-            //System.out.println("teamDistanceMap: " + teamDistanceMap);
+            LOG.debug("teamDistanceMap: " + teamDistanceMap);
             leaderBoard.setTeamDistanceMap(teamDistanceMap);
 
             // Calculate team average distance
@@ -214,14 +198,14 @@ public final class HungryVelosController {
                             e -> e.getKey(), e -> e.getValue() / getTeamMemberCount(e.getKey(), teams)
                     )
             );
-            //System.out.println("teamAvgDistanceMap: " + teamAvgDistanceMap);
+            LOG.debug("teamAvgDistanceMap: " + teamAvgDistanceMap);
             leaderBoard.setTeamAvgDistanceMap(teamAvgDistanceMap);
 
             // Calculate team elevation
             final Map<String, Double> teamElevationMap = teams.stream().collect(
                     groupingBy(t -> t.getName(), summingDouble(t -> getAthleteAggregateDouble(t, athleteElevationMap)))
             );
-            //System.out.println("teamElevationMap: " + teamElevationMap);
+            LOG.debug("teamElevationMap: " + teamElevationMap);
             leaderBoard.setTeamElevationMap(teamElevationMap);
 
             // Calculate team average elevation
@@ -230,14 +214,14 @@ public final class HungryVelosController {
                             e -> e.getKey(), e -> e.getValue() / getTeamMemberCount(e.getKey(), teams)
                     )
             );
-            //System.out.println("teamAvgElevationMap: " + teamAvgElevationMap);
+            LOG.debug("teamAvgElevationMap: " + teamAvgElevationMap);
             leaderBoard.setTeamAvgElevationMap(teamAvgElevationMap);
 
             // Calculate team ride count
             final Map<String, Double> teamRideCountMap = teams.stream().collect(
                     groupingBy(t -> t.getName(), summingDouble(t -> getAthleteAggregate(t, athleteRideCountMap)))
             );
-            //System.out.println("teamRideCountMap: " + teamRideCountMap);
+            LOG.debug("teamRideCountMap: " + teamRideCountMap);
             leaderBoard.setTeamRidesMap(teamRideCountMap);
 
             // Calculate team average ride count
@@ -246,7 +230,7 @@ public final class HungryVelosController {
                             e -> e.getKey(), e -> round(e.getValue() / getTeamMemberCount(e.getKey(), teams))
                     )
             );
-            //System.out.println("teamAvgRidesMap: " + teamAvgRidesMap);
+            LOG.debug("teamAvgRidesMap: " + teamAvgRidesMap);
             leaderBoard.setTeamAvgRidesMap(teamAvgRidesMap);
         }
 
@@ -262,7 +246,7 @@ public final class HungryVelosController {
         leaderBoard.setMrThuliMaga(summingAggregateLong(activities, teamMembers, "M"));
         leaderBoard.setMsThuliMaga(summingAggregateLong(activities, teamMembers, "F"));
 
-        final ModelAndView mav = new ModelAndView("hungryVelos");
+        final ModelAndView mav = new ModelAndView("index");
         mav.addObject("leaderBoard", leaderBoard);
         mav.addObject("principalName", client.getPrincipalName());
         return mav;

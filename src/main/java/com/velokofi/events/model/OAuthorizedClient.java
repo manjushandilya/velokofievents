@@ -1,5 +1,9 @@
 package com.velokofi.events.model;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
@@ -11,6 +15,10 @@ import java.io.ObjectOutputStream;
 import java.util.Objects;
 
 @Document
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 public class OAuthorizedClient {
 
     @Id
@@ -39,22 +47,6 @@ public class OAuthorizedClient {
         } catch (final Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public String getPrincipalName() {
-        return principalName;
-    }
-
-    public void setPrincipalName(String principalName) {
-        this.principalName = principalName;
-    }
-
-    public byte[] getBytes() {
-        return bytes;
-    }
-
-    public void setBytes(byte[] bytes) {
-        this.bytes = bytes;
     }
 
     @Override

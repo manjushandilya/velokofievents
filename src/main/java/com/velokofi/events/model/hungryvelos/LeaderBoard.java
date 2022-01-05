@@ -2,11 +2,19 @@ package com.velokofi.events.model.hungryvelos;
 
 import com.velokofi.events.model.AthleteProfile;
 import com.velokofi.events.model.AthleteSummary;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 public class LeaderBoard {
 
     // event totals
@@ -46,203 +54,4 @@ public class LeaderBoard {
 
     private AthleteProfile athleteProfile;
 
-    public Double getTotalDistance() {
-        return totalDistance;
-    }
-
-    public void setTotalDistance(Double totalDistance) {
-        this.totalDistance = totalDistance;
-    }
-
-    public Double getTotalElevation() {
-        return totalElevation;
-    }
-
-    public void setTotalElevation(Double totalElevation) {
-        this.totalElevation = totalElevation;
-    }
-
-    public int getTotalRides() {
-        return totalRides;
-    }
-
-    public void setTotalRides(int totalRides) {
-        this.totalRides = totalRides;
-    }
-
-    public long getMovingTime() {
-        return movingTime;
-    }
-
-    public void setMovingTime(long movingTime) {
-        this.movingTime = movingTime;
-    }
-
-    public Double getRiderAverage() {
-        return riderAverage;
-    }
-
-    public void setRiderAverage(Double riderAverage) {
-        this.riderAverage = riderAverage;
-    }
-
-    public int getRiderCount() {
-        return riderCount;
-    }
-
-    public void setRiderCount(int riderCount) {
-        this.riderCount = riderCount;
-    }
-
-    public String getMovingTimeInHumanReadableFormat() {
-        return movingTimeInHumanReadableFormat;
-    }
-
-    public void setMovingTimeInHumanReadableFormat(String movingTimeInHumanReadableFormat) {
-        this.movingTimeInHumanReadableFormat = movingTimeInHumanReadableFormat;
-    }
-
-    public Map<String, Double> getTeamDistanceMap() {
-        return teamDistanceMap;
-    }
-
-    public void setTeamDistanceMap(Map<String, Double> teamDistanceMap) {
-        this.teamDistanceMap = teamDistanceMap;
-    }
-
-    public Map<String, Double> getTeamElevationMap() {
-        return teamElevationMap;
-    }
-
-    public void setTeamElevationMap(Map<String, Double> teamElevationMap) {
-        this.teamElevationMap = teamElevationMap;
-    }
-
-    public Map<String, Double> getTeamRidesMap() {
-        return teamRidesMap;
-    }
-
-    public void setTeamRidesMap(Map<String, Double> teamRidesMap) {
-        this.teamRidesMap = teamRidesMap;
-    }
-
-    public Map<String, Double> getTeamSpeedMap() {
-        return teamSpeedMap;
-    }
-
-    public void setTeamSpeedMap(Map<String, Double> teamSpeedMap) {
-        this.teamSpeedMap = teamSpeedMap;
-    }
-
-    public Map<String, Double> getTeamAvgDistanceMap() {
-        return teamAvgDistanceMap;
-    }
-
-    public void setTeamAvgDistanceMap(Map<String, Double> teamAvgDistanceMap) {
-        this.teamAvgDistanceMap = teamAvgDistanceMap;
-    }
-
-    public Map<String, Double> getTeamAvgElevationMap() {
-        return teamAvgElevationMap;
-    }
-
-    public void setTeamAvgElevationMap(Map<String, Double> teamAvgElevationMap) {
-        this.teamAvgElevationMap = teamAvgElevationMap;
-    }
-
-    public Map<String, Double> getTeamAvgRidesMap() {
-        return teamAvgRidesMap;
-    }
-
-    public void setTeamAvgRidesMap(Map<String, Double> teamAvgRidesMap) {
-        this.teamAvgRidesMap = teamAvgRidesMap;
-    }
-
-    public Map<String, Double> getTeamAvgSpeedMap() {
-        return teamAvgSpeedMap;
-    }
-
-    public void setTeamAvgSpeedMap(Map<String, Double> teamAvgSpeedMap) {
-        this.teamAvgSpeedMap = teamAvgSpeedMap;
-    }
-
-    public List<Entry<String, Double>> getBettappa() {
-        return bettappa;
-    }
-
-    public void setBettappa(List<Entry<String, Double>> bettappa) {
-        this.bettappa = bettappa;
-    }
-
-    public List<Entry<String, Double>> getBettamma() {
-        return bettamma;
-    }
-
-    public void setBettamma(List<Entry<String, Double>> bettamma) {
-        this.bettamma = bettamma;
-    }
-
-    public List<Entry<String, Double>> getMrAlemaari() {
-        return mrAlemaari;
-    }
-
-    public void setMrAlemaari(List<Entry<String, Double>> mrAlemaari) {
-        this.mrAlemaari = mrAlemaari;
-    }
-
-    public List<Entry<String, Double>> getMsAlemaari() {
-        return msAlemaari;
-    }
-
-    public void setMsAlemaari(List<Entry<String, Double>> msAlemaari) {
-        this.msAlemaari = msAlemaari;
-    }
-
-    public List<Entry<String, Double>> getMinchinaOtappa() {
-        return minchinaOtappa;
-    }
-
-    public void setMinchinaOtappa(List<Entry<String, Double>> minchinaOtappa) {
-        this.minchinaOtappa = minchinaOtappa;
-    }
-
-    public List<Entry<String, Double>> getMinchinaOtamma() {
-        return minchinaOtamma;
-    }
-
-    public void setMinchinaOtamma(List<Entry<String, Double>> minchinaOtamma) {
-        this.minchinaOtamma = minchinaOtamma;
-    }
-
-    public List<Entry<String, Long>> getMrThuliMaga() {
-        return mrThuliMaga;
-    }
-
-    public void setMrThuliMaga(List<Entry<String, Long>> mrThuliMaga) {
-        this.mrThuliMaga = mrThuliMaga;
-    }
-
-    public List<Entry<String, Long>> getMsThuliMaga() {
-        return msThuliMaga;
-    }
-
-    public void setMsThuliMaga(List<Entry<String, Long>> msThuliMaga) {
-        this.msThuliMaga = msThuliMaga;
-    }
-
-    public AthleteProfile getAthleteProfile() {
-        return athleteProfile;
-    }
-
-    public void setAthleteProfile(AthleteProfile athleteProfile) {
-        this.athleteProfile = athleteProfile;
-    }
-
-    public List<AthleteSummary> getAthleteSummaries() {
-        return athleteSummaries;
-    }
-
-    public void setAthleteSummaries(List<AthleteSummary> athleteSummaries) {
-        this.athleteSummaries = athleteSummaries;
-    }
 }

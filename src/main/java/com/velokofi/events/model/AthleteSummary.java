@@ -1,5 +1,14 @@
 package com.velokofi.events.model;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 public class AthleteSummary {
 
     private long id;
@@ -17,68 +26,4 @@ public class AthleteSummary {
     private String gender;
 
     private long rides;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public double getDistance() {
-        return distance;
-    }
-
-    public void setDistance(double distance) {
-        this.distance = distance;
-    }
-
-    public double getElevation() {
-        return elevation;
-    }
-
-    public void setElevation(double elevation) {
-        this.elevation = elevation;
-    }
-
-    public double getAvgSpeed() {
-        return avgSpeed;
-    }
-
-    public void setAvgSpeed(double avgSpeed) {
-        this.avgSpeed = avgSpeed;
-    }
-
-    public boolean isCaptain() {
-        return captain;
-    }
-
-    public void setCaptain(boolean captain) {
-        this.captain = captain;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public long getRides() {
-        return rides;
-    }
-
-    public void setRides(long rides) {
-        this.rides = rides;
-    }
 }

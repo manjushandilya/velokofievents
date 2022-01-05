@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+    <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>VeloKofi - Events</title>
@@ -12,7 +12,7 @@ Teams Rankings
         <th>Team name</th>
         <th>Kilometers</th>
     </tr>
-    <tr th:each="team: ${leaderBoard.teamTotals}">
+    <tr th:each="team: ${leaderBoard.teamDistanceMap}">
         <td th:text="${team.key}"/>
         <td th:text="${team.value}"/>
     </tr>
@@ -42,7 +42,7 @@ Bettamma
     </tr>
 </table>
 
-Mr Alamaari
+Mr Alemaari
 <table border="1">
     <tr>
         <th>Athlete name</th>
@@ -54,7 +54,7 @@ Mr Alamaari
     </tr>
 </table>
 
-Ms Alamaari
+Ms Alemaari
 <table border="1">
     <tr>
         <th>Athlete name</th>

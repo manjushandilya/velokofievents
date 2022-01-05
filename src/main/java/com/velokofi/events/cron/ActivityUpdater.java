@@ -2,6 +2,7 @@ package com.velokofi.events.cron;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.velokofi.events.Application;
 import com.velokofi.events.model.AthleteActivity;
 import com.velokofi.events.model.OAuthorizedClient;
 import com.velokofi.events.model.RefreshTokenRequest;
@@ -9,12 +10,10 @@ import com.velokofi.events.model.RefreshTokenResponse;
 import com.velokofi.events.persistence.AthleteActivityRepository;
 import com.velokofi.events.persistence.OAuthorizedClientRepository;
 import com.velokofi.events.persistence.Saver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
@@ -34,6 +33,8 @@ import static java.util.stream.Collectors.toList;
 @Component
 public final class ActivityUpdater {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ActivityUpdater.class);
+
     @Autowired
     private AthleteActivityRepository athleteActivityRepo;
 
@@ -42,7 +43,7 @@ public final class ActivityUpdater {
 
     @Scheduled(fixedDelay = 60 * 1000 * 60, initialDelay = 60 * 1000 * 5)
     public void run() throws Exception {
-        System.out.println("Running scheduled task at: " + LocalDateTime.now());
+        LOG.info("Running scheduled task at: " + LocalDateTime.now());
 
         final ObjectMapper mapper = new ObjectMapper();
         mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
@@ -52,7 +53,7 @@ public final class ActivityUpdater {
         final List<String> clientIds = clients.stream().map(c -> c.getPrincipalName()).collect(toList());
 
         for (final String clientId : clientIds) {
-            //System.out.println("Fetching activities for client with id: " + clientId);
+            LOG.info("Fetching activities for client with id: " + clientId);
             int pageNumber = 1;
             for (int retries = 0; retries < 10; retries++) {
                 final URI uri = getUri(pageNumber);
@@ -63,33 +64,33 @@ public final class ActivityUpdater {
                 final HttpEntity<String> request = new HttpEntity<String>(headers);
 
                 try {
-                    //System.out.println("Trying to fetch activities with pageNumber: " + pageNumber);
+                    LOG.debug("Trying to fetch activities with pageNumber: " + pageNumber);
                     final ResponseEntity<String> activitiesResponse = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
                     final AthleteActivity[] activitiesArray = mapper.readValue(activitiesResponse.getBody(), AthleteActivity[].class);
                     if (activitiesArray.length > 0) {
-                        //System.out.println("Saving " + activitiesArray.length + " activities to db");
+                        LOG.debug("Saving " + activitiesArray.length + " activities to db");
                         Stream.of(activitiesArray)
-                                .filter(a->a.getType().equalsIgnoreCase("ride"))
+                                .filter(a -> a.getType().equalsIgnoreCase("ride"))
                                 .forEach(activity -> athleteActivityRepo.save(activity));
 
-                        //System.out.println("Saving " + activitiesArray.length + " activities to file");
-                        Saver.persistActivities(clientId,activitiesResponse.getBody());
+                        LOG.debug("Saving " + activitiesArray.length + " activities to file");
+                        Saver.persistActivities(clientId, activitiesResponse.getBody());
                     }
 
                     if (activitiesArray.length < 200) {
-                        //System.out.println("Less than 200 (pageSize) activities found, breaking the loop...");
+                        LOG.debug("Less than 200 (pageSize) activities found, breaking the loop...");
                         break;
                     }
                     pageNumber++;
                 } catch (final Exception e) {
-                    //System.out.println("Request failed with message: " + e.getMessage());
-                    System.out.println("Refreshing auth token, old value: " + getTokenValue(clientId));
+                    LOG.debug("Request failed with message: " + e.getMessage());
+                    LOG.debug("Refreshing auth token, old value: " + getTokenValue(clientId));
 
                     refresh(clientId);
 
-                    //System.out.println("New value: " + getTokenValue(clientId));
+                    LOG.debug("New value: " + getTokenValue(clientId));
                 }
-                //System.out.println("zZzZzZz ing for 5 seconds...");
+                LOG.debug("zZzZzZz ing for 5 seconds...");
                 try {
                     Thread.sleep(5000);
                 } catch (final Exception e) {
@@ -120,12 +121,12 @@ public final class ActivityUpdater {
             requestObj.setRefresh_token(authorizedClient.getRefreshToken().getTokenValue());
             final String body = mapper.writeValueAsString(requestObj);
 
-            //System.out.println("Refresh token request: " + body);
+            LOG.debug("Refresh token request: " + body);
 
             final HttpEntity<String> request = new HttpEntity<String>(body, headers);
 
             final ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-            //System.out.println("Refresh token response: " + response);
+            LOG.debug("Refresh token response: " + response);
 
             final RefreshTokenResponse refreshTokenResponse = mapper.readValue(response.getBody(), RefreshTokenResponse.class);
             oAuthClientRepo.deleteById(authorizedClient.getPrincipalName());
@@ -162,7 +163,7 @@ public final class ActivityUpdater {
         final StringBuilder builder = new StringBuilder();
         builder.append("https://www.strava.com/api/v3/athlete/activities");
         builder.append("?per_page=200");
-        builder.append("&after=").append("1609631999"); // Start of 3 Jan 2021
+        builder.append("&after=").append(Application.START_TIMESTAMP);
         builder.append("&page=").append(pageNumber);
 
         return new URI(builder.toString());

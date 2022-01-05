@@ -43,11 +43,13 @@ public class TeamsRepository implements TeamConstants {
         final List<TeamMember> teamMembers = new ArrayList<>();
         for (final String[] row : allData) {
             final TeamMember teamMember = new TeamMember();
-            teamMember.setId(Long.parseLong(row[0].trim()));
-            teamMember.setName(row[1].trim());
-            teamMember.setGender(row[2].trim());
-            teamMember.setTeamId(Integer.parseInt(row[3].trim()));
-            teamMember.setCaptain(Boolean.parseBoolean(row[4].trim()));
+            int columnIndex = 0;
+            teamMember.setId(Long.parseLong(row[columnIndex++].trim()));
+            teamMember.setName(row[columnIndex++].trim());
+            teamMember.setAlias(row[columnIndex++].trim());
+            teamMember.setGender(row[columnIndex++].trim());
+            teamMember.setTeamId(Integer.parseInt(row[columnIndex++].trim()));
+            teamMember.setCaptain(Boolean.parseBoolean(row[columnIndex++].trim()));
 
             teamMembers.add(teamMember);
         }

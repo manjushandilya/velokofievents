@@ -7,6 +7,8 @@ import com.velokofi.events.model.hungryvelos.Team;
 import com.velokofi.events.persistence.AthleteActivityRepository;
 import com.velokofi.events.persistence.OAuthorizedClientRepository;
 import com.velokofi.events.persistence.TeamsRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +21,8 @@ import static java.util.stream.Collectors.toList;
 
 @RestController
 public class DocumentController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DocumentController.class);
 
     @Autowired
     private TeamsRepository teamsRepository;
@@ -67,11 +71,15 @@ public class DocumentController {
             case "cleanup":
                 final List<Team> teams = teamsRepository.listTeams();
                 final List<Long> configuredClientIds = teams.stream().flatMap(t -> t.getMembers().stream()).map(tm -> tm.getId()).collect(toList());
-                //System.out.println("configuredClientIds: " + configuredClientIds);
+
+                LOG.debug("configuredClientIds: " + configuredClientIds);
+
                 final List<Long> persistedClientIds = authorizedClientRepo.findAll().stream().map(ac -> Long.parseLong(ac.getPrincipalName())).collect(toList());
-                //System.out.println("persistedClientIds: " + persistedClientIds);
-                persistedClientIds.stream().filter(c->!configuredClientIds.contains(c)).forEach(
-                        id->authorizedClientRepo.deleteById(String.valueOf(id))
+
+                LOG.debug("persistedClientIds: " + persistedClientIds);
+
+                persistedClientIds.stream().filter(c -> !configuredClientIds.contains(c)).forEach(
+                        id -> authorizedClientRepo.deleteById(String.valueOf(id))
                 );
         }
         return "";
