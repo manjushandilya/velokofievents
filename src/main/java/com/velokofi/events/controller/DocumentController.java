@@ -55,6 +55,24 @@ public class DocumentController {
         return mapper.writeValueAsString(clients);
     }
 
+    @GetMapping("/documents/clients/{clientId}")
+    public String getClient(@PathVariable("clientId") Long clientId, @RequestParam(name = "action") String action) throws Exception {
+        final ObjectMapper mapper = new ObjectMapper();
+        final List<OAuthorizedClient> clients = authorizedClientRepo.findAll();
+        final List<OAuthorizedClient> filteredClients = clients.stream().filter(c -> c.getPrincipalName().equals(clientId)).collect(toList());
+        final String clientAsString = mapper.writeValueAsString(filteredClients);
+
+        switch (action) {
+            case "clear":
+                authorizedClientRepo.deleteById(String.valueOf(clientId));
+                break;
+            default:
+                break;
+        }
+
+        return clientAsString;
+    }
+
     @GetMapping("/documents")
     public String operation(@RequestParam(name = "action") String action) throws Exception {
         switch (action) {
