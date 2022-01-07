@@ -93,7 +93,7 @@ public final class HungryVelosController {
                 url.append("&page=").append(page);
 
                 if (debug) {
-                    LOG.debug("Hitting url: " + url);
+                    LOG.info("Hitting url: " + url);
                 }
 
                 final String activitiesResponse = getResponse(tokenValue, url.toString());
