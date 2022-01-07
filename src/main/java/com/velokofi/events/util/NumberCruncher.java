@@ -1,5 +1,6 @@
 package com.velokofi.events.util;
 
+import com.velokofi.events.Application;
 import com.velokofi.events.controller.HungryVelosController;
 import com.velokofi.events.model.AthleteActivity;
 import com.velokofi.events.model.hungryvelos.Team;
@@ -36,8 +37,8 @@ public final class NumberCruncher {
     public static long getTeamMemberCount(final String teamName, final List<Team> teams) {
         final Optional<Team> optional = teams.stream().filter(t -> t.getName().equals(teamName)).findFirst();
         if (optional.isPresent()) {
-            final Team team = optional.get(); // exceptional handling for injured team member!
-            return team.getId() == 2 ? team.getMembers().size() - 1 : team.getMembers().size();
+            final Team team = optional.get();
+            return team.getMembers().size();
         }
         return 0;
     }
@@ -54,7 +55,7 @@ public final class NumberCruncher {
                 );
 
         final Stream<Map.Entry<String, Double>> aggregateSorted = aggregateMap.entrySet().stream().sorted(comparingByValue(reverseOrder()));
-        return aggregateSorted.collect(toList());
+        return aggregateSorted.limit(Application.LEADER_BOARD_LIMIT).collect(toList());
     }
 
     public static List<Map.Entry<String, Double>> averagingAggregateDouble(final List<AthleteActivity> activities,
@@ -69,7 +70,7 @@ public final class NumberCruncher {
                 );
 
         final Stream<Map.Entry<String, Double>> aggregateSorted = aggregateMap.entrySet().stream().sorted(comparingByValue(reverseOrder()));
-        return aggregateSorted.collect(toList());
+        return aggregateSorted.limit(Application.LEADER_BOARD_LIMIT).collect(toList());
     }
 
     public static List<Map.Entry<String, Long>> summingAggregateLong(final List<AthleteActivity> activities,
@@ -84,7 +85,7 @@ public final class NumberCruncher {
                 );
 
         final Stream<Map.Entry<String, Long>> aggregateSorted = map.entrySet().stream().sorted(comparingByValue(reverseOrder()));
-        return aggregateSorted.collect(toList());
+        return aggregateSorted.limit(Application.LEADER_BOARD_LIMIT).collect(toList());
     }
 
     public static double getValue(HungryVelosController.MetricType metricType, AthleteActivity a) {
