@@ -1,5 +1,7 @@
 package com.velokofi.events.model;
 
+import com.opencsv.bean.CsvIgnore;
+import com.opencsv.bean.CsvRecurse;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -85,9 +87,11 @@ public class AthleteActivity implements Serializable {
     @Getter
     @Setter
     @NoArgsConstructor
-    @ToString
+    @ToString(includeFieldNames = false)
     public static final class Athlete implements Serializable {
         private long id;
+
+        @CsvIgnore
         private int resource_state;
     }
 
