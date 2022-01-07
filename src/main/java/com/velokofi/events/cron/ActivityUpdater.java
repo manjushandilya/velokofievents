@@ -164,6 +164,7 @@ public final class ActivityUpdater {
         builder.append("https://www.strava.com/api/v3/athlete/activities");
         builder.append("?per_page=200");
         builder.append("&after=").append(Application.START_TIMESTAMP);
+        builder.append("&before=").append(Application.END_TIMESTAMP);
         builder.append("&page=").append(pageNumber);
 
         return new URI(builder.toString());
