@@ -416,7 +416,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                            <tr th:each="athleteSummary : ${leaderBoard.athleteSummaries}">
+                                            <tr th:each="athleteSummary: ${leaderBoard.athleteSummaries}">
                                                 <td>
                                                     <img width="30" height="25"
                                                          th:src="${athleteSummary.gender == 'M' ? 'img/undraw_profile.svg' : 'img/undraw_profile_1.svg'}"/>
@@ -548,7 +548,7 @@
 
     var msAlemaariChartConfig = {
         labels: [
-            /*[# th:each="alemaari, iterStat: ${leaderBoard.msAlemaari}"]*/
+            /*[# th:each="alemaari, iterStat: ${leaderBoard.msAlemaari}" th:unless="iterStat.index > 5"]*/
                 "[(${alemaari.key})]",
             /*[/]*/
         ],
@@ -557,7 +557,7 @@
             borderColor: random_rgba(),
             fill: false,
             data: [
-                /*[# th:each="alemaari, iterStat: ${leaderBoard.msAlemaari}"]*/
+                /*[# th:each="alemaari, iterStat: ${leaderBoard.msAlemaari}" th:unless="iterStat.index > 5"]*/
                     [(${alemaari.value})],
                 /*[/]*/
             ]
@@ -566,7 +566,7 @@
 
     var mrAlemaariChartConfig = {
         labels: [
-            /*[# th:each="alemaari, iterStat: ${leaderBoard.mrAlemaari}"]*/
+            /*[# th:each="alemaari, iterStat: ${leaderBoard.mrAlemaari}" th:unless="iterStat.index > 5"]*/
                 "[(${alemaari.key})]",
             /*[/]*/
         ],
@@ -575,7 +575,7 @@
             borderColor: random_rgba(),
             fill: false,
             data: [
-                /*[# th:each="alemaari, iterStat: ${leaderBoard.mrAlemaari}"]*/
+                /*[# th:each="alemaari, iterStat: ${leaderBoard.mrAlemaari}" th:unless="iterStat.index > 5"]*/
                     [(${alemaari.value})],
                 /*[/]*/
             ]
@@ -584,7 +584,7 @@
 
     var bettammaChartConfig = {
         labels: [
-            /*[# th:each="amma, iterStat: ${leaderBoard.bettamma}"]*/
+            /*[# th:each="amma, iterStat: ${leaderBoard.bettamma}" th:unless="iterStat.index > 5"]*/
                 "[(${amma.key})]",
             /*[/]*/
         ],
@@ -593,7 +593,7 @@
             borderColor: random_rgba(),
             fill: false,
             data: [
-                /*[# th:each="amma, iterStat: ${leaderBoard.bettamma}"]*/
+                /*[# th:each="amma, iterStat: ${leaderBoard.bettamma}" th:unless="iterStat.index > 5"]*/
                     [(${amma.value})],
                 /*[/]*/
             ]
@@ -602,7 +602,7 @@
 
     var bettappaChartConfig = {
         labels: [
-            /*[# th:each="appa, iterStat: ${leaderBoard.bettappa}"]*/
+            /*[# th:each="appa, iterStat: ${leaderBoard.bettappa}" th:unless="iterStat.index > 5"]*/
                 "[(${appa.key})]",
             /*[/]*/
         ],
@@ -611,7 +611,7 @@
             borderColor: random_rgba(),
             fill: false,
             data: [
-                /*[# th:each="bettappa, iterStat: ${leaderBoard.bettappa}"]*/
+                /*[# th:each="bettappa, iterStat: ${leaderBoard.bettappa}" th:unless="iterStat.index > 5"]*/
                     [(${bettappa.value})],
                 /*[/]*/
             ]
@@ -620,7 +620,7 @@
 
     var minchinaOtammaChartConfig = {
         labels: [
-            /*[# th:each="motamma, iterStat: ${leaderBoard.minchinaOtamma}"]*/
+            /*[# th:each="motamma, iterStat: ${leaderBoard.minchinaOtamma}" th:unless="iterStat.index > 5"]*/
                 "[(${motamma.key})]",
             /*[/]*/
         ],
@@ -629,7 +629,7 @@
             borderColor: random_rgba(),
             fill: false,
             data: [
-                /*[# th:each="motamma, iterStat: ${leaderBoard.minchinaOtamma}"]*/
+                /*[# th:each="motamma, iterStat: ${leaderBoard.minchinaOtamma}" th:unless="iterStat.index > 5"]*/
                     [(${motamma.value})],
                 /*[/]*/
             ]
@@ -638,7 +638,7 @@
 
     var minchinaOtappaChartConfig = {
         labels: [
-            /*[# th:each="motappa, iterStat: ${leaderBoard.minchinaOtappa}"]*/
+            /*[# th:each="motappa, iterStat: ${leaderBoard.minchinaOtappa}" th:unless="iterStat.index > 5"]*/
                 "[(${motappa.key})]",
             /*[/]*/
         ],
@@ -647,7 +647,7 @@
             borderColor: random_rgba(),
             fill: false,
             data: [
-                /*[# th:each="motappa, iterStat: ${leaderBoard.minchinaOtappa}"]*/
+                /*[# th:each="motappa, iterStat: ${leaderBoard.minchinaOtappa}" th:unless="iterStat.index > 5"]*/
                     [(${motappa.value})],
                 /*[/]*/
             ]
@@ -656,7 +656,7 @@
 
     var msThuliMagaChartConfig = {
         labels: [
-            /*[# th:each="thuliMaga, iterStat: ${leaderBoard.msThuliMaga}"]*/
+            /*[# th:each="thuliMaga, iterStat: ${leaderBoard.msThuliMaga}" th:unless="iterStat.index > 5"]*/
                 "[(${thuliMaga.key})]",
             /*[/]*/
         ],
@@ -665,7 +665,7 @@
             borderColor: random_rgba(),
             fill: false,
             data: [
-                /*[# th:each="thuliMaga, iterStat: ${leaderBoard.msThuliMaga}"]*/
+                /*[# th:each="thuliMaga, iterStat: ${leaderBoard.msThuliMaga}" th:unless="iterStat.index > 5"]*/
                     [(${thuliMaga.value})],
                 /*[/]*/
             ]
@@ -674,7 +674,7 @@
 
     var mrThuliMagaChartConfig = {
         labels: [
-            /*[# th:each="thuliMaga, iterStat: ${leaderBoard.mrThuliMaga}"]*/
+            /*[# th:each="thuliMaga, iterStat: ${leaderBoard.mrThuliMaga}" th:unless="iterStat.index > 5"]*/
                 "[(${thuliMaga.key})]",
             /*[/]*/
         ],
@@ -683,7 +683,7 @@
             borderColor: random_rgba(),
             fill: false,
             data: [
-                /*[# th:each="thuliMaga, iterStat: ${leaderBoard.mrThuliMaga}"]*/
+                /*[# th:each="thuliMaga, iterStat: ${leaderBoard.mrThuliMaga}" th:unless="iterStat.index > 5"]*/
                     [(${thuliMaga.value})],
                 /*[/]*/
             ]
