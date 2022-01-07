@@ -13,14 +13,14 @@ public class Application {
 
     public static final Long LEADER_BOARD_LIMIT = 5L;
 
-    //public static final String START_TIMESTAMP = "1641580200"; // 00:00:00 on 08 Jan 2022
-    //public static final String END_TIMESTAMP = "1644604199";   // 23:59:59 on 11 Feb 2022
+    public static final String START_TIMESTAMP = "1641580200"; // 00:00:00 on 08 Jan 2022
+    public static final String END_TIMESTAMP = "1645208999";   // 23:59:59 on 18 Feb 2022
 
     //public static final String START_TIMESTAMP = "1638297000";    // 00:00:00 on 01 Dec 2021
     //public static final String END_TIMESTAMP = "1640975399";      // 23:59:59 on 31 Dec 2021
 
-    public static final String START_TIMESTAMP = "1641148200";      // 00:00:00 on 03 Jan 2022
-    public static final String END_TIMESTAMP = "1641580199";        // 23:59:59 on 07 Jan 2022
+    //public static final String START_TIMESTAMP = "1641148200";      // 00:00:00 on 03 Jan 2022
+    //public static final String END_TIMESTAMP = "1641580199";        // 23:59:59 on 07 Jan 2022
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
