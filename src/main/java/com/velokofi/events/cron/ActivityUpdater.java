@@ -86,9 +86,12 @@ public final class ActivityUpdater {
                     LOG.debug("Request failed with message: " + e.getMessage());
                     LOG.debug("Refreshing auth token, old value: " + getTokenValue(clientId));
 
-                    refresh(clientId);
-
-                    LOG.debug("New value: " + getTokenValue(clientId));
+                    try {
+                        refresh(clientId);
+                        LOG.info("Successfully refreshed token with new value: " + getTokenValue(clientId));
+                    } catch (final Exception re) {
+                        LOG.error("Error while refreshing token for clientId: " + clientId + " " + re.getMessage());
+                    }
                 }
                 LOG.debug("zZzZzZz ing for 5 seconds...");
                 try {
@@ -100,63 +103,60 @@ public final class ActivityUpdater {
         }
     }
 
-    public void refresh(final String clientId) {
+    public void refresh(final String clientId) throws Exception {
         final OAuthorizedClient client = oAuthClientRepo.findById(clientId).get();
         final OAuth2AuthorizedClient authorizedClient = OAuthorizedClient.fromBytes(client.getBytes());
         final ObjectMapper mapper = new ObjectMapper();
-        try {
-            final StringBuilder builder = new StringBuilder();
-            builder.append("https://www.strava.com/api/v3/oauth/token");
 
-            URI uri = new URI(builder.toString());
+        final StringBuilder builder = new StringBuilder();
+        builder.append("https://www.strava.com/api/v3/oauth/token");
 
-            final RestTemplate restTemplate = new RestTemplate();
-            final HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
+        URI uri = new URI(builder.toString());
 
-            final RefreshTokenRequest requestObj = new RefreshTokenRequest();
-            requestObj.setClient_id(authorizedClient.getClientRegistration().getClientId());
-            requestObj.setClient_secret(authorizedClient.getClientRegistration().getClientSecret());
-            requestObj.setGrant_type("refresh_token");
-            requestObj.setRefresh_token(authorizedClient.getRefreshToken().getTokenValue());
-            final String body = mapper.writeValueAsString(requestObj);
+        final RestTemplate restTemplate = new RestTemplate();
+        final HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
-            LOG.debug("Refresh token request: " + body);
+        final RefreshTokenRequest requestObj = new RefreshTokenRequest();
+        requestObj.setClient_id(authorizedClient.getClientRegistration().getClientId());
+        requestObj.setClient_secret(authorizedClient.getClientRegistration().getClientSecret());
+        requestObj.setGrant_type("refresh_token");
+        requestObj.setRefresh_token(authorizedClient.getRefreshToken().getTokenValue());
+        final String body = mapper.writeValueAsString(requestObj);
 
-            final HttpEntity<String> request = new HttpEntity<String>(body, headers);
+        LOG.debug("Refresh token request: " + body);
 
-            final ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-            LOG.debug("Refresh token response: " + response);
+        final HttpEntity<String> request = new HttpEntity<String>(body, headers);
 
-            final RefreshTokenResponse refreshTokenResponse = mapper.readValue(response.getBody(), RefreshTokenResponse.class);
-            oAuthClientRepo.deleteById(authorizedClient.getPrincipalName());
+        final ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
+        LOG.debug("Refresh token response: " + response);
 
-            final OAuth2AccessToken accessToken = new OAuth2AccessToken(
-                    OAuth2AccessToken.TokenType.BEARER,
-                    refreshTokenResponse.getAccess_token(),
-                    Instant.ofEpochSecond(refreshTokenResponse.getExpires_in()),
-                    Instant.ofEpochSecond(refreshTokenResponse.getExpires_at())
-            );
+        final RefreshTokenResponse refreshTokenResponse = mapper.readValue(response.getBody(), RefreshTokenResponse.class);
+        oAuthClientRepo.deleteById(authorizedClient.getPrincipalName());
 
-            final OAuth2RefreshToken refreshToken = new OAuth2RefreshToken(
-                    refreshTokenResponse.getRefresh_token(),
-                    Instant.ofEpochSecond(refreshTokenResponse.getExpires_in())
-            );
+        final OAuth2AccessToken accessToken = new OAuth2AccessToken(
+                OAuth2AccessToken.TokenType.BEARER,
+                refreshTokenResponse.getAccess_token(),
+                Instant.ofEpochSecond(refreshTokenResponse.getExpires_in()),
+                Instant.ofEpochSecond(refreshTokenResponse.getExpires_at())
+        );
 
-            final OAuth2AuthorizedClient newClient = new OAuth2AuthorizedClient(
-                    authorizedClient.getClientRegistration(),
-                    authorizedClient.getPrincipalName(),
-                    accessToken,
-                    refreshToken
-            );
+        final OAuth2RefreshToken refreshToken = new OAuth2RefreshToken(
+                refreshTokenResponse.getRefresh_token(),
+                Instant.ofEpochSecond(refreshTokenResponse.getExpires_in())
+        );
 
-            final OAuthorizedClient OAuthorizedClient = new OAuthorizedClient();
-            OAuthorizedClient.setPrincipalName(authorizedClient.getPrincipalName());
-            OAuthorizedClient.setBytes(com.velokofi.events.model.OAuthorizedClient.toBytes(newClient));
-            oAuthClientRepo.save(OAuthorizedClient);
-        } catch (final Exception e) {
-            e.printStackTrace();
-        }
+        final OAuth2AuthorizedClient newClient = new OAuth2AuthorizedClient(
+                authorizedClient.getClientRegistration(),
+                authorizedClient.getPrincipalName(),
+                accessToken,
+                refreshToken
+        );
+
+        final OAuthorizedClient OAuthorizedClient = new OAuthorizedClient();
+        OAuthorizedClient.setPrincipalName(authorizedClient.getPrincipalName());
+        OAuthorizedClient.setBytes(com.velokofi.events.model.OAuthorizedClient.toBytes(newClient));
+        oAuthClientRepo.save(OAuthorizedClient);
     }
 
     private URI getUri(final int pageNumber) throws URISyntaxException {
