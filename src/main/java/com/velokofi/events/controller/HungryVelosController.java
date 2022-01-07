@@ -25,11 +25,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.velokofi.events.util.Formatter.convertMetersToKilometers;
 import static com.velokofi.events.util.Formatter.humanReadableFormat;
 import static com.velokofi.events.util.NumberCruncher.*;
 import static java.util.stream.Collectors.*;
@@ -142,8 +144,13 @@ public final class HungryVelosController {
 
         {
             // Calculate athlete distance
-            final Map<Long, Double> athleteDistanceMap = activities.stream().collect(
-                    groupingBy(a -> a.getAthlete().getId(), summingDouble(a -> a.getDistance() / 1000))
+            final Map<Long, Long> athleteDistanceInMetersMap = activities.stream().collect(
+                    groupingBy(a -> a.getAthlete().getId(), summingLong(a -> a.getDistance()))
+            );
+            final Map<Long, Double> athleteDistanceMap = athleteDistanceInMetersMap.entrySet().stream().collect(
+                    Collectors.toMap(
+                            e -> e.getKey(),
+                            e -> new BigDecimal(convertMetersToKilometers(e.getValue())).doubleValue())
             );
             LOG.debug("athleteDistanceMap: " + athleteDistanceMap);
 
