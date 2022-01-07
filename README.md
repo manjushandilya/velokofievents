@@ -10,6 +10,25 @@ Individual awards category (monthly):
 - Ms and Mr Minchina Ota (Max average speed)
 - Ms Thulimagle and Mr Thulimaga (Max no. of rides)
 
+Hosting details:
+- Homepage (Redirects to Strava login and authorization page of Strava): http://31.170.165.24:8080/
+
+- CSV report for all activities: http://31.170.165.24:8080/reports/activities
+
+- CSV report for all activities for a single athlete: http://31.170.165.24:8080/reports/activities/{athleteId}
+
+- Document dump (JSON) for all activities: http://31.170.165.24:8080/documents/activities
+
+- Document dump (JSON) for all activities for a single athlete: http://31.170.165.24:8080/documents/activities/{athleteId}
+
+- Document dump (JSON) for all clients: http://31.170.165.24:8080/documents/clients
+
+Housekeeping:
+- Clear all activities: http://31.170.165.24:8080/documents?action=clearActivities
+- Clear all oauth client caches: http://31.170.165.24:8080/documents?action=clearClients
+- Clear everything: http://31.170.165.24:8080/documents?action=clearAll
+- Cleanup stale data: http://31.170.165.24:8080/documents?action=cleanup
+
 Technical Backlog:
 - Single sign-on
 - Logging infrastructure with rollover and archiving
