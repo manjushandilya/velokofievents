@@ -26,4 +26,6 @@ public class AthleteSummary {
     private String gender;
 
     private long rides;
+
+    private String team;
 }

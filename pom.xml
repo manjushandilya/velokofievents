@@ -14,6 +14,10 @@
     <name>velokofievents</name>
     <description>events by velokofi</description>
 
+    <properties>
+        <start-class>com.velokofi.events.Application</start-class>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

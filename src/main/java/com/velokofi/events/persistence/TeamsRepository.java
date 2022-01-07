@@ -10,7 +10,8 @@ import org.springframework.stereotype.Component;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Component
 public class TeamsRepository implements TeamConstants {
@@ -26,16 +27,18 @@ public class TeamsRepository implements TeamConstants {
             final Team team = new Team();
             final int teamId = Integer.parseInt(row[0].trim());
             team.setId(teamId);
-            team.setName(row[1].trim());
+            final String teamName = row[1].trim();
+            team.setName(teamName);
             team.setCaptainId(Long.parseLong(row[2].trim()));
-            team.setMembers(teamMembers.stream().filter(teamMember -> teamMember.getTeamId() == teamId).collect(Collectors.toList()));
-
+            List<TeamMember> members = teamMembers.stream().filter(teamMember -> teamMember.getTeamId() == teamId).collect(toList());
+            members.stream().forEach(teamMember -> teamMember.setTeam(teamName));
+            team.setMembers(members);
             teams.add(team);
         }
         return teams;
     }
 
-    public List<TeamMember> listTeamMembers() throws Exception {
+    private List<TeamMember> listTeamMembers() throws Exception {
         final StringReader reader = new StringReader(TEAM_MEMBERS_CSV);
         final CSVReader csvReader = new CSVReaderBuilder(reader).withSkipLines(1).build();
         final List<String[]> allData = csvReader.readAll();
@@ -50,7 +53,6 @@ public class TeamsRepository implements TeamConstants {
             teamMember.setGender(row[columnIndex++].trim());
             teamMember.setTeamId(Integer.parseInt(row[columnIndex++].trim()));
             teamMember.setCaptain(Boolean.parseBoolean(row[columnIndex++].trim()));
-
             teamMembers.add(teamMember);
         }
         return teamMembers;

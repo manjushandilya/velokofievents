@@ -22,4 +22,6 @@ public class TeamMember {
     private int teamId;
 
     private boolean captain;
+
+    private String team;
 }

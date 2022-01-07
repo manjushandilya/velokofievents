@@ -177,6 +177,7 @@ public final class HungryVelosController {
                 summary.setGender(tm.getGender());
                 summary.setCaptain(tm.isCaptain());
                 summary.setRides(athleteRideCountMap.containsKey(id) ? athleteRideCountMap.get(id) : 0);
+                summary.setTeam(tm.getTeam());
                 athleteSummaries.add(summary);
             }
 
