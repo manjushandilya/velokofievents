@@ -41,7 +41,7 @@ public final class ActivityUpdater {
     @Autowired
     private OAuthorizedClientRepository oAuthClientRepo;
 
-    @Scheduled(fixedDelay = 60 * 1000 * 60, initialDelay = 60 * 1000 * 5)
+    @Scheduled(fixedDelay = 4 * 60 * 1000 * 60, initialDelay = 60 * 1000 * 5)
     public void run() throws Exception {
         LOG.info("Running scheduled task at: " + LocalDateTime.now());
 
@@ -89,6 +89,7 @@ public final class ActivityUpdater {
                     try {
                         refresh(clientId);
                         LOG.info("Successfully refreshed token with new value: " + getTokenValue(clientId));
+                        break;
                     } catch (final Exception re) {
                         LOG.error("Error while refreshing token for clientId: " + clientId + " " + re.getMessage());
                     }

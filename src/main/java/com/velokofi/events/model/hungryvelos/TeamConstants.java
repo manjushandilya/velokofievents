@@ -59,7 +59,7 @@ public interface TeamConstants {
             73492491, Savitha Naik, Savitha, F, 4, false
             71154685, Ashwini Nischal (Ashu), Ashwini, F, 4, false
             70101578, Chidanand Kawri Lokesh, Chidu, M, 4, false
-            67288162, Harsha Gandhi, Harsha, F, 4, false
+            67288162, Harsha Gandhi, Harsha, M, 4, false
             62471947, Girish Jain Jain, Girish, M, 4, false
             38148750, Chandrakanth, Chandu, M, 4, false
             33762572, Arun Bastin, Bastin, M, 4, false
