@@ -9,6 +9,7 @@ import com.velokofi.events.model.RefreshTokenRequest;
 import com.velokofi.events.model.RefreshTokenResponse;
 import com.velokofi.events.persistence.AthleteActivityRepository;
 import com.velokofi.events.persistence.OAuthorizedClientRepository;
+import com.velokofi.events.persistence.Saver;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -73,6 +74,9 @@ public final class ActivityUpdater {
                 final AthleteActivity[] activities = getActivities(clientId);
                 if (activities.length > 0) {
                     LOG.info("Saving " + activities.length + " activities for clientId: " + clientId);
+                    for (final AthleteActivity activity: activities) {
+                        LOG.info("Activity type for clientId: " + clientId, " is " + activity.getType());
+                    }
                     Stream.of(activities)
                             .filter(a -> SUPPORTED_RIDE_TYPES.contains(a.getType()))
                             .forEach(activity -> athleteActivityRepo.save(activity));
