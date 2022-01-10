@@ -9,7 +9,8 @@ import com.velokofi.events.model.RefreshTokenRequest;
 import com.velokofi.events.model.RefreshTokenResponse;
 import com.velokofi.events.persistence.AthleteActivityRepository;
 import com.velokofi.events.persistence.OAuthorizedClientRepository;
-import com.velokofi.events.persistence.Saver;
+import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,15 +26,33 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
 @Component
+@Getter
+@Setter
 public final class ActivityUpdater {
 
     private static final Logger LOG = LoggerFactory.getLogger(ActivityUpdater.class);
+
+    private static final ObjectMapper MAPPER;
+    static {
+        MAPPER = new ObjectMapper();
+        MAPPER.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
+        MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    }
+
+    private static final List<String> SUPPORTED_RIDE_TYPES;
+
+    static {
+        SUPPORTED_RIDE_TYPES = new ArrayList<>();
+        SUPPORTED_RIDE_TYPES.add("Ride");
+        SUPPORTED_RIDE_TYPES.add("Virtual Ride");
+    }
 
     @Autowired
     private AthleteActivityRepository athleteActivityRepo;
@@ -41,67 +60,44 @@ public final class ActivityUpdater {
     @Autowired
     private OAuthorizedClientRepository oAuthClientRepo;
 
-    @Scheduled(fixedDelay = 4 * 60 * 1000 * 60, initialDelay = 60 * 1000 * 5)
+    @Scheduled(fixedDelay = 1 * 60 * 1000 * 60, initialDelay = 60 * 1000 * 5)
     public void run() throws Exception {
-        LOG.info("Running scheduled task at: " + LocalDateTime.now());
-
-        final ObjectMapper mapper = new ObjectMapper();
-        mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        LOG.info("Running ActivityUpdater scheduled task at: " + LocalDateTime.now());
 
         final List<OAuthorizedClient> clients = oAuthClientRepo.findAll();
         final List<String> clientIds = clients.stream().map(c -> c.getPrincipalName()).collect(toList());
 
         for (final String clientId : clientIds) {
-            LOG.info("Fetching activities for client with id: " + clientId);
-            int pageNumber = 1;
-            for (int retries = 0; retries < 10; retries++) {
-                final URI uri = getUri(pageNumber);
-                final RestTemplate restTemplate = new RestTemplate();
-                final HttpHeaders headers = new HttpHeaders();
-                headers.setContentType(MediaType.APPLICATION_JSON);
-                headers.set("Authorization", "Bearer " + getTokenValue(clientId));
-                final HttpEntity<String> request = new HttpEntity<String>(headers);
-
-                try {
-                    LOG.debug("Trying to fetch activities with pageNumber: " + pageNumber);
-                    final ResponseEntity<String> activitiesResponse = restTemplate.exchange(uri, HttpMethod.GET, request, String.class);
-                    final AthleteActivity[] activitiesArray = mapper.readValue(activitiesResponse.getBody(), AthleteActivity[].class);
-                    if (activitiesArray.length > 0) {
-                        LOG.debug("Saving " + activitiesArray.length + " activities to db");
-                        Stream.of(activitiesArray)
-                                .filter(a -> a.getType().equalsIgnoreCase("ride"))
-                                .forEach(activity -> athleteActivityRepo.save(activity));
-
-                        LOG.debug("Saving " + activitiesArray.length + " activities to file");
-                        Saver.persistActivities(clientId, activitiesResponse.getBody());
-                    }
-
-                    if (activitiesArray.length < 200) {
-                        LOG.debug("Less than 200 (pageSize) activities found, breaking the loop...");
-                        break;
-                    }
-                    pageNumber++;
-                } catch (final Exception e) {
-                    LOG.debug("Request failed with message: " + e.getMessage());
-                    LOG.debug("Refreshing auth token, old value: " + getTokenValue(clientId));
-
-                    try {
-                        refresh(clientId);
-                        LOG.info("Successfully refreshed token with new value: " + getTokenValue(clientId));
-                        break;
-                    } catch (final Exception re) {
-                        LOG.error("Error while refreshing token for clientId: " + clientId + " " + re.getMessage());
-                    }
+            LOG.info("Fetching activities for clientId: " + clientId);
+            try {
+                final AthleteActivity[] activities = getActivities(clientId);
+                if (activities.length > 0) {
+                    LOG.info("Saving " + activities.length + " activities for clientId: " + clientId);
+                    Stream.of(activities)
+                            .filter(a -> SUPPORTED_RIDE_TYPES.contains(a.getType()))
+                            .forEach(activity -> athleteActivityRepo.save(activity));
                 }
-                LOG.debug("zZzZzZz ing for 5 seconds...");
+            } catch (final Exception e) {
+                LOG.info("Refreshing auth token for clientId: " + clientId + ", old value: " + getTokenValue(clientId));
                 try {
-                    Thread.sleep(5000);
-                } catch (final Exception e) {
-                    e.printStackTrace();
+                    refresh(clientId);
+                    LOG.info("Successfully refreshed token for clientId: " + clientId + ", new value: " + getTokenValue(clientId));
+                } catch (final Exception re) {
+                    LOG.error("Error while refreshing token for clientId: " + clientId + " " + re.getMessage());
                 }
             }
         }
+    }
+
+    public AthleteActivity[] getActivities(final String clientId) throws Exception {
+        final RestTemplate restTemplate = new RestTemplate();
+        final HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", "Bearer " + getTokenValue(clientId));
+
+        final HttpEntity<String> request = new HttpEntity<>(headers);
+        final ResponseEntity<String> response = restTemplate.exchange(getUri(1), HttpMethod.GET, request, String.class);
+        return MAPPER.readValue(response.getBody(), AthleteActivity[].class);
     }
 
     public void refresh(final String clientId) throws Exception {
@@ -118,16 +114,12 @@ public final class ActivityUpdater {
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        final RefreshTokenRequest requestObj = new RefreshTokenRequest();
-        requestObj.setClient_id(authorizedClient.getClientRegistration().getClientId());
-        requestObj.setClient_secret(authorizedClient.getClientRegistration().getClientSecret());
-        requestObj.setGrant_type("refresh_token");
-        requestObj.setRefresh_token(authorizedClient.getRefreshToken().getTokenValue());
+        final RefreshTokenRequest requestObj = getRefreshTokenRequest(authorizedClient);
         final String body = mapper.writeValueAsString(requestObj);
 
         LOG.debug("Refresh token request: " + body);
 
-        final HttpEntity<String> request = new HttpEntity<String>(body, headers);
+        final HttpEntity<String> request = new HttpEntity<>(body, headers);
 
         final ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
         LOG.debug("Refresh token response: " + response);
@@ -160,10 +152,19 @@ public final class ActivityUpdater {
         oAuthClientRepo.save(OAuthorizedClient);
     }
 
+    private RefreshTokenRequest getRefreshTokenRequest(final OAuth2AuthorizedClient authorizedClient) {
+        final RefreshTokenRequest requestObj = new RefreshTokenRequest();
+        requestObj.setClient_id(authorizedClient.getClientRegistration().getClientId());
+        requestObj.setClient_secret(authorizedClient.getClientRegistration().getClientSecret());
+        requestObj.setGrant_type("refresh_token");
+        requestObj.setRefresh_token(authorizedClient.getRefreshToken().getTokenValue());
+        return requestObj;
+    }
+
     private URI getUri(final int pageNumber) throws URISyntaxException {
         final StringBuilder builder = new StringBuilder();
         builder.append("https://www.strava.com/api/v3/athlete/activities");
-        builder.append("?per_page=200");
+        builder.append("?per_page=").append(Application.ACTIVITIES_PER_PAGE);
         builder.append("&after=").append(Application.START_TIMESTAMP);
         builder.append("&before=").append(Application.END_TIMESTAMP);
         builder.append("&page=").append(pageNumber);
