@@ -65,7 +65,7 @@ public class HomePageController {
         }
 
         if (clientId == null || clientId.isBlank()) {
-            return new ModelAndView("login");
+            return new ModelAndView("redirect:/login");
         }
 
         final LeaderBoard leaderBoard = new LeaderBoard();
