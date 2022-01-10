@@ -24,7 +24,7 @@ public class SetCookieContoller {
     public RedirectView execute(final HttpServletRequest request, final HttpServletResponse response) throws Exception {
         final String clientId = (String) request.getAttribute(Application.COOKIE_ID);
 
-        LOG.debug("Setting cookie with name as: "+ Application.COOKIE_ID + " and value as: " + clientId);
+        LOG.debug("Setting cookie with name as: " + Application.COOKIE_ID + " and value as: " + clientId);
 
         final Cookie cookie = new Cookie(Application.COOKIE_ID, clientId);
         cookie.setMaxAge(30 * 24 * 60 * 60); // expires in 30 days

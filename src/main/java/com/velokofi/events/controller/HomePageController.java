@@ -199,14 +199,14 @@ public class HomePageController {
             leaderBoard.setTeamAvgRidesMap(teamAvgRidesMap);
         }
 
-        leaderBoard.setMrAlemaari(summingAggregateDouble(activities, teamMembers, "M", HungryVelosController.MetricType.DISTANCE));
-        leaderBoard.setMsAlemaari(summingAggregateDouble(activities, teamMembers, "F", HungryVelosController.MetricType.DISTANCE));
+        leaderBoard.setMrAlemaari(summingAggregateDouble(activities, teamMembers, "M", Application.MetricType.DISTANCE));
+        leaderBoard.setMsAlemaari(summingAggregateDouble(activities, teamMembers, "F", Application.MetricType.DISTANCE));
 
-        leaderBoard.setBettappa(summingAggregateDouble(activities, teamMembers, "M", HungryVelosController.MetricType.ELEVATION));
-        leaderBoard.setBettamma(summingAggregateDouble(activities, teamMembers, "F", HungryVelosController.MetricType.ELEVATION));
+        leaderBoard.setBettappa(summingAggregateDouble(activities, teamMembers, "M", Application.MetricType.ELEVATION));
+        leaderBoard.setBettamma(summingAggregateDouble(activities, teamMembers, "F", Application.MetricType.ELEVATION));
 
-        leaderBoard.setMinchinaOtappa(averagingAggregateDouble(activities, teamMembers, "M", HungryVelosController.MetricType.AVG_SPEED));
-        leaderBoard.setMinchinaOtamma(averagingAggregateDouble(activities, teamMembers, "F", HungryVelosController.MetricType.AVG_SPEED));
+        leaderBoard.setMinchinaOtappa(averagingAggregateDouble(activities, teamMembers, "M", Application.MetricType.AVG_SPEED));
+        leaderBoard.setMinchinaOtamma(averagingAggregateDouble(activities, teamMembers, "F", Application.MetricType.AVG_SPEED));
 
         leaderBoard.setMrThuliMaga(summingAggregateLong(activities, teamMembers, "M"));
         leaderBoard.setMsThuliMaga(summingAggregateLong(activities, teamMembers, "F"));

@@ -1,4 +1,4 @@
-package com.velokofi.events.controller;
+/*package com.velokofi.events.controller;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -265,3 +265,4 @@ public final class HungryVelosController {
     public enum MetricType {DISTANCE, ELEVATION, AVG_SPEED}
 
 }
+*/

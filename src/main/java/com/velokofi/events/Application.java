@@ -21,7 +21,6 @@ public class Application {
 
     public static final String START_TIMESTAMP = "1641580200"; // 00:00:00 on 08 Jan 2022
     public static final String END_TIMESTAMP = "1645208999";   // 23:59:59 on 18 Feb 2022
-
     public static final ObjectMapper MAPPER;
 
     static {
@@ -43,5 +42,7 @@ public class Application {
             }
         };
     }
+
+    public enum MetricType {DISTANCE, ELEVATION, AVG_SPEED}
 
 }

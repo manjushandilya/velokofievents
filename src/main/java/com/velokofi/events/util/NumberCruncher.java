@@ -1,7 +1,6 @@
 package com.velokofi.events.util;
 
 import com.velokofi.events.Application;
-import com.velokofi.events.controller.HungryVelosController;
 import com.velokofi.events.model.AthleteActivity;
 import com.velokofi.events.model.hungryvelos.Team;
 import com.velokofi.events.model.hungryvelos.TeamMember;
@@ -41,7 +40,7 @@ public final class NumberCruncher {
     public static List<Map.Entry<String, Double>> summingAggregateDouble(final List<AthleteActivity> activities,
                                                                          final List<TeamMember> teamMembers,
                                                                          final String gender,
-                                                                         final HungryVelosController.MetricType metricType) {
+                                                                         final Application.MetricType metricType) {
         final Map<String, Double> aggregateMap = activities.stream()
                 .filter(a -> filterBasedOnGender(a.getAthlete(), teamMembers, gender))
                 .collect(groupingBy(
@@ -56,7 +55,7 @@ public final class NumberCruncher {
     public static List<Map.Entry<String, Double>> averagingAggregateDouble(final List<AthleteActivity> activities,
                                                                            final List<TeamMember> teamMembers,
                                                                            final String gender,
-                                                                           final HungryVelosController.MetricType metricType) {
+                                                                           final Application.MetricType metricType) {
         final Map<String, Double> aggregateMap = activities.stream()
                 .filter(a -> filterBasedOnGender(a.getAthlete(), teamMembers, gender))
                 .collect(groupingBy(
@@ -83,10 +82,10 @@ public final class NumberCruncher {
         return aggregateSorted.limit(Application.LEADER_BOARD_LIMIT).collect(toList());
     }
 
-    public static double getValue(HungryVelosController.MetricType metricType, AthleteActivity a) {
-        if (metricType == HungryVelosController.MetricType.DISTANCE) {
+    public static double getValue(Application.MetricType metricType, AthleteActivity a) {
+        if (metricType == Application.MetricType.DISTANCE) {
             return round(a.getDistance() / 1000D);
-        } else if (metricType == HungryVelosController.MetricType.ELEVATION) {
+        } else if (metricType == Application.MetricType.ELEVATION) {
             return a.getTotal_elevation_gain();
         } else {
             return a.getAverage_speed();
