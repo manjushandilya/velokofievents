@@ -21,8 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.view.RedirectView;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -34,7 +32,7 @@ import static java.util.stream.Collectors.toList;
 @Setter
 public class LoginController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(HungryVelosController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LoginController.class);
 
     private final RestTemplate restTemplate;
 
@@ -52,14 +50,7 @@ public class LoginController {
     }
 
     @GetMapping("/login")
-    public RedirectView execute(final HttpServletResponse response,
-                                @RegisteredOAuth2AuthorizedClient final OAuth2AuthorizedClient client) throws Exception {
-
-        final Cookie cookie = new Cookie(Application.COOKIE_ID, client.getPrincipalName());
-        cookie.setMaxAge(30 * 24 * 60 * 60); // expires in 30 days
-        cookie.setPath("/");
-        response.addCookie(cookie);
-
+    public RedirectView execute(@RegisteredOAuth2AuthorizedClient final OAuth2AuthorizedClient client) throws Exception {
         final List<Team> teams = teamsRepository.listTeams();
         final List<TeamMember> teamMembers = teams.stream().flatMap(t -> t.getMembers().stream()).collect(toList());
         final Optional<TeamMember> teamMemberLogin = teamMembers.stream().filter(tm -> String.valueOf(tm.getId()).equals(client.getPrincipalName())).findFirst();
@@ -95,7 +86,10 @@ public class LoginController {
                 }
             }
         }
-        return new RedirectView("/");
+        final RedirectView redirectView = new RedirectView("/setCookie");
+        redirectView.addStaticAttribute(Application.COOKIE_ID, client.getPrincipalName());
+
+        return redirectView;
     }
 
     private String getResponse(final String tokenValue, final String url) {

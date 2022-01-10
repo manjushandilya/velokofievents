@@ -65,7 +65,7 @@ public class HomePageController {
         }
 
         if (clientId == null || clientId.isBlank()) {
-            final ModelAndView mav = new ModelAndView("login");
+            return new ModelAndView("login");
         }
 
         final LeaderBoard leaderBoard = new LeaderBoard();
@@ -77,7 +77,6 @@ public class HomePageController {
         ).collect(toList());
 
         LOG.info("Fetched " + activities.size() + " activities from db...");
-        LOG.debug("Activities: " + activities);
 
         { // event totals
             final Double totalDistance = round(activities.stream().collect(summingDouble(a -> a.getDistance())) / 1000);
