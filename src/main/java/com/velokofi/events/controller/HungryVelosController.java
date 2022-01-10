@@ -1,4 +1,4 @@
-/*package com.velokofi.events.controller;
+package com.velokofi.events.controller;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,6 +13,8 @@ import com.velokofi.events.model.hungryvelos.TeamMember;
 import com.velokofi.events.persistence.AthleteActivityRepository;
 import com.velokofi.events.persistence.OAuthorizedClientRepository;
 import com.velokofi.events.persistence.TeamsRepository;
+import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,8 @@ import static com.velokofi.events.util.NumberCruncher.*;
 import static java.util.stream.Collectors.*;
 
 @RestController
+@Getter
+@Setter
 public final class HungryVelosController {
 
     private static final Logger LOG = LoggerFactory.getLogger(HungryVelosController.class);
@@ -234,14 +238,14 @@ public final class HungryVelosController {
             leaderBoard.setTeamAvgRidesMap(teamAvgRidesMap);
         }
 
-        leaderBoard.setMrAlemaari(summingAggregateDouble(activities, teamMembers, "M", MetricType.DISTANCE));
-        leaderBoard.setMsAlemaari(summingAggregateDouble(activities, teamMembers, "F", MetricType.DISTANCE));
+        leaderBoard.setMrAlemaari(summingAggregateDouble(activities, teamMembers, "M", Application.MetricType.DISTANCE));
+        leaderBoard.setMsAlemaari(summingAggregateDouble(activities, teamMembers, "F", Application.MetricType.DISTANCE));
 
-        leaderBoard.setBettappa(summingAggregateDouble(activities, teamMembers, "M", MetricType.ELEVATION));
-        leaderBoard.setBettamma(summingAggregateDouble(activities, teamMembers, "F", MetricType.ELEVATION));
+        leaderBoard.setBettappa(summingAggregateDouble(activities, teamMembers, "M", Application.MetricType.ELEVATION));
+        leaderBoard.setBettamma(summingAggregateDouble(activities, teamMembers, "F", Application.MetricType.ELEVATION));
 
-        leaderBoard.setMinchinaOtappa(averagingAggregateDouble(activities, teamMembers, "M", MetricType.AVG_SPEED));
-        leaderBoard.setMinchinaOtamma(averagingAggregateDouble(activities, teamMembers, "F", MetricType.AVG_SPEED));
+        leaderBoard.setMinchinaOtappa(averagingAggregateDouble(activities, teamMembers, "M", Application.MetricType.AVG_SPEED));
+        leaderBoard.setMinchinaOtamma(averagingAggregateDouble(activities, teamMembers, "F", Application.MetricType.AVG_SPEED));
 
         leaderBoard.setMrThuliMaga(summingAggregateLong(activities, teamMembers, "M"));
         leaderBoard.setMsThuliMaga(summingAggregateLong(activities, teamMembers, "F"));
@@ -262,7 +266,4 @@ public final class HungryVelosController {
         return response.getBody();
     }
 
-    public enum MetricType {DISTANCE, ELEVATION, AVG_SPEED}
-
 }
-*/

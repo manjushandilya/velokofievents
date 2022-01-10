@@ -20,6 +20,8 @@
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
 
+    <script type="text/javascript" src="/js/jquery-min.js"></script>
+
 </head>
 
 <body id="page-top">
@@ -44,9 +46,10 @@
                     <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <!--<span class="mr-2 d-none d-lg-inline text-gray-600 small"
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small"
                                   th:text="${leaderBoard.athleteProfile.firstname + ' ' + leaderBoard.athleteProfile.lastname}"/>
-                            <img class="img-profile rounded-circle" th:src="${leaderBoard.athleteProfile.profile_medium}"/>-->
+                            <img class="img-profile rounded-circle"
+                                 th:src="${leaderBoard.athleteProfile.profile_medium}"/>
                         </a>
                     </li>
                 </ul>
@@ -416,20 +419,20 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                            <tr th:each="athleteSummary: ${leaderBoard.athleteSummaries}">
-                                                <td>
-                                                    <img width="30" height="25"
-                                                         th:src="${athleteSummary.gender == 'M' ? 'img/undraw_profile.svg' : 'img/undraw_profile_1.svg'}"/>
-                                                    <span th:text="${athleteSummary.name}">Name</span>
-                                                    <img width="25" height="25"
-                                                         th:if="${athleteSummary.captain}" src="img/star.png"/>
-                                                </td>
-                                                <td><span th:text="${athleteSummary.distance}">Distance</span></td>
-                                                <td><span th:text="${athleteSummary.elevation}">Elevation</span></td>
-                                                <td><span th:text="${athleteSummary.avgSpeed}">Average Speed</span></td>
-                                                <td><span th:text="${athleteSummary.rides}">Rides</span></td>
-                                                <td><span th:text="${athleteSummary.team}">Team</span></td>
-                                            </tr>
+                                        <tr th:each="athleteSummary: ${leaderBoard.athleteSummaries}">
+                                            <td>
+                                                <img width="30" height="25"
+                                                     th:src="${athleteSummary.gender == 'M' ? 'img/undraw_profile.svg' : 'img/undraw_profile_1.svg'}"/>
+                                                <span th:text="${athleteSummary.name}">Name</span>
+                                                <img width="25" height="25"
+                                                     th:if="${athleteSummary.captain}" src="img/star.png"/>
+                                            </td>
+                                            <td><span th:text="${athleteSummary.distance}">Distance</span></td>
+                                            <td><span th:text="${athleteSummary.elevation}">Elevation</span></td>
+                                            <td><span th:text="${athleteSummary.avgSpeed}">Average Speed</span></td>
+                                            <td><span th:text="${athleteSummary.rides}">Rides</span></td>
+                                            <td><span th:text="${athleteSummary.team}">Team</span></td>
+                                        </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -830,6 +833,7 @@
             }
         });
     };
+
 </script>
 
 </body>

@@ -1,4 +1,4 @@
-package com.velokofi.events.controller;
+/*package com.velokofi.events.controller;
 
 import com.velokofi.events.Application;
 import com.velokofi.events.model.AthleteActivity;
@@ -53,7 +53,8 @@ public class LoginController {
     public RedirectView execute(@RegisteredOAuth2AuthorizedClient final OAuth2AuthorizedClient client) throws Exception {
         final List<Team> teams = teamsRepository.listTeams();
         final List<TeamMember> teamMembers = teams.stream().flatMap(t -> t.getMembers().stream()).collect(toList());
-        final Optional<TeamMember> teamMemberLogin = teamMembers.stream().filter(tm -> String.valueOf(tm.getId()).equals(client.getPrincipalName())).findFirst();
+        final Optional<TeamMember> teamMemberLogin = teamMembers.stream()
+                .filter(tm -> String.valueOf(tm.getId()).equals(client.getPrincipalName())).findFirst();
 
         LOG.debug("Team member logged in? " + teamMemberLogin.isPresent() + ", strava id: " + client.getPrincipalName());
 
@@ -67,18 +68,18 @@ public class LoginController {
             for (int pageNumber = 1; ; pageNumber++) {
                 final StringBuilder url = new StringBuilder();
                 url.append("https://www.strava.com/api/v3/athlete/activities");
-                url.append("?per_page=200");
+                url.append("?per_page=").append(Application.ACTIVITIES_PER_PAGE);
                 url.append("&after=").append(Application.START_TIMESTAMP);
                 url.append("&before=").append(Application.END_TIMESTAMP);
                 url.append("&page=").append(pageNumber);
 
                 LOG.debug("Hitting url: " + url);
 
-                final String activitiesResponse = getResponse(tokenValue, url.toString());
+                final String response = getResponse(tokenValue, url.toString());
 
-                final AthleteActivity[] activitiesArray = Application.MAPPER.readValue(activitiesResponse, AthleteActivity[].class);
+                final AthleteActivity[] activitiesArray = Application.MAPPER.readValue(response, AthleteActivity[].class);
                 Stream.of(activitiesArray)
-                        .filter(a -> ((Long) a.getAthlete().getId() != null) && a.getType().equalsIgnoreCase("ride"))
+                        .filter(a->Application.SUPPORTED_RIDE_TYPES.contains(a.getType()))
                         .forEach(activity -> athleteActivityRepo.save(activity));
 
                 if (activitiesArray.length < 200) {
@@ -103,3 +104,4 @@ public class LoginController {
     }
 
 }
+*/

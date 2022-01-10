@@ -6,9 +6,19 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+@RestController
 @SpringBootApplication
 @EnableScheduling
 public class Application {
@@ -27,6 +37,19 @@ public class Application {
         MAPPER = new ObjectMapper();
         MAPPER.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
         MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    }
+
+    public static final List<String> SUPPORTED_RIDE_TYPES;
+
+    static {
+        SUPPORTED_RIDE_TYPES = new ArrayList<>();
+        SUPPORTED_RIDE_TYPES.add("Ride");
+        SUPPORTED_RIDE_TYPES.add("VirtualRide");
+    }
+
+    @GetMapping("/user")
+    public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
+        return Collections.singletonMap("name", principal.getName());
     }
 
     public static void main(String[] args) {

@@ -25,7 +25,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -37,14 +36,6 @@ import static java.util.stream.Collectors.toList;
 public final class ActivityUpdater {
 
     private static final Logger LOG = LoggerFactory.getLogger(ActivityUpdater.class);
-
-    private static final List<String> SUPPORTED_RIDE_TYPES;
-
-    static {
-        SUPPORTED_RIDE_TYPES = new ArrayList<>();
-        SUPPORTED_RIDE_TYPES.add("Ride");
-        SUPPORTED_RIDE_TYPES.add("VirtualRide");
-    }
 
     @Autowired
     private AthleteActivityRepository athleteActivityRepo;
@@ -66,7 +57,7 @@ public final class ActivityUpdater {
                 if (activities.length > 0) {
                     LOG.info("Saving " + activities.length + " activities for clientId: " + clientId);
                     Stream.of(activities)
-                            .filter(a -> SUPPORTED_RIDE_TYPES.contains(a.getType()))
+                            .filter(a -> Application.SUPPORTED_RIDE_TYPES.contains(a.getType()))
                             .forEach(activity -> athleteActivityRepo.save(activity));
                 }
             } catch (final Exception e) {
