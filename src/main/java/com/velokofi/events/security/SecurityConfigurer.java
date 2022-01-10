@@ -17,21 +17,21 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers("/resources/**", "/cache/**");
     }
 
-    /*@Override
+    @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .anyRequest()
                 .authenticated()
                 .and()
                 .oauth2Login();
-    }*/
+    }
 
-    @Override
+    /*@Override
     protected void configure(final HttpSecurity http) throws Exception {
         http.authorizeRequests(a -> a
                 .antMatchers("/", "/documents/**").permitAll()
         ).oauth2Login();
-    }
+    }*/
 
     @Bean
     public RestTemplate restTemplate() {
