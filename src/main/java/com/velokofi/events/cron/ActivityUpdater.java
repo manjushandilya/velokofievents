@@ -60,7 +60,7 @@ public final class ActivityUpdater {
     @Autowired
     private OAuthorizedClientRepository oAuthClientRepo;
 
-    @Scheduled(fixedDelay = 1 * 60 * 1000 * 60, initialDelay = 60 * 1000 * 5)
+    @Scheduled(fixedDelay = 1 * 60 * 1000 * 60)
     public void run() throws Exception {
         LOG.info("Running ActivityUpdater scheduled task at: " + LocalDateTime.now());
 
