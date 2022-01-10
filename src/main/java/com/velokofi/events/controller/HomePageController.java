@@ -1,12 +1,8 @@
 package com.velokofi.events.controller;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.velokofi.events.Application;
 import com.velokofi.events.model.AthleteActivity;
-import com.velokofi.events.model.AthleteProfile;
 import com.velokofi.events.model.AthleteSummary;
-import com.velokofi.events.model.OAuthorizedClient;
 import com.velokofi.events.model.hungryvelos.LeaderBoard;
 import com.velokofi.events.model.hungryvelos.Team;
 import com.velokofi.events.model.hungryvelos.TeamMember;
@@ -17,18 +13,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
-import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.velokofi.events.util.Formatter.convertMetersToKilometers;
 import static com.velokofi.events.util.Formatter.humanReadableFormat;
@@ -36,9 +31,9 @@ import static com.velokofi.events.util.NumberCruncher.*;
 import static java.util.stream.Collectors.*;
 
 @RestController
-public final class HungryVelosController {
+public class HomePageController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(HungryVelosController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DocumentController.class);
 
     private final RestTemplate restTemplate;
 
@@ -51,65 +46,36 @@ public final class HungryVelosController {
     @Autowired
     private OAuthorizedClientRepository authorizedClientRepo;
 
-    public HungryVelosController(final RestTemplate restTemplate) {
+    public HomePageController(final RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
-    @GetMapping("/hungryvelos")
-    public ModelAndView execute(@RegisteredOAuth2AuthorizedClient final OAuth2AuthorizedClient client) throws Exception {
+    @GetMapping("/")
+    public ModelAndView execute(final HttpServletRequest request) throws Exception {
 
-        final List<Team> teams = teamsRepository.listTeams();
-        final List<TeamMember> teamMembers = teams.stream().flatMap(t -> t.getMembers().stream()).collect(toList());
-        final Optional<TeamMember> teamMemberLogin = teamMembers.stream().filter(tm -> String.valueOf(tm.getId()).equals(client.getPrincipalName())).findFirst();
-
-        LOG.debug("Team member logged in? " + teamMemberLogin.isPresent() + ", strava id: " + client.getPrincipalName());
-
-        final LeaderBoard leaderBoard = new LeaderBoard();
-        final ObjectMapper mapper = new ObjectMapper();
-        mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-        final String tokenValue = client.getAccessToken().getTokenValue();
-
-        final String profileResponse = getResponse(tokenValue, "https://www.strava.com/api/v3/athlete");
-        final AthleteProfile athleteProfile = mapper.readValue(profileResponse, AthleteProfile.class);
-
-        leaderBoard.setAthleteProfile(athleteProfile);
-
-        if (teamMemberLogin.isPresent()) {
-            final OAuthorizedClient OAuthorizedClient = new OAuthorizedClient();
-            OAuthorizedClient.setPrincipalName(client.getPrincipalName());
-            OAuthorizedClient.setBytes(com.velokofi.events.model.OAuthorizedClient.toBytes(client));
-            authorizedClientRepo.save(OAuthorizedClient);
-        }
-
-        if (teamMemberLogin.isPresent()) {
-            for (int page = 1; ; page++) {
-                final StringBuilder url = new StringBuilder();
-                url.append("https://www.strava.com/api/v3/athlete/activities");
-                url.append("?per_page=200");
-                url.append("&after=").append(Application.START_TIMESTAMP);
-                url.append("&before=").append(Application.END_TIMESTAMP);
-                url.append("&page=").append(page);
-
-                LOG.debug("Hitting url: " + url);
-
-                final String activitiesResponse = getResponse(tokenValue, url.toString());
-
-                final AthleteActivity[] activitiesArray = mapper.readValue(activitiesResponse, AthleteActivity[].class);
-                Stream.of(activitiesArray)
-                        .filter(a -> ((Long) a.getAthlete().getId() != null) && a.getType().equalsIgnoreCase("ride"))
-                        .forEach(activity -> athleteActivityRepo.save(activity));
-
-                if (activitiesArray.length < 200) {
+        String clientId = null;
+        final Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (final Cookie cookie : cookies) {
+                if (cookie.getName().equals(Application.COOKIE_ID)) {
+                    clientId = cookie.getValue();
                     break;
                 }
             }
         }
 
+        if (clientId == null || clientId.isBlank()) {
+            final ModelAndView mav = new ModelAndView("login");
+        }
+
+        final LeaderBoard leaderBoard = new LeaderBoard();
+
+        final List<Team> teams = teamsRepository.listTeams();
+        final List<TeamMember> teamMembers = teams.stream().flatMap(t -> t.getMembers().stream()).collect(toList());
         final List<AthleteActivity> activities = athleteActivityRepo.findAll().stream().filter(
                 a -> ((Long) a.getAthlete().getId()) != null
         ).collect(toList());
+
         LOG.info("Fetched " + activities.size() + " activities from db...");
         LOG.debug("Activities: " + activities);
 
@@ -234,21 +200,21 @@ public final class HungryVelosController {
             leaderBoard.setTeamAvgRidesMap(teamAvgRidesMap);
         }
 
-        leaderBoard.setMrAlemaari(summingAggregateDouble(activities, teamMembers, "M", MetricType.DISTANCE));
-        leaderBoard.setMsAlemaari(summingAggregateDouble(activities, teamMembers, "F", MetricType.DISTANCE));
+        leaderBoard.setMrAlemaari(summingAggregateDouble(activities, teamMembers, "M", HungryVelosController.MetricType.DISTANCE));
+        leaderBoard.setMsAlemaari(summingAggregateDouble(activities, teamMembers, "F", HungryVelosController.MetricType.DISTANCE));
 
-        leaderBoard.setBettappa(summingAggregateDouble(activities, teamMembers, "M", MetricType.ELEVATION));
-        leaderBoard.setBettamma(summingAggregateDouble(activities, teamMembers, "F", MetricType.ELEVATION));
+        leaderBoard.setBettappa(summingAggregateDouble(activities, teamMembers, "M", HungryVelosController.MetricType.ELEVATION));
+        leaderBoard.setBettamma(summingAggregateDouble(activities, teamMembers, "F", HungryVelosController.MetricType.ELEVATION));
 
-        leaderBoard.setMinchinaOtappa(averagingAggregateDouble(activities, teamMembers, "M", MetricType.AVG_SPEED));
-        leaderBoard.setMinchinaOtamma(averagingAggregateDouble(activities, teamMembers, "F", MetricType.AVG_SPEED));
+        leaderBoard.setMinchinaOtappa(averagingAggregateDouble(activities, teamMembers, "M", HungryVelosController.MetricType.AVG_SPEED));
+        leaderBoard.setMinchinaOtamma(averagingAggregateDouble(activities, teamMembers, "F", HungryVelosController.MetricType.AVG_SPEED));
 
         leaderBoard.setMrThuliMaga(summingAggregateLong(activities, teamMembers, "M"));
         leaderBoard.setMsThuliMaga(summingAggregateLong(activities, teamMembers, "F"));
 
         final ModelAndView mav = new ModelAndView("index");
         mav.addObject("leaderBoard", leaderBoard);
-        mav.addObject("principalName", client.getPrincipalName());
+        mav.addObject("principalName", clientId);
         return mav;
     }
 

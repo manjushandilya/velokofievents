@@ -1,6 +1,5 @@
 package com.velokofi.events.cron;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.velokofi.events.Application;
 import com.velokofi.events.model.AthleteActivity;
@@ -9,7 +8,6 @@ import com.velokofi.events.model.RefreshTokenRequest;
 import com.velokofi.events.model.RefreshTokenResponse;
 import com.velokofi.events.persistence.AthleteActivityRepository;
 import com.velokofi.events.persistence.OAuthorizedClientRepository;
-import com.velokofi.events.persistence.Saver;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -40,19 +38,12 @@ public final class ActivityUpdater {
 
     private static final Logger LOG = LoggerFactory.getLogger(ActivityUpdater.class);
 
-    private static final ObjectMapper MAPPER;
-    static {
-        MAPPER = new ObjectMapper();
-        MAPPER.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
-        MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    }
-
     private static final List<String> SUPPORTED_RIDE_TYPES;
 
     static {
         SUPPORTED_RIDE_TYPES = new ArrayList<>();
         SUPPORTED_RIDE_TYPES.add("Ride");
-        SUPPORTED_RIDE_TYPES.add("Virtual Ride");
+        SUPPORTED_RIDE_TYPES.add("VirtualRide");
     }
 
     @Autowired
@@ -74,9 +65,6 @@ public final class ActivityUpdater {
                 final AthleteActivity[] activities = getActivities(clientId);
                 if (activities.length > 0) {
                     LOG.info("Saving " + activities.length + " activities for clientId: " + clientId);
-                    for (final AthleteActivity activity: activities) {
-                        LOG.info("Activity type for clientId: " + clientId + " is " + activity.getType());
-                    }
                     Stream.of(activities)
                             .filter(a -> SUPPORTED_RIDE_TYPES.contains(a.getType()))
                             .forEach(activity -> athleteActivityRepo.save(activity));
@@ -101,7 +89,7 @@ public final class ActivityUpdater {
 
         final HttpEntity<String> request = new HttpEntity<>(headers);
         final ResponseEntity<String> response = restTemplate.exchange(getUri(1), HttpMethod.GET, request, String.class);
-        return MAPPER.readValue(response.getBody(), AthleteActivity[].class);
+        return Application.MAPPER.readValue(response.getBody(), AthleteActivity[].class);
     }
 
     public void refresh(final String clientId) throws Exception {

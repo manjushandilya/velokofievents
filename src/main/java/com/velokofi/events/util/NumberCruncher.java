@@ -15,12 +15,7 @@ import java.util.stream.Stream;
 
 import static java.util.Comparator.reverseOrder;
 import static java.util.Map.Entry.comparingByValue;
-import static java.util.stream.Collectors.averagingDouble;
-import static java.util.stream.Collectors.counting;
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.summingDouble;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.*;
 
 public final class NumberCruncher {
 
@@ -44,9 +39,9 @@ public final class NumberCruncher {
     }
 
     public static List<Map.Entry<String, Double>> summingAggregateDouble(final List<AthleteActivity> activities,
-                                                                   final List<TeamMember> teamMembers,
-                                                                   final String gender,
-                                                                   final HungryVelosController.MetricType metricType) {
+                                                                         final List<TeamMember> teamMembers,
+                                                                         final String gender,
+                                                                         final HungryVelosController.MetricType metricType) {
         final Map<String, Double> aggregateMap = activities.stream()
                 .filter(a -> filterBasedOnGender(a.getAthlete(), teamMembers, gender))
                 .collect(groupingBy(
@@ -59,9 +54,9 @@ public final class NumberCruncher {
     }
 
     public static List<Map.Entry<String, Double>> averagingAggregateDouble(final List<AthleteActivity> activities,
-                                                                     final List<TeamMember> teamMembers,
-                                                                     final String gender,
-                                                                     final HungryVelosController.MetricType metricType) {
+                                                                           final List<TeamMember> teamMembers,
+                                                                           final String gender,
+                                                                           final HungryVelosController.MetricType metricType) {
         final Map<String, Double> aggregateMap = activities.stream()
                 .filter(a -> filterBasedOnGender(a.getAthlete(), teamMembers, gender))
                 .collect(groupingBy(
@@ -74,8 +69,8 @@ public final class NumberCruncher {
     }
 
     public static List<Map.Entry<String, Long>> summingAggregateLong(final List<AthleteActivity> activities,
-                                                               final List<TeamMember> teamMembers,
-                                                               final String gender) {
+                                                                     final List<TeamMember> teamMembers,
+                                                                     final String gender) {
 
         final Map<String, Long> map = activities.stream()
                 .filter(a -> getGenderFromId(a.getAthlete().getId(), teamMembers).equalsIgnoreCase(gender))

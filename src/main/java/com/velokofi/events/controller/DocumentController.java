@@ -76,7 +76,6 @@ public class DocumentController {
     @GetMapping("/documents")
     public String operation(@RequestParam(name = "action") String action) throws Exception {
         switch (action) {
-            case "updateActivities":
             case "clearActivities":
                 athleteActivityRepo.deleteAll();
                 break;
