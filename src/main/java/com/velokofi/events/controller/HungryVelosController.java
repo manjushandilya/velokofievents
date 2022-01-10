@@ -66,7 +66,7 @@ public final class HungryVelosController {
         final List<TeamMember> teamMembers = teams.stream().flatMap(t -> t.getMembers().stream()).collect(toList());
         final Optional<TeamMember> teamMemberLogin = teamMembers.stream().filter(tm -> String.valueOf(tm.getId()).equals(client.getPrincipalName())).findFirst();
 
-        LOG.debug("Team member logged in? " + teamMemberLogin.isPresent() + ", strava id: " + client.getPrincipalName());
+        LOG.info("Team member logged in? " + teamMemberLogin.isPresent() + ", strava id: " + client.getPrincipalName());
 
         final LeaderBoard leaderBoard = new LeaderBoard();
         final ObjectMapper mapper = new ObjectMapper();
