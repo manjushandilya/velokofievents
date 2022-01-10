@@ -59,7 +59,7 @@ public final class HungryVelosController {
         this.restTemplate = restTemplate;
     }
 
-    @GetMapping("/hungryvelos")
+    @GetMapping("/")
     public ModelAndView execute(@RegisteredOAuth2AuthorizedClient final OAuth2AuthorizedClient client) throws Exception {
 
         final List<Team> teams = teamsRepository.listTeams();
