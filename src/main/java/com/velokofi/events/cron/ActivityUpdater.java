@@ -75,7 +75,7 @@ public final class ActivityUpdater {
                 if (activities.length > 0) {
                     LOG.info("Saving " + activities.length + " activities for clientId: " + clientId);
                     for (final AthleteActivity activity: activities) {
-                        LOG.info("Activity type for clientId: " + clientId, " is " + activity.getType());
+                        LOG.info("Activity type for clientId: " + clientId + " is " + activity.getType());
                     }
                     Stream.of(activities)
                             .filter(a -> SUPPORTED_RIDE_TYPES.contains(a.getType()))
