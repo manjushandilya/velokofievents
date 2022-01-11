@@ -32,6 +32,7 @@ public class Application {
     public static final String START_TIMESTAMP = "1641580200"; // 00:00:00 on 08 Jan 2022
     public static final String END_TIMESTAMP = "1645208999";   // 23:59:59 on 18 Feb 2022
     public static final ObjectMapper MAPPER;
+    public static final List<String> SUPPORTED_RIDE_TYPES;
 
     static {
         MAPPER = new ObjectMapper();
@@ -39,21 +40,19 @@ public class Application {
         MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
-    public static final List<String> SUPPORTED_RIDE_TYPES;
-
     static {
         SUPPORTED_RIDE_TYPES = new ArrayList<>();
         SUPPORTED_RIDE_TYPES.add("Ride");
         SUPPORTED_RIDE_TYPES.add("VirtualRide");
     }
 
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
+
     @GetMapping("/user")
     public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
         return Collections.singletonMap("name", principal.getName());
-    }
-
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
     }
 
     @Bean

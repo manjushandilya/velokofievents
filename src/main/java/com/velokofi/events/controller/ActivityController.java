@@ -1,4 +1,4 @@
-package com.velokofi.events.cron;
+package com.velokofi.events.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.velokofi.events.Application;
@@ -8,71 +8,62 @@ import com.velokofi.events.model.RefreshTokenRequest;
 import com.velokofi.events.model.RefreshTokenResponse;
 import com.velokofi.events.persistence.AthleteActivityRepository;
 import com.velokofi.events.persistence.OAuthorizedClientRepository;
-import lombok.Getter;
-import lombok.Setter;
+import com.velokofi.events.persistence.TeamsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2RefreshToken;
-import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.toList;
+@RestController
+public class ActivityController {
 
-@Component
-@Getter
-@Setter
-public final class ActivityUpdater {
+    private static final Logger LOG = LoggerFactory.getLogger(ActivityController.class);
 
-    private static final Logger LOG = LoggerFactory.getLogger(ActivityUpdater.class);
+    @Autowired
+    private TeamsRepository teamsRepository;
 
     @Autowired
     private AthleteActivityRepository athleteActivityRepo;
 
     @Autowired
+    private OAuthorizedClientRepository authorizedClientRepo;
+
+    @Autowired
     private OAuthorizedClientRepository oAuthClientRepo;
 
-    @Scheduled(fixedDelay = 1 * 60 * 1000 * 60)
-    public void run() throws Exception {
-        LOG.info("Running ActivityUpdater scheduled task at: " + LocalDateTime.now());
-
-        final List<OAuthorizedClient> clients = oAuthClientRepo.findAll();
-        final List<String> clientIds = clients.stream().map(c -> c.getPrincipalName()).collect(toList());
-
-        for (final String clientId : clientIds) {
-            LOG.info("Fetching activities for clientId: " + clientId);
-            try {
-                final AthleteActivity[] activities = getActivities(clientId);
-                if (activities.length > 0) {
-                    LOG.info("Saving " + activities.length + " activities for clientId: " + clientId);
-                    Stream.of(activities)
-                            .filter(a -> Application.SUPPORTED_RIDE_TYPES.contains(a.getType()))
-                            .forEach(activity -> athleteActivityRepo.save(activity));
-                }
-            } catch (final Exception e) {
-                LOG.info("Refreshing auth token for clientId: " + clientId + ", old value: " + getTokenValue(clientId));
-                try {
-                    refresh(clientId);
-                    LOG.info("Successfully refreshed token for clientId: " + clientId + ", new value: " + getTokenValue(clientId));
-                } catch (final Exception re) {
-                    LOG.error("Error while refreshing token for clientId: " + clientId + " " + re.getMessage());
-                }
+    @GetMapping("/activities/{clientId}")
+    public String getActivities(@PathVariable("clientId") String clientId) throws Exception {
+        final AthleteActivity[] activities;
+        try {
+            activities = getAthleteActivities(clientId);
+            if (activities.length > 0) {
+                LOG.info("Saving " + activities.length + " activities for clientId: " + clientId);
+                Stream.of(activities)
+                        .filter(a -> Application.SUPPORTED_RIDE_TYPES.contains(a.getType()))
+                        .forEach(activity -> athleteActivityRepo.save(activity));
             }
+        } catch (final Exception e) {
+            LOG.info("Refreshing auth token for clientId: " + clientId + ", old value: " + getTokenValue(clientId));
+            refresh(clientId);
+            LOG.info("Successfully refreshed token for clientId: " + clientId + ", new value: " + getTokenValue(clientId));
+            return getActivities(clientId);
         }
+        return Application.MAPPER.writeValueAsString(activities);
     }
 
-    private AthleteActivity[] getActivities(final String clientId) throws Exception {
+    private AthleteActivity[] getAthleteActivities(final String clientId) throws Exception {
         final RestTemplate restTemplate = new RestTemplate();
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
