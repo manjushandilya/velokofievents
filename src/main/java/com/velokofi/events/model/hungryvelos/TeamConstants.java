@@ -42,7 +42,7 @@ public interface TeamConstants {
             75500724, Revathi M P, Revs, F, 3, true
             65820756, Nanda Kishor G D, Kishor, M, 3, false
             65392239, Vipin Devis, Vipin, M, 3, false
-            93507523, Amarnath Vali, Amari, M, 3, false
+            64907699, Amarnath Vali, Amari, M, 3, false
             63014939, Srinidhi Bharadwaj, Nidhi, M, 3, false
             61999014, Vidyaprasanna Kambalur, VP, M, 3, false
             61335755, Sampige Santhosh, Santhosh, M, 3, false
