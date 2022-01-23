@@ -1,6 +1,5 @@
 package com.velokofi.events.cron;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.velokofi.events.Application;
 import com.velokofi.events.model.AthleteActivity;
 import com.velokofi.events.model.OAuthorizedClient;
@@ -86,7 +85,6 @@ public final class ActivityUpdater {
     private void refresh(final String clientId) throws Exception {
         final OAuthorizedClient client = oAuthClientRepo.findById(clientId).get();
         final OAuth2AuthorizedClient authorizedClient = OAuthorizedClient.fromBytes(client.getBytes());
-        final ObjectMapper mapper = new ObjectMapper();
 
         final StringBuilder builder = new StringBuilder();
         builder.append("https://www.strava.com/api/v3/oauth/token");
@@ -98,7 +96,7 @@ public final class ActivityUpdater {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         final RefreshTokenRequest requestObj = getRefreshTokenRequest(authorizedClient);
-        final String body = mapper.writeValueAsString(requestObj);
+        final String body = Application.MAPPER.writeValueAsString(requestObj);
 
         LOG.debug("Refresh token request: " + body);
 
@@ -107,7 +105,7 @@ public final class ActivityUpdater {
         final ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
         LOG.debug("Refresh token response: " + response);
 
-        final RefreshTokenResponse refreshTokenResponse = mapper.readValue(response.getBody(), RefreshTokenResponse.class);
+        final RefreshTokenResponse refreshTokenResponse = Application.MAPPER.readValue(response.getBody(), RefreshTokenResponse.class);
         oAuthClientRepo.deleteById(authorizedClient.getPrincipalName());
 
         final OAuth2AccessToken accessToken = new OAuth2AccessToken(

@@ -8,6 +8,7 @@ import com.velokofi.events.model.AthleteProfile;
 import com.velokofi.events.model.AthleteSummary;
 import com.velokofi.events.model.OAuthorizedClient;
 import com.velokofi.events.model.hungryvelos.LeaderBoard;
+import com.velokofi.events.model.hungryvelos.RogueActivities;
 import com.velokofi.events.model.hungryvelos.Team;
 import com.velokofi.events.model.hungryvelos.TeamMember;
 import com.velokofi.events.persistence.AthleteActivityRepository;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.*;
@@ -116,6 +118,13 @@ public final class HungryVelosController {
         ).collect(toList());
         LOG.info("Fetched " + activities.size() + " activities from db...");
         LOG.debug("Activities: " + activities);
+
+        final Field[] rogueActivitiesAsFields = RogueActivities.class.getDeclaredFields();
+        LOG.info("Adding " + rogueActivitiesAsFields.length + " rogue activities...");
+        for (final Field field : rogueActivitiesAsFields) {
+            final AthleteActivity rogueActivity = Application.MAPPER.readValue(field.get(null).toString(), AthleteActivity.class);
+            activities.add(rogueActivity);
+        }
 
         { // event totals
             final Double totalDistance = round(activities.stream().collect(summingDouble(a -> a.getDistance())) / 1000);
