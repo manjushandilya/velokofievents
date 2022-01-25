@@ -25,7 +25,7 @@ public class TeamSummary {
 
     private double avgSpeed;
 
-    private double rides;
+    private int rides;
 
     private double avgRides;
 

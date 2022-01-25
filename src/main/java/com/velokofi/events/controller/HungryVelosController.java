@@ -249,13 +249,13 @@ public final class HungryVelosController {
                 final TeamSummary teamSummary = new TeamSummary();
                 teamSummary.setId(team.getId());
                 teamSummary.setName(team.getName());
-                teamSummary.setDistance(teamDistanceMap.get(team.getName()));
+                teamSummary.setDistance(round(teamDistanceMap.get(team.getName())));
                 teamSummary.setAvgDistance(teamAvgDistanceMap.get(team.getName()));
-                teamSummary.setElevation(teamElevationMap.get(team.getName()));
+                teamSummary.setElevation(round(teamElevationMap.get(team.getName())));
                 teamSummary.setAvgElevation(teamAvgElevationMap.get(team.getName()));
-                teamSummary.setRides(teamRideCountMap.get(team.getName()));
+                teamSummary.setRides(teamRideCountMap.get(team.getName()).intValue());
                 teamSummary.setAvgRides(teamAvgRidesMap.get(team.getName()));
-                teamSummary.setAvgSpeed(teamAvgSpeedMap.get(team.getName()));
+                teamSummary.setAvgSpeed(round(teamAvgSpeedMap.get(team.getName())));
                 teamSummary.setMemberCount(team.getMembers().size());
                 teamSummaries.add(teamSummary);
             });
