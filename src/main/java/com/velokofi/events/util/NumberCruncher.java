@@ -109,6 +109,19 @@ public final class NumberCruncher {
         return total;
     }
 
+    public static double getAthleteAverageDouble(final Team team, final Map<Long, Double> map) {
+        final List<TeamMember> members = team.getMembers();
+        double total = 0;
+        int count = 0;
+        for (final TeamMember member : members) {
+            if (map.containsKey(member.getId())) {
+                total += map.get(member.getId());
+                count++;
+            }
+        }
+        return count > 0 ? total / count : 0;
+    }
+
     public static long getAthleteAggregate(final Team team, final Map<Long, Long> map) {
         final List<TeamMember> members = team.getMembers();
         long total = 0;

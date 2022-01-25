@@ -239,7 +239,7 @@ public final class HungryVelosController {
 
             // Calculate team average speed
             final Map<String, Double> teamAvgSpeedMap = teams.stream().collect(
-                    groupingBy(t -> t.getName(), averagingDouble(t -> getAthleteAggregateDouble(t, athleteAvgSpeedMap)))
+                    groupingBy(t -> t.getName(), averagingDouble(t -> getAthleteAverageDouble(t, athleteAvgSpeedMap)))
             );
             LOG.debug("teamAvgSpeedMap: " + teamAvgSpeedMap);
 
