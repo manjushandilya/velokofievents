@@ -441,7 +441,50 @@
                             </div>
                         </div>
 
+                        <div class="col-xl-6 col-lg-7">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div
+                                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Team Summary</h6>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered" id="dataTable1" width="100%" cellspacing="0">
+                                            <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Distance</th>
+                                                <th>Average Distance</th>
+                                                <th>Elevation</th>
+                                                <th>Average Elevation</th>
+                                                <th>Average Speed</th>
+                                                <th>Rides</th>
+                                                <th>Average Rides</th>
+                                                <th>Members</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="teamSummary: ${leaderBoard.teamSummaries}">
+                                                <td><span th:text="${teamSummary.name}">Name</span></td>
+                                                <td><span th:text="${teamSummary.distance}">Distance</span></td>
+                                                <td><span th:text="${teamSummary.avgDistance}">Average Distance</span></td>
+                                                <td><span th:text="${teamSummary.elevation}">Elevation</span></td>
+                                                <td><span th:text="${teamSummary.avgElevation}">Average Elevation</span></td>
+                                                <td><span th:text="${teamSummary.avgSpeed}">Average Speed</span></td>
+                                                <td><span th:text="${teamSummary.rides}">Rides</span></td>
+                                                <td><span th:text="${teamSummary.avgRides}">Average Rides</span></td>
+                                                <td><span th:text="${teamSummary.memberCount}">Members</span></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
                     </div>
+
                 </div>
             </div>
             <!-- /.container-fluid -->

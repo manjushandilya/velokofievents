@@ -2,6 +2,7 @@ package com.velokofi.events.model.hungryvelos;
 
 import com.velokofi.events.model.AthleteProfile;
 import com.velokofi.events.model.AthleteSummary;
+import com.velokofi.events.model.TeamSummary;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,6 +17,8 @@ import java.util.Map.Entry;
 @NoArgsConstructor
 @ToString
 public class LeaderBoard {
+
+    private AthleteProfile athleteProfile;
 
     // event totals
     private Double totalDistance;
@@ -51,7 +54,6 @@ public class LeaderBoard {
 
     // for tabular data
     private List<AthleteSummary> athleteSummaries;
-
-    private AthleteProfile athleteProfile;
+    private List<TeamSummary> teamSummaries;
 
 }

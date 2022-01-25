@@ -1,12 +1,7 @@
 package com.velokofi.events.controller;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.velokofi.events.Application;
-import com.velokofi.events.model.AthleteActivity;
-import com.velokofi.events.model.AthleteProfile;
-import com.velokofi.events.model.AthleteSummary;
-import com.velokofi.events.model.OAuthorizedClient;
+import com.velokofi.events.model.*;
 import com.velokofi.events.model.hungryvelos.LeaderBoard;
 import com.velokofi.events.model.hungryvelos.RogueActivities;
 import com.velokofi.events.model.hungryvelos.Team;
@@ -71,14 +66,10 @@ public final class HungryVelosController {
         LOG.info("Team member logged in? " + teamMemberLogin.isPresent() + ", strava id: " + client.getPrincipalName());
 
         final LeaderBoard leaderBoard = new LeaderBoard();
-        final ObjectMapper mapper = new ObjectMapper();
-        mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
         final String tokenValue = client.getAccessToken().getTokenValue();
 
         final String profileResponse = getResponse(tokenValue, "https://www.strava.com/api/v3/athlete");
-        final AthleteProfile athleteProfile = mapper.readValue(profileResponse, AthleteProfile.class);
+        final AthleteProfile athleteProfile = Application.MAPPER.readValue(profileResponse, AthleteProfile.class);
 
         leaderBoard.setAthleteProfile(athleteProfile);
 
@@ -102,7 +93,7 @@ public final class HungryVelosController {
 
                 final String activitiesResponse = getResponse(tokenValue, url.toString());
 
-                final AthleteActivity[] activitiesArray = mapper.readValue(activitiesResponse, AthleteActivity[].class);
+                final AthleteActivity[] activitiesArray = Application.MAPPER.readValue(activitiesResponse, AthleteActivity[].class);
                 Stream.of(activitiesArray)
                         .filter(a -> ((Long) a.getAthlete().getId() != null) && a.getType().equalsIgnoreCase("ride"))
                         .forEach(activity -> athleteActivityRepo.save(activity));
@@ -208,7 +199,7 @@ public final class HungryVelosController {
             // Calculate team average distance
             final Map<String, Double> teamAvgDistanceMap = teamDistanceMap.entrySet().stream().collect(
                     toMap(
-                            e -> e.getKey(), e -> e.getValue() / getTeamMemberCount(e.getKey(), teams)
+                            e -> e.getKey(), e -> round(e.getValue() / getTeamMemberCount(e.getKey(), teams))
                     )
             );
             LOG.debug("teamAvgDistanceMap: " + teamAvgDistanceMap);
@@ -224,7 +215,7 @@ public final class HungryVelosController {
             // Calculate team average elevation
             final Map<String, Double> teamAvgElevationMap = teamElevationMap.entrySet().stream().collect(
                     toMap(
-                            e -> e.getKey(), e -> e.getValue() / getTeamMemberCount(e.getKey(), teams)
+                            e -> e.getKey(), e -> round(e.getValue() / getTeamMemberCount(e.getKey(), teams))
                     )
             );
             LOG.debug("teamAvgElevationMap: " + teamAvgElevationMap);
@@ -245,6 +236,32 @@ public final class HungryVelosController {
             );
             LOG.debug("teamAvgRidesMap: " + teamAvgRidesMap);
             leaderBoard.setTeamAvgRidesMap(teamAvgRidesMap);
+
+            // Calculate team average speed
+            final Map<String, Double> teamAvgSpeedMap = teams.stream().collect(
+                    groupingBy(t -> t.getName(), averagingDouble(t -> getAthleteAggregateDouble(t, athleteAvgSpeedMap)))
+            );
+            LOG.debug("teamAvgSpeedMap: " + teamAvgSpeedMap);
+
+            // Calculate team summaries
+            final List<TeamSummary> teamSummaries = new ArrayList<>();
+            teams.forEach(team -> {
+                final TeamSummary teamSummary = new TeamSummary();
+                teamSummary.setId(team.getId());
+                teamSummary.setName(team.getName());
+                teamSummary.setDistance(teamDistanceMap.get(team.getName()));
+                teamSummary.setAvgDistance(teamAvgDistanceMap.get(team.getName()));
+                teamSummary.setElevation(teamElevationMap.get(team.getName()));
+                teamSummary.setAvgElevation(teamAvgElevationMap.get(team.getName()));
+                teamSummary.setRides(teamRideCountMap.get(team.getName()));
+                teamSummary.setAvgRides(teamAvgRidesMap.get(team.getName()));
+                teamSummary.setAvgSpeed(teamAvgSpeedMap.get(team.getName()));
+                teamSummary.setMemberCount(team.getMembers().size());
+                teamSummaries.add(teamSummary);
+            });
+
+            leaderBoard.setTeamSummaries(teamSummaries);
+            LOG.info("teamSummaries: " + teamSummaries);
         }
 
         leaderBoard.setMrAlemaari(summingAggregateDouble(activities, teamMembers, "M", Application.MetricType.DISTANCE));
