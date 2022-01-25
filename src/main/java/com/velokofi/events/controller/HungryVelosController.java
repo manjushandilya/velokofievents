@@ -261,7 +261,7 @@ public final class HungryVelosController {
             });
 
             leaderBoard.setTeamSummaries(teamSummaries);
-            LOG.info("teamSummaries: " + teamSummaries);
+            LOG.debug("teamSummaries: " + teamSummaries);
         }
 
         leaderBoard.setMrAlemaari(summingAggregateDouble(activities, teamMembers, "M", Application.MetricType.DISTANCE));
