@@ -37,6 +37,21 @@ public final class NumberCruncher {
         return 0;
     }
 
+    public static List<Map.Entry<String, Double>> summingAggregateDoubleNoLimit(final List<AthleteActivity> activities,
+                                                                         final List<TeamMember> teamMembers,
+                                                                         final String gender,
+                                                                         final Application.MetricType metricType) {
+        final Map<String, Double> aggregateMap = activities.stream()
+                .filter(a -> filterBasedOnGender(a.getAthlete(), teamMembers, gender))
+                .collect(groupingBy(
+                        a -> getNameFromId(a.getAthlete().getId(), teamMembers),
+                        summingDouble(a -> round(getValue(metricType, a))))
+                );
+
+        final Stream<Map.Entry<String, Double>> aggregateSorted = aggregateMap.entrySet().stream().sorted(comparingByValue(reverseOrder()));
+        return aggregateSorted.collect(toList());
+    }
+
     public static List<Map.Entry<String, Double>> summingAggregateDouble(final List<AthleteActivity> activities,
                                                                          final List<TeamMember> teamMembers,
                                                                          final String gender,
@@ -52,6 +67,21 @@ public final class NumberCruncher {
         return aggregateSorted.limit(Application.LEADER_BOARD_LIMIT).collect(toList());
     }
 
+    public static List<Map.Entry<String, Double>> averagingAggregateDoubleNoLimit(final List<AthleteActivity> activities,
+                                                                           final List<TeamMember> teamMembers,
+                                                                           final String gender,
+                                                                           final Application.MetricType metricType) {
+        final Map<String, Double> aggregateMap = activities.stream()
+                .filter(a -> filterBasedOnGender(a.getAthlete(), teamMembers, gender))
+                .collect(groupingBy(
+                        a -> getNameFromId(a.getAthlete().getId(), teamMembers),
+                        averagingDouble(a -> round(getValue(metricType, a) * 3.6)))
+                );
+
+        final Stream<Map.Entry<String, Double>> aggregateSorted = aggregateMap.entrySet().stream().sorted(comparingByValue(reverseOrder()));
+        return aggregateSorted.collect(toList());
+    }
+
     public static List<Map.Entry<String, Double>> averagingAggregateDouble(final List<AthleteActivity> activities,
                                                                            final List<TeamMember> teamMembers,
                                                                            final String gender,
@@ -65,6 +95,21 @@ public final class NumberCruncher {
 
         final Stream<Map.Entry<String, Double>> aggregateSorted = aggregateMap.entrySet().stream().sorted(comparingByValue(reverseOrder()));
         return aggregateSorted.limit(Application.LEADER_BOARD_LIMIT).collect(toList());
+    }
+
+    public static List<Map.Entry<String, Long>> summingAggregateLongNoLimit(final List<AthleteActivity> activities,
+                                                                     final List<TeamMember> teamMembers,
+                                                                     final String gender) {
+
+        final Map<String, Long> map = activities.stream()
+                .filter(a -> getGenderFromId(a.getAthlete().getId(), teamMembers).equalsIgnoreCase(gender))
+                .collect(groupingBy(a -> a.getAthlete().getId(), counting()))
+                .entrySet().stream().collect(
+                        toMap(e -> getNameFromId(e.getKey(), teamMembers), e -> e.getValue())
+                );
+
+        final Stream<Map.Entry<String, Long>> aggregateSorted = map.entrySet().stream().sorted(comparingByValue(reverseOrder()));
+        return aggregateSorted.collect(toList());
     }
 
     public static List<Map.Entry<String, Long>> summingAggregateLong(final List<AthleteActivity> activities,

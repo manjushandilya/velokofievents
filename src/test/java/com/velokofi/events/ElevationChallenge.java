@@ -27,7 +27,7 @@ public class ElevationChallenge {
         final List<Team> teams = teamsRepository.listTeams();
         final List<TeamMember> teamMembers = teams.stream().flatMap(t -> t.getMembers().stream()).collect(toList());
 
-        final Path path = Paths.get("src", "test", "resources", "allActivitiesTill25012022.json");
+        final Path path = Paths.get("src", "test", "resources", "activities/allActivitiesTill25012022.json");
         final byte[] bytes = Files.readAllBytes(path);
         final AthleteActivity[] allActivities = Application.MAPPER.readValue(bytes, AthleteActivity[].class);
         System.out.println("Read " + allActivities.length + " activities");
@@ -39,7 +39,7 @@ public class ElevationChallenge {
                 .filter(a -> Formatter.isBetween(after, before, Formatter.parse(a.getStart_date_local())))
                 .collect(Collectors.toList());
 
-        List<Map.Entry<String, Double>> entries = summingAggregateDouble(activities, teamMembers, "M", Application.MetricType.ELEVATION);
+        final List<Map.Entry<String, Double>> entries = summingAggregateDouble(activities, teamMembers, "M", Application.MetricType.ELEVATION);
         System.out.println(entries);
     }
 
@@ -49,7 +49,7 @@ public class ElevationChallenge {
         final List<Team> teams = teamsRepository.listTeams();
         final List<TeamMember> teamMembers = teams.stream().flatMap(t -> t.getMembers().stream()).collect(toList());
 
-        final Path path = Paths.get("src", "test", "resources", "allActivitiesTill25012022.json");
+        final Path path = Paths.get("src", "test", "resources", "activities/allActivitiesTill25012022.json");
         final byte[] bytes = Files.readAllBytes(path);
         final AthleteActivity[] allActivities = Application.MAPPER.readValue(bytes, AthleteActivity[].class);
         System.out.println("Read " + allActivities.length + " activities");
@@ -61,7 +61,7 @@ public class ElevationChallenge {
                 .filter(a -> Formatter.isBetween(after, before, Formatter.parse(a.getStart_date_local())))
                 .collect(Collectors.toList());
 
-        List<Map.Entry<String, Double>> entries = summingAggregateDouble(activities, teamMembers, "F", Application.MetricType.ELEVATION);
+        final List<Map.Entry<String, Double>> entries = summingAggregateDouble(activities, teamMembers, "F", Application.MetricType.ELEVATION);
         System.out.println(entries);
     }
 
