@@ -118,14 +118,14 @@ public final class HungryVelosController {
         }
 
         { // event totals
-            final Double totalDistance = round(activities.stream().collect(summingDouble(a -> a.getDistance())) / 1000);
+            final Double totalDistance = round(activities.stream().collect(summingDouble(a -> a.getDistance())) / 1000L);
 
             final Double totalElevation = round(activities.stream().collect(summingDouble(a -> a.getTotal_elevation_gain())));
 
             final int totalRides = activities.size();
 
             final long movingTimeInSeconds = activities.stream().collect(summingLong(a -> a.getMoving_time()));
-            final long movingTimeInHours = movingTimeInSeconds / 3600;
+            final long movingTimeInHours = movingTimeInSeconds / 3600L;
 
             leaderBoard.setTotalDistance(totalDistance);
             leaderBoard.setTotalElevation(totalElevation);
@@ -174,9 +174,9 @@ public final class HungryVelosController {
                 final long id = tm.getId();
                 summary.setId(id);
                 summary.setName(getNameFromId(id, teamMembers));
-                summary.setDistance(round(athleteDistanceMap.containsKey(id) ? athleteDistanceMap.get(id) : 0));
-                summary.setElevation(round(athleteElevationMap.containsKey(id) ? athleteElevationMap.get(id) : 0));
-                summary.setAvgSpeed(round(athleteAvgSpeedMap.containsKey(id) ? athleteAvgSpeedMap.get(id) : 0));
+                summary.setDistance(round(athleteDistanceMap.containsKey(id) ? athleteDistanceMap.get(id) : 0.0D));
+                summary.setElevation(round(athleteElevationMap.containsKey(id) ? athleteElevationMap.get(id) : 0.0D));
+                summary.setAvgSpeed(round(athleteAvgSpeedMap.containsKey(id) ? athleteAvgSpeedMap.get(id) : 0.0D));
                 summary.setGender(tm.getGender());
                 summary.setCaptain(tm.isCaptain());
                 summary.setRides(athleteRideCountMap.containsKey(id) ? athleteRideCountMap.get(id) : 0);

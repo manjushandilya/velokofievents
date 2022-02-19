@@ -1,6 +1,6 @@
 package com.velokofi.events.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.velokofi.events.Application;
 import com.velokofi.events.model.AthleteActivity;
 import com.velokofi.events.model.OAuthorizedClient;
 import com.velokofi.events.model.hungryvelos.Team;
@@ -35,32 +35,28 @@ public class DocumentController {
 
     @GetMapping("/documents/activities")
     public String getActivities() throws Exception {
-        final ObjectMapper mapper = new ObjectMapper();
         final List<AthleteActivity> activities = athleteActivityRepo.findAll();
-        return mapper.writeValueAsString(activities);
+        return Application.MAPPER.writeValueAsString(activities);
     }
 
     @GetMapping("/documents/activities/{athleteId}")
-    public String getActivities(@PathVariable("athleteId") Long athleteId) throws Exception {
-        final ObjectMapper mapper = new ObjectMapper();
-        final List<AthleteActivity> athleteActivities = athleteActivityRepo.findAll();
-        final List<AthleteActivity> activities = athleteActivities.stream().filter(a -> a.getAthlete().getId() == athleteId).collect(toList());
-        return mapper.writeValueAsString(activities);
+    public String getActivities(@PathVariable("athleteId") final Long athleteId) throws Exception {
+        final List<AthleteActivity> allActivities = athleteActivityRepo.findAll();
+        final List<AthleteActivity> athleteActivities = allActivities.stream().filter(a -> a.getAthlete().getId() == athleteId).collect(toList());
+        return Application.MAPPER.writeValueAsString(athleteActivities);
     }
 
     @GetMapping("/documents/clients")
     public String getClients() throws Exception {
-        final ObjectMapper mapper = new ObjectMapper();
         final List<OAuthorizedClient> clients = authorizedClientRepo.findAll();
-        return mapper.writeValueAsString(clients);
+        return Application.MAPPER.writeValueAsString(clients);
     }
 
     @GetMapping("/documents/clients/{clientId}")
-    public String getClient(@PathVariable("clientId") Long clientId, @RequestParam(name = "action") String action) throws Exception {
-        final ObjectMapper mapper = new ObjectMapper();
+    public String getClient(@PathVariable("clientId") final Long clientId, @RequestParam(name = "action") final String action) throws Exception {
         final List<OAuthorizedClient> clients = authorizedClientRepo.findAll();
         final List<OAuthorizedClient> filteredClients = clients.stream().filter(c -> c.getPrincipalName().equals(clientId)).collect(toList());
-        final String clientAsString = mapper.writeValueAsString(filteredClients);
+        final String clientAsString = Application.MAPPER.writeValueAsString(filteredClients);
 
         switch (action) {
             case "clear":
@@ -74,7 +70,7 @@ public class DocumentController {
     }
 
     @GetMapping("/documents")
-    public String operation(@RequestParam(name = "action") String action) throws Exception {
+    public String operation(@RequestParam(name = "action") final String action) throws Exception {
         switch (action) {
             case "clearActivities":
                 athleteActivityRepo.deleteAll();

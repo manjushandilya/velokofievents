@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 import static com.velokofi.events.util.NumberCruncher.*;
 import static java.util.stream.Collectors.toList;
 
-public class WeeklyChallengeByArun {
+public class QuadsOfFury {
 
     @Test
     public void test() throws Exception {

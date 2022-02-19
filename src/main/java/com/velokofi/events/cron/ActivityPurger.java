@@ -21,7 +21,7 @@ public final class ActivityPurger {
     @Autowired
     private AthleteActivityRepository athleteActivityRepo;
 
-    @Scheduled(cron = "0 0 0 * * *")
+    //@Scheduled(cron = "0 0 0 * * *")
     public void run() throws Exception {
         LOG.info("Running ActivityPurger scheduled task at: " + LocalDateTime.now());
 
