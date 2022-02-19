@@ -80,7 +80,7 @@ public final class HungryVelosController {
             authorizedClientRepo.save(OAuthorizedClient);
         }
 
-        if (teamMemberLogin.isPresent()) {
+        /*if (teamMemberLogin.isPresent()) {
             for (int page = 1; ; page++) {
                 final StringBuilder url = new StringBuilder();
                 url.append("https://www.strava.com/api/v3/athlete/activities");
@@ -102,7 +102,7 @@ public final class HungryVelosController {
                     break;
                 }
             }
-        }
+        }*/
 
         final List<AthleteActivity> activities = athleteActivityRepo.findAll().stream().filter(
                 a -> ((Long) a.getAthlete().getId()) != null
