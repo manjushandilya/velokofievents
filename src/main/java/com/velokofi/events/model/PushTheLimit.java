@@ -1,19 +1,30 @@
 package com.velokofi.events.model;
 
-import lombok.AllArgsConstructor;
+import com.velokofi.events.util.NumberCruncher;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Duration;
+
+import static com.velokofi.events.util.Formatter.humanReadableFormat;
+
 @Getter
 @Setter
-@AllArgsConstructor
 public class PushTheLimit implements Comparable<PushTheLimit> {
+
+    private String teamMemberName;
 
     private long phaseOneDistance;
 
     private long phaseTwoDistance;
 
-    private String teamMemberName;
+    private double phaseOneElevation;
+
+    private double phaseTwoElevation;
+
+    private long phaseOneMovingTime;
+
+    private long phaseTwoMovingTime;
 
     private double getRatio() {
         return (double) phaseTwoDistance / phaseOneDistance;
@@ -21,7 +32,10 @@ public class PushTheLimit implements Comparable<PushTheLimit> {
 
     @Override
     public String toString() {
-        return teamMemberName + "," + phaseTwoDistance / 1000 + "," + phaseOneDistance / 1000 + "," + getRatio();
+        return teamMemberName
+                + "," + (double) phaseTwoDistance / 1000 + "," + (double) phaseOneDistance / 1000 + "," + getRatio()
+                + "," + NumberCruncher.round(phaseOneElevation) + "," + NumberCruncher.round(phaseTwoElevation)
+                + "," + humanReadableFormat(Duration.ofSeconds(phaseOneMovingTime)) + "," + humanReadableFormat(Duration.ofSeconds(phaseTwoMovingTime));
     }
 
     @Override
@@ -34,4 +48,5 @@ public class PushTheLimit implements Comparable<PushTheLimit> {
             return 0;
         }
     }
+
 }
