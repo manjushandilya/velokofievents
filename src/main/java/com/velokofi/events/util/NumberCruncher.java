@@ -127,13 +127,23 @@ public final class NumberCruncher {
         return aggregateSorted.limit(Application.LEADER_BOARD_LIMIT).collect(toList());
     }
 
+    public static double getValue(Application.MetricType metricType, double a) {
+        if (metricType == Application.MetricType.DISTANCE) {
+            return round(a);
+        } else if (metricType == Application.MetricType.ELEVATION) {
+            return a;
+        } else {
+            return a;
+        }
+    }
+
     public static double getValue(Application.MetricType metricType, AthleteActivity a) {
         if (metricType == Application.MetricType.DISTANCE) {
-            return round(a.getDistance() / 1000D);
+            return getValue(metricType, a.getDistance() / 1000D);
         } else if (metricType == Application.MetricType.ELEVATION) {
-            return a.getTotal_elevation_gain();
+            return getValue(metricType, a.getTotal_elevation_gain());
         } else {
-            return a.getAverage_speed();
+            return getValue(metricType, a.getAverage_speed());
         }
     }
 

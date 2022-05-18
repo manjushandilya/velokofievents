@@ -16,11 +16,15 @@ public final class Formatter {
                 duration.getSeconds() - TimeUnit.MINUTES.toSeconds(duration.toMinutes()));
     }
 
-    public static String convertMetersToKilometers(final long totalDistance) {
+    public static String convertMetersToKilometers(final double totalDistance) {
         final double ff = totalDistance / 1000.0;
         BigDecimal bd = BigDecimal.valueOf(ff);
         bd = bd.setScale(2, RoundingMode.HALF_UP);
         return String.valueOf(bd.doubleValue());
+    }
+
+    public static String convertMetersToKilometers(final long totalDistance) {
+        return convertMetersToKilometers(new Double(totalDistance));
     }
 
     public static LocalDateTime parse(final String input) {
