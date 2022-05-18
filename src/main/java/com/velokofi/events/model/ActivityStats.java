@@ -13,6 +13,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @ToString
 public class ActivityStats {
 
+    private String athleteId;
+
     private double biggest_ride_distance;
 
     private double biggest_climb_elevation_gain;
