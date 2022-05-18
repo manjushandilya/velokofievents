@@ -47,9 +47,7 @@ public class StatisticsController {
     }
 
     @GetMapping("/documents/totals")
-    public String getTotals(final HttpServletResponse response) throws Exception {
-        response.setContentType("text/plain; charset=utf-8");
-
+    public String getTotals() throws Exception {
         final TeamsRepository teamsRepository = new TeamsRepository();
         final List<Team> teams = teamsRepository.listTeams();
         final List<TeamMember> teamMembers = teams.stream().flatMap(t -> t.getMembers().stream()).collect(toList());
@@ -61,7 +59,7 @@ public class StatisticsController {
                 ).collect(toList());
 
         final StringBuilder sb = new StringBuilder();
-        list.forEach(as -> sb.append(as).append(System.lineSeparator()));
+        list.forEach(as -> sb.append(as).append("<br/>"));
         return sb.toString();
     }
 
