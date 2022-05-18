@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2RefreshToken;
@@ -40,13 +39,13 @@ public final class ActivityUpdater {
     private AthleteActivityRepository athleteActivityRepo;
 
     @Autowired
-    private OAuthorizedClientRepository oAuthClientRepo;
+    private OAuthorizedClientRepository authorizedClientRepo;
 
     //@Scheduled(fixedDelay = 1 * 60 * 1000 * 60, initialDelay = 60 * 1000 * 60)
     public void run() throws Exception {
         LOG.info("Running ActivityUpdater scheduled task at: " + LocalDateTime.now());
 
-        final List<OAuthorizedClient> clients = oAuthClientRepo.findAll();
+        final List<OAuthorizedClient> clients = authorizedClientRepo.findAll();
         final List<String> clientIds = clients.stream().map(c -> c.getPrincipalName()).collect(toList());
 
         for (final String clientId : clientIds) {
@@ -83,7 +82,7 @@ public final class ActivityUpdater {
     }
 
     private void refresh(final String clientId) throws Exception {
-        final OAuthorizedClient client = oAuthClientRepo.findById(clientId).get();
+        final OAuthorizedClient client = authorizedClientRepo.findById(clientId).get();
         final OAuth2AuthorizedClient authorizedClient = OAuthorizedClient.fromBytes(client.getBytes());
 
         final StringBuilder builder = new StringBuilder();
@@ -106,7 +105,7 @@ public final class ActivityUpdater {
         LOG.debug("Refresh token response: " + response);
 
         final RefreshTokenResponse refreshTokenResponse = Application.MAPPER.readValue(response.getBody(), RefreshTokenResponse.class);
-        oAuthClientRepo.deleteById(authorizedClient.getPrincipalName());
+        authorizedClientRepo.deleteById(authorizedClient.getPrincipalName());
 
         final OAuth2AccessToken accessToken = new OAuth2AccessToken(
                 OAuth2AccessToken.TokenType.BEARER,
@@ -130,7 +129,7 @@ public final class ActivityUpdater {
         final OAuthorizedClient OAuthorizedClient = new OAuthorizedClient();
         OAuthorizedClient.setPrincipalName(authorizedClient.getPrincipalName());
         OAuthorizedClient.setBytes(com.velokofi.events.model.OAuthorizedClient.toBytes(newClient));
-        oAuthClientRepo.save(OAuthorizedClient);
+        authorizedClientRepo.save(OAuthorizedClient);
     }
 
     private RefreshTokenRequest getRefreshTokenRequest(final OAuth2AuthorizedClient authorizedClient) {
@@ -154,7 +153,7 @@ public final class ActivityUpdater {
     }
 
     private String getTokenValue(final String clientId) {
-        final OAuthorizedClient client = oAuthClientRepo.findById(clientId).get();
+        final OAuthorizedClient client = authorizedClientRepo.findById(clientId).get();
         final OAuth2AuthorizedClient entry = OAuthorizedClient.fromBytes(client.getBytes());
         final String tokenValue = entry.getAccessToken().getTokenValue();
         return tokenValue;
