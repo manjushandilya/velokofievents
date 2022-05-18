@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -46,23 +47,26 @@ public class StatisticsController {
     }
 
     @GetMapping("/documents/totals")
-    public String getTotals() throws Exception {
+    public String getTotals(final HttpServletResponse response) throws Exception {
+        response.setContentType("text/plain; charset=utf-8");
+
         final TeamsRepository teamsRepository = new TeamsRepository();
         final List<Team> teams = teamsRepository.listTeams();
         final List<TeamMember> teamMembers = teams.stream().flatMap(t -> t.getMembers().stream()).collect(toList());
 
         final List<ActivityStats> activityStats = getActivityStats();
-        activityStats.stream().sorted((o1, o2) ->
-                Float.compare(o2.getYtd_ride_totals().getDistance(), o1.getYtd_ride_totals().getDistance())
-        );
-
-        final List<String> list = activityStats.stream().map(
-                a -> getAthleteStatisticsSummary(a, teamMembers)
-        ).collect(toList());
+        final List<String> list = activityStats.stream()
+                .sorted((o1, o2) -> compareTotals(o1, o2))
+                .map(a -> getAthleteStatisticsSummary(a, teamMembers)
+                ).collect(toList());
 
         final StringBuilder sb = new StringBuilder();
-        list.forEach(as -> sb.append(as));
+        list.forEach(as -> sb.append(as).append(System.lineSeparator()));
         return sb.toString();
+    }
+
+    private int compareTotals(ActivityStats o1, ActivityStats o2) {
+        return Float.compare(o2.getYtd_ride_totals().getDistance(), o1.getYtd_ride_totals().getDistance());
     }
 
     private List<ActivityStats> getActivityStats() {
