@@ -26,7 +26,7 @@ import java.util.List;
 @RestController
 public class StatisticsController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DocumentController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(StatisticsController.class);
 
     @Autowired
     private OAuthorizedClientRepository authorizedClientRepo;
@@ -41,8 +41,13 @@ public class StatisticsController {
                 LOG.info("Fetching statistics for clientId: " + clientId);
                 try {
                     final ResponseEntity<String> response = getStatisticsResponse(clientId);
+
+                    LOG.error("Fetched statistics response: " + response);
+
                     final ActivityStats activityStats = Application.MAPPER.readValue(response.getBody(), ActivityStats.class);
                     activityStatistics.add(activityStats);
+
+                    LOG.error("Added activityStats bean to collection: " + activityStats);
                     break;
                 } catch (final Exception e) {
                     LOG.info("Refreshing auth token for clientId: " + clientId + ", old value: " + getTokenValue(clientId));
