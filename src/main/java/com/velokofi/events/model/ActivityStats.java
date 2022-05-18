@@ -13,20 +13,20 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @ToString
 public class ActivityStats {
 
-    private String biggest_ride_distance;
+    private double biggest_ride_distance;
 
-    private String biggest_climb_elevation_gain;
+    private double biggest_climb_elevation_gain;
 
-    private String ytd_ride_totals;
+    private ActivityTotal ytd_ride_totals;
 
-    private String ytd_run_totals;
+    private ActivityTotal ytd_run_totals;
 
-    private String ytd_swim_totals;
+    private ActivityTotal ytd_swim_totals;
 
-    private String all_ride_totals;
+    private ActivityTotal all_ride_totals;
 
-    private String all_run_totals;
+    private ActivityTotal all_run_totals;
 
-    private String all_swim_totals;
+    private ActivityTotal all_swim_totals;
 
 }

@@ -1,7 +1,5 @@
 package com.velokofi.events;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.velokofi.events.model.AthleteActivity;
 import com.velokofi.events.model.hungryvelos.Team;
 import com.velokofi.events.model.hungryvelos.TeamMember;
@@ -24,17 +22,13 @@ public class ActivityCountTest {
 
     @Test
     public void test() throws Exception {
-        final ObjectMapper mapper = new ObjectMapper();
-        mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
         final List<AthleteActivity> allActivities = new ArrayList<>();
-        final Path activitiesDir = Paths.get("src","test", "resources", "activities");
+        final Path activitiesDir = Paths.get("src", "test", "resources", "activities");
         final File[] files = activitiesDir.toFile().listFiles();
         if (files != null) {
             for (final File file : files) {
                 final byte[] bytes = Files.readAllBytes(file.toPath());
-                final AthleteActivity[] activities = mapper.readValue(bytes, AthleteActivity[].class);
+                final AthleteActivity[] activities = Application.MAPPER.readValue(bytes, AthleteActivity[].class);
                 allActivities.addAll(Arrays.asList(activities));
             }
         }

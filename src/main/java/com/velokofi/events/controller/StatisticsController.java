@@ -50,10 +50,12 @@ public class StatisticsController {
                     LOG.error("Added activityStats bean to collection: " + activityStats);
                     break;
                 } catch (final Exception e) {
+                    LOG.error("Exception occurred during fetching: " + e.getMessage());
                     LOG.info("Refreshing auth token for clientId: " + clientId + ", old value: " + getTokenValue(clientId));
                     try {
                         refreshToken(clientId);
                         LOG.info("Successfully refreshed token for clientId: " + clientId + ", new value: " + getTokenValue(clientId));
+                        break;
                     } catch (final Exception re) {
                         LOG.error("Error while refreshing token for clientId: " + clientId + " " + re.getMessage());
                     }
