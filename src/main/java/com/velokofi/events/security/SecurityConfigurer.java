@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -17,6 +18,10 @@ import org.springframework.web.client.RestTemplate;
 public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Override
+    public void configure(final AuthenticationManagerBuilder auth) {
+    }
+
+    @Override
     public void configure(final WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/resources/**", "/cache/**");
     }
@@ -28,11 +33,11 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .httpStrictTransportSecurity()
                 .disable();
 
-        http.authorizeRequests()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .oauth2Login();
+        // http.authorizeRequests()
+        //  .anyRequest()
+        //  .authenticated()
+        //  .and()
+        //  .oauth2Login();
     }
 
     @Bean
