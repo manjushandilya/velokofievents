@@ -7,6 +7,7 @@ import com.velokofi.events.model.RefreshTokenRequest;
 import com.velokofi.events.model.RefreshTokenResponse;
 import com.velokofi.events.model.hungryvelos.Team;
 import com.velokofi.events.model.hungryvelos.TeamMember;
+import com.velokofi.events.persistence.ActivityStatsRepository;
 import com.velokofi.events.persistence.OAuthorizedClientRepository;
 import com.velokofi.events.persistence.TeamsRepository;
 import com.velokofi.events.util.NumberCruncher;
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -40,9 +40,13 @@ public class StatisticsController {
     @Autowired
     private OAuthorizedClientRepository authorizedClientRepo;
 
+    @Autowired
+    private ActivityStatsRepository activityStatsRepository;
+
     @GetMapping("/documents/statistics")
     public String getStatistics() throws Exception {
         final List<ActivityStats> activityStatistics = getActivityStats();
+        activityStatsRepository.saveAll(activityStatistics);
         return Application.MAPPER.writeValueAsString(activityStatistics);
     }
 
@@ -52,7 +56,7 @@ public class StatisticsController {
         final List<Team> teams = teamsRepository.listTeams();
         final List<TeamMember> teamMembers = teams.stream().flatMap(t -> t.getMembers().stream()).collect(toList());
 
-        final List<ActivityStats> activityStats = getActivityStats();
+        final List<ActivityStats> activityStats = activityStatsRepository.findAll();
         final List<String> list = activityStats.stream()
                 .sorted((o1, o2) -> compareTotals(o1, o2))
                 .map(a -> getAthleteStatisticsSummary(a, teamMembers)

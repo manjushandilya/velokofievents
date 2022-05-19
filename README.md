@@ -11,18 +11,21 @@ Individual awards category (monthly):
 - Ms Thulimagle and Mr Thulimaga (Max no. of rides)
 
 Hosting details:
-- Homepage (Redirects to Strava login and authorization page of Strava): http://31.170.165.24:8080/
-- CSV report for all activities: http://31.170.165.24:8080/reports/activities
-- CSV report for all activities for a single athlete: http://31.170.165.24:8080/reports/activities/{athleteId}
-- Document dump (JSON) for all activities: http://31.170.165.24:8080/documents/activities
-- Document dump (JSON) for all activities for a single athlete: http://31.170.165.24:8080/documents/activities/{athleteId}
-- Document dump (JSON) for all clients: http://31.170.165.24:8080/documents/clients
+- Homepage (Redirects to Strava login and authorization page of Strava): http://neois.online:8080/
+- CSV report for all activities: http://neois.online:8080/reports/activities
+- CSV report for all activities for a single athlete: http://neois.online:8080/reports/activities/{athleteId}
+- Document dump (JSON) for all activities: http://neois.online:8080/documents/activities
+- Document dump (JSON) for all activities for a single athlete: http://neois.online:8080/documents/activities/{athleteId}
+- Document dump (JSON) for all clients: http://neois.online:8080/documents/clients
+- Document dump (JSON) for all activity statistics: http://neois.online:8080/documents/statistics
+- CSV for activity statistics totals: http://neois.online:8080/documents/totals
+- Spring boot being run on IP address: 31.170.165.24 and port: 8080
 
 Housekeeping (DO NOT USE, UNLESS YOU KNOW WHAT YOU'RE DOING!!!):
-- Clear all activities: http://31.170.165.24:8080/documents?action=clearActivities
-- Clear all oauth client caches: http://31.170.165.24:8080/documents?action=clearClients
-- Clear everything: http://31.170.165.24:8080/documents?action=clearAll
-- Cleanup stale data: http://31.170.165.24:8080/documents?action=cleanup
+- Clear all activities: http://neois.online:8080/documents?action=clearActivities
+- Clear all oauth client caches: http://neois.online:8080/documents?action=clearClients
+- Clear everything: http://neois.online:8080/documents?action=clearAll
+- Cleanup stale data: http://neois.online:8080/documents?action=cleanup
 
 Technical Backlog:
 - Theme colors and team colors

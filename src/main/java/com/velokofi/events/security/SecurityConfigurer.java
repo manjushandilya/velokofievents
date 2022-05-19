@@ -18,7 +18,8 @@ import org.springframework.web.client.RestTemplate;
 public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Override
-    public void configure(final AuthenticationManagerBuilder auth) {
+    public void configure(final AuthenticationManagerBuilder auth) throws Exception {
+        super.configure(auth);
     }
 
     @Override
@@ -33,11 +34,16 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .httpStrictTransportSecurity()
                 .disable();
 
-        // http.authorizeRequests()
-        //  .anyRequest()
-        //  .authenticated()
-        //  .and()
-        //  .oauth2Login();
+        http.authorizeRequests()
+                .antMatchers("/",
+                        "/error",
+                        "/webjars/**",
+                        "/login",
+                        "/about",
+                        "/documents/totals",
+                        "/documents/activities"
+                ).permitAll()
+                .anyRequest().authenticated().and().oauth2Login();
     }
 
     @Bean
