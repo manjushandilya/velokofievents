@@ -63,8 +63,8 @@ public class Application {
     }
 
     @GetMapping("/user")
-    public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
-        return Collections.singletonMap("name", principal != null ? principal.getName() : null);
+    public Map<String, Object> user(@AuthenticationPrincipal final OAuth2User principal) {
+        return Collections.singletonMap("name", principal.getName());
     }
 
     @Bean
