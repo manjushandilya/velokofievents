@@ -1,4 +1,4 @@
-/*package com.velokofi.events.controller;
+package com.velokofi.events.controller;
 
 import com.velokofi.events.Application;
 import com.velokofi.events.model.AthleteActivity;
@@ -33,6 +33,8 @@ import static java.util.stream.Collectors.toList;
 public class LoginController {
 
     private static final Logger LOG = LoggerFactory.getLogger(LoginController.class);
+
+    private static final String COOKIE_ID = "velokofieventscookie";
 
     private final RestTemplate restTemplate;
 
@@ -79,7 +81,7 @@ public class LoginController {
 
                 final AthleteActivity[] activitiesArray = Application.MAPPER.readValue(response, AthleteActivity[].class);
                 Stream.of(activitiesArray)
-                        .filter(a->Application.SUPPORTED_RIDE_TYPES.contains(a.getType()))
+                        .filter(a -> Application.SUPPORTED_RIDE_TYPES.contains(a.getType()))
                         .forEach(activity -> athleteActivityRepo.save(activity));
 
                 if (activitiesArray.length < 200) {
@@ -88,7 +90,7 @@ public class LoginController {
             }
         }
         final RedirectView redirectView = new RedirectView("/setCookie");
-        redirectView.addStaticAttribute(Application.COOKIE_ID, client.getPrincipalName());
+        redirectView.addStaticAttribute(COOKIE_ID, client.getPrincipalName());
 
         return redirectView;
     }
@@ -104,4 +106,3 @@ public class LoginController {
     }
 
 }
-*/
