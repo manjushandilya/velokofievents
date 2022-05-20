@@ -58,11 +58,6 @@ public final class HungryVelosController {
         this.restTemplate = restTemplate;
     }
 
-    @GetMapping("/user")
-    public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
-        return Collections.singletonMap("name", principal.getAttribute("name"));
-    }
-
     @GetMapping("/")
     public ModelAndView execute(/*@RegisteredOAuth2AuthorizedClient final OAuth2AuthorizedClient client*/) throws Exception {
         final LeaderBoard leaderBoard = new LeaderBoard();
