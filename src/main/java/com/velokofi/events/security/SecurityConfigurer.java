@@ -32,16 +32,11 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
         // https://stackoverflow.com/questions/49273847/springboot-error-parsing-http-request-header
         http.headers().httpStrictTransportSecurity().disable();
 
-        http
-                .authorizeRequests()
-                .antMatchers("/", "/home").permitAll()
-                .anyRequest().authenticated()
+        http.authorizeRequests()
+                .anyRequest()
+                .authenticated()
                 .and()
-                .oauth2Login()
-                .permitAll()
-                .and()
-                .logout()
-                .permitAll();
+                .oauth2Login();
     }
 
     @Bean
