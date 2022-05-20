@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Hungry Velos</title>
+    <title>VeloKofi Events</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -19,8 +19,6 @@
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
-
-    <script type="text/javascript" src="/js/jquery-min.js"></script>
 
 </head>
 
@@ -40,28 +38,39 @@
 
                 <!-- Topbar Navbar -->
                 <ul class="navbar-nav ml-auto">
+
                     <div class="topbar-divider d-none d-sm-block"></div>
 
                     <!-- Nav Item - User Information -->
-                    <!--li class="nav-item dropdown no-arrow authenticated" style="display:none">
+                    <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 small"
-                                  th:text="${leaderBoard.athleteProfile.firstname + ' ' + leaderBoard.athleteProfile.lastname}"/>
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
                             <img class="img-profile rounded-circle"
-                                 th:src="${leaderBoard.athleteProfile.profile_medium}"/>
+                                 src="img/undraw_profile.svg">
                         </a>
-                    </li-->
-
-                    <div class="unauthenticated">
-                        To login with Strava: <a href="/oauth2/authorization/strava">Click here</a>
-                    </div>
-                    <div class="authenticated" >
-                        Logged in as: <span id="user"></span>
-                        <div>
-                            <button onClick="logout()" class="btn btn-primary">Logout</button>
+                        <!-- Dropdown - User Information -->
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                             aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Profile
+                            </a>
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Settings
+                            </a>
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Activity Log
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Logout
+                            </a>
                         </div>
-                    </div>
+                    </li>
 
                 </ul>
 
@@ -72,430 +81,43 @@
             <div class="container-fluid">
 
                 <!-- Page Heading -->
-                <h1 class="h3 mb-2 text-gray-800">Hungry Velos Challenge Q1 2022</h1>
-                <p class="mb-4">
-                    Hungry Velos is a 6 week long challenge starting from
-                    <b>00:00:00 on 08 Jan 2022 </b> and ending on
-                    <b>23:59:59 on 18 Feb 2022</b> to encourage the cyclist in you!
-                    Here's the story so far:
-                </p>
-
-                <!-- Content Row -->
-                <div class="row">
-
-                    <div class="col-xl-2 col-md-6 mb-4">
-                        <div class="card border-left-primary shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                            Distance
-                                        </div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800"
-                                             th:text="${leaderBoard.totalDistance} + ' kms'"/>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-bicycle fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-2 col-md-6 mb-4">
-                        <div class="card border-left-success shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                            Elevation Gain
-                                        </div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800"
-                                             th:text="${leaderBoard.totalElevation} + ' mts'"/>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-rocket fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-2 col-md-6 mb-4">
-                        <div class="card border-left-info shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Rides
-                                        </div>
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col">
-                                                <div class="h5 mb-0 font-weight-bold text-gray-800"
-                                                     th:text="${leaderBoard.totalRides}"/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-calculator fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-2 col-md-6 mb-4">
-                        <div class="card border-left-warning shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                            Moving Time
-                                        </div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800"
-                                             th:text="${leaderBoard.movingTimeInHumanReadableFormat}"/>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-cogs fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-2 col-md-6 mb-4">
-                        <div class="card border-left-danger shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                            Rider Average
-                                        </div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800"
-                                             th:text="${leaderBoard.riderAverage + ' kms'}"/>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-user fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-2 col-md-6 mb-4">
-                        <div class="card border-left-secondary shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-gray text-uppercase mb-1">
-                                            Riders
-                                        </div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800"
-                                             th:text="${leaderBoard.riderCount}"/>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-users fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Content Row -->
-                <div class="row">
-
-                    <div class="col-lg-4 mb-4">
-
-                        <!-- Bar Chart -->
-                        <div>
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Team Average Distance</h6>
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="chart-pie pt-4 pb-2">
-                                        <canvas id="teamAvgDistanceChart"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 mb-4">
-
-                        <!-- Bar Chart -->
-                        <div class="card shadow mb-4">
-                            <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Team Average Elevation</h6>
-                            </div>
-                            <!-- Card Body -->
-                            <div class="card-body">
-                                <div class="chart-pie pt-4 pb-2">
-                                    <canvas id="teamAvgElevationChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 mb-4">
-
-                        <!-- Bar Chart -->
-                        <div class="card shadow mb-4">
-                            <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Team Average Rides</h6>
-                            </div>
-
-                            <!-- Card Body -->
-                            <div class="card-body">
-                                <div class="chart-pie pt-4 pb-2">
-                                    <canvas id="teamAvgRidesChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Content Row - Ms Alemaari and Mr Alemaari -->
-                <div class="row">
-
-                    <!-- Area Chart -->
-                    <div class="col-xl-6 col-lg-7">
-                        <div class="card shadow mb-4">
-                            <!-- Card Header - Dropdown -->
-                            <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">Ms. Alemaari</h6>
-                            </div>
-                            <!-- Card Body -->
-                            <div class="card-body">
-                                <div class="chart-area">
-                                    <canvas id="msAlemaariChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Area Chart -->
-                    <div class="col-xl-6 col-lg-7">
-                        <div class="card shadow mb-4">
-                            <!-- Card Header - Dropdown -->
-                            <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">Mr. Alemaari</h6>
-                            </div>
-                            <!-- Card Body -->
-                            <div class="card-body">
-                                <div class="chart-area">
-                                    <canvas id="mrAlemaariChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Content Row - Bettappa, Bettamma -->
-                <div class="row">
-
-                    <!-- Area Chart -->
-                    <div class="col-xl-6 col-lg-7">
-                        <div class="card shadow mb-4">
-                            <!-- Card Header - Dropdown -->
-                            <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">Ms. Bettamma</h6>
-                            </div>
-                            <!-- Card Body -->
-                            <div class="card-body">
-                                <div class="chart-area">
-                                    <canvas id="bettammaChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Area Chart -->
-                    <div class="col-xl-6 col-lg-7">
-                        <div class="card shadow mb-4">
-                            <!-- Card Header - Dropdown -->
-                            <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">Mr. Bettappa</h6>
-                            </div>
-                            <!-- Card Body -->
-                            <div class="card-body">
-                                <div class="chart-area">
-                                    <canvas id="bettappaChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Content Row - Minchina Otamma and Michina Otappa -->
-                <div class="row">
-
-                    <!-- Area Chart -->
-                    <div class="col-xl-6 col-lg-7">
-                        <div class="card shadow mb-4">
-                            <!-- Card Header - Dropdown -->
-                            <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">Ms. Minchina Ota</h6>
-                            </div>
-                            <!-- Card Body -->
-                            <div class="card-body">
-                                <div class="chart-area">
-                                    <canvas id="minchinaOtammaChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Area Chart -->
-                    <div class="col-xl-6 col-lg-7">
-                        <div class="card shadow mb-4">
-                            <!-- Card Header - Dropdown -->
-                            <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">Mr. Minchina Ota</h6>
-                            </div>
-                            <!-- Card Body -->
-                            <div class="card-body">
-                                <div class="chart-area">
-                                    <canvas id="minchinaOtappaChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Content Row - Ms Thulimaga and Mr Thulimaga -->
-                <div class="row">
-
-                    <!-- Area Chart -->
-                    <div class="col-xl-6 col-lg-7">
-                        <div class="card shadow mb-4">
-                            <!-- Card Header - Dropdown -->
-                            <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">Ms. Thulimagle</h6>
-                            </div>
-                            <!-- Card Body -->
-                            <div class="card-body">
-                                <div class="chart-area">
-                                    <canvas id="msThuliMagaChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Area Chart -->
-                    <div class="col-xl-6 col-lg-7">
-                        <div class="card shadow mb-4">
-                            <!-- Card Header - Dropdown -->
-                            <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">Mr. Thulimaga</h6>
-                            </div>
-                            <!-- Card Body -->
-                            <div class="card-body">
-                                <div class="chart-area">
-                                    <canvas id="mrThuliMagaChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">Cards</h1>
                 </div>
 
                 <div class="row">
-                    <div class="col-xl-6 col-lg-7">
-                        <div class="card shadow mb-4">
-                            <!-- Card Header - Dropdown -->
-                            <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">Individual Summary</h6>
+
+                    <div class="col-lg-6">
+
+                        <!-- Default Card Example -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                Hungry Velos
                             </div>
-                            <!-- Card Body -->
                             <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Distance</th>
-                                                <th>Elevation</th>
-                                                <th>Avg Speed</th>
-                                                <th>Rides</th>
-                                                <th>Team</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr th:each="athleteSummary: ${leaderBoard.athleteSummaries}">
-                                                <td>
-                                                    <img width="30" height="25"
-                                                         th:src="${athleteSummary.gender == 'M' ? 'img/undraw_profile.svg' : 'img/undraw_profile_1.svg'}"/>
-                                                    <span th:text="${athleteSummary.name}">Name</span>
-                                                    <img width="25" height="25"
-                                                         th:if="${athleteSummary.captain}" src="img/star.png"/>
-                                                </td>
-                                                <td><span th:text="${athleteSummary.distance}">Distance</span></td>
-                                                <td><span th:text="${athleteSummary.elevation}">Elevation</span></td>
-                                                <td><span th:text="${athleteSummary.avgSpeed}">Avg Speed</span></td>
-                                                <td><span th:text="${athleteSummary.rides}">Rides</span></td>
-                                                <td><span th:text="${athleteSummary.team}">Team</span></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                Hungry Velos was a 6 week long challenge starting from
+                                <b>00:00:00 on 08 Jan 2022 </b> and ending on
+                                <b>23:59:59 on 18 Feb 2022</b> to encourage the cyclist in you!
+                                Click <a href="/hungryvelos">here</a> for details!
                             </div>
                         </div>
+
+                        <!-- Basic Card Example -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">4044 in 2022</h6>
+                            </div>
+                            <div class="card-body">
+                                Some members of VeloKofi tribe, have pledged to pedal a whopping
+                                distance of 4044 kilometers in the calendar year of 2022!
+                                Click <a href="/pledge">here</a> for details!
+                            </div>
+                        </div>
+
                     </div>
 
-                    <div class="col-xl-6 col-lg-7">
-                        <div class="card shadow mb-4">
-                            <!-- Card Header - Dropdown -->
-                            <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">Team Summary</h6>
-                            </div>
-                            <!-- Card Body -->
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered" id="dataTable1" width="100%" cellspacing="0">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Distance</th>
-                                                <th>Avg Distance</th>
-                                                <th>Elevation</th>
-                                                <th>Avg Elevation</th>
-                                                <th>Avg Speed</th>
-                                                <th>Rides</th>
-                                                <th>Avg Rides</th>
-                                                <th>Members</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr th:each="teamSummary: ${leaderBoard.teamSummaries}">
-                                                <td><span th:text="${teamSummary.name}">Name</span></td>
-                                                <td><span th:text="${teamSummary.distance}">Distance</span></td>
-                                                <td><span th:text="${teamSummary.avgDistance}">Avg Distance</span></td>
-                                                <td><span th:text="${teamSummary.elevation}">Elevation</span></td>
-                                                <td><span th:text="${teamSummary.avgElevation}">Avg Elevation</span></td>
-                                                <td><span th:text="${teamSummary.avgSpeed}">Avg Speed</span></td>
-                                                <td><span th:text="${teamSummary.rides}">Rides</span></td>
-                                                <td><span th:text="${teamSummary.avgRides}">Avg Rides</span></td>
-                                                <td><span th:text="${teamSummary.memberCount}">Members</span></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
+
             </div>
             <!-- /.container-fluid -->
 
@@ -506,7 +128,7 @@
         <footer class="sticky-footer bg-white">
             <div class="container my-auto">
                 <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; VeloKofi 2022</span>
+                    <span>Copyright &copy; VeloKofi 2020</span>
                 </div>
             </div>
         </footer>
@@ -523,6 +145,26 @@
     <i class="fas fa-angle-up"></i>
 </a>
 
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary" href="login.html">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Bootstrap core JavaScript-->
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -532,379 +174,6 @@
 
 <!-- Custom scripts for all pages-->
 <script src="js/sb-admin-2.min.js"></script>
-
-<script src="vendor/chart.js/Chart.min.js"></script>
-
-<script th:inline="javascript">
-    random_rgba = function() {
-        var num = Math.round(0xffffff * Math.random());
-        var r = num >> 16;
-        var g = num >> 8 & 255;
-        var b = num & 255;
-        return 'rgb(' + r + ', ' + g + ', ' + b + ')';
-    }
-
-    var teamAvgDistanceConfig = {
-        labels: [
-            /*[# th:each="team, iterStat: ${leaderBoard.teamAvgDistanceMap}"]*/
-               "[(${team.key})]"[(${iterStat.last ? '' : ','})]
-            /*[/]*/
-        ],
-        datasets: [{
-            data: [
-                /*[# th:each="team, iterStat: ${leaderBoard.teamAvgDistanceMap}"]*/
-                    [(${team.value})][(${iterStat.last ? '' : ','})]
-                /*[/]*/
-            ],
-            backgroundColor: [
-                /*[# th:each="team, iterStat: ${leaderBoard.teamAvgDistanceMap}"]*/
-                    random_rgba(),
-                /*[/]*/
-            ],
-        }]
-    };
-
-    var teamAvgElevationConfig = {
-        labels: [
-            /*[# th:each="team, iterStat: ${leaderBoard.teamAvgElevationMap}"]*/
-               "[(${team.key})]"[(${iterStat.last ? '' : ','})]
-            /*[/]*/
-        ],
-        datasets: [{
-            data: [
-                /*[# th:each="team, iterStat: ${leaderBoard.teamAvgElevationMap}"]*/
-                    [(${team.value})][(${iterStat.last ? '' : ','})]
-                /*[/]*/
-            ],
-            backgroundColor: [
-                /*[# th:each="team, iterStat: ${leaderBoard.teamAvgElevationMap}"]*/
-                    random_rgba(),
-                /*[/]*/
-            ],
-        }]
-    };
-
-    var teamAvgRidesConfig = {
-        labels: [
-            /*[# th:each="team, iterStat: ${leaderBoard.teamAvgRidesMap}"]*/
-               "[(${team.key})]"[(${iterStat.last ? '' : ','})]
-            /*[/]*/
-        ],
-        datasets: [{
-            data: [
-                /*[# th:each="team, iterStat: ${leaderBoard.teamAvgRidesMap}"]*/
-                    [(${team.value})][(${iterStat.last ? '' : ','})]
-                /*[/]*/
-            ],
-            backgroundColor: [
-                /*[# th:each="team, iterStat: ${leaderBoard.teamAvgRidesMap}"]*/
-                    random_rgba(),
-                /*[/]*/
-            ],
-        }]
-    };
-
-    var msAlemaariChartConfig = {
-        labels: [
-            /*[# th:each="alemaari, iterStat: ${leaderBoard.msAlemaari}"]*/
-                "[(${alemaari.key})]",
-            /*[/]*/
-        ],
-        datasets: [{
-            label: 'Distance',
-            borderColor: random_rgba(),
-            fill: false,
-            data: [
-                /*[# th:each="alemaari, iterStat: ${leaderBoard.msAlemaari}"]*/
-                    [(${alemaari.value})],
-                /*[/]*/
-            ]
-        }]
-    };
-
-    var mrAlemaariChartConfig = {
-        labels: [
-            /*[# th:each="alemaari, iterStat: ${leaderBoard.mrAlemaari}"]*/
-                "[(${alemaari.key})]",
-            /*[/]*/
-        ],
-        datasets: [{
-            label: 'Distance',
-            borderColor: random_rgba(),
-            fill: false,
-            data: [
-                /*[# th:each="alemaari, iterStat: ${leaderBoard.mrAlemaari}"]*/
-                    [(${alemaari.value})],
-                /*[/]*/
-            ]
-        }]
-    };
-
-    var bettammaChartConfig = {
-        labels: [
-            /*[# th:each="amma, iterStat: ${leaderBoard.bettamma}"]*/
-                "[(${amma.key})]",
-            /*[/]*/
-        ],
-        datasets: [{
-            label: 'Elevation Gain',
-            borderColor: random_rgba(),
-            fill: false,
-            data: [
-                /*[# th:each="amma, iterStat: ${leaderBoard.bettamma}"]*/
-                    [(${amma.value})],
-                /*[/]*/
-            ]
-        }]
-    };
-
-    var bettappaChartConfig = {
-        labels: [
-            /*[# th:each="appa, iterStat: ${leaderBoard.bettappa}"]*/
-                "[(${appa.key})]",
-            /*[/]*/
-        ],
-        datasets: [{
-            label: 'Elevation Gain',
-            borderColor: random_rgba(),
-            fill: false,
-            data: [
-                /*[# th:each="bettappa, iterStat: ${leaderBoard.bettappa}"]*/
-                    [(${bettappa.value})],
-                /*[/]*/
-            ]
-        }]
-    };
-
-    var minchinaOtammaChartConfig = {
-        labels: [
-            /*[# th:each="motamma, iterStat: ${leaderBoard.minchinaOtamma}"]*/
-                "[(${motamma.key})]",
-            /*[/]*/
-        ],
-        datasets: [{
-            label: 'Average Speed',
-            borderColor: random_rgba(),
-            fill: false,
-            data: [
-                /*[# th:each="motamma, iterStat: ${leaderBoard.minchinaOtamma}"]*/
-                    [(${motamma.value})],
-                /*[/]*/
-            ]
-        }]
-    };
-
-    var minchinaOtappaChartConfig = {
-        labels: [
-            /*[# th:each="motappa, iterStat: ${leaderBoard.minchinaOtappa}"]*/
-                "[(${motappa.key})]",
-            /*[/]*/
-        ],
-        datasets: [{
-            label: 'Average Speed',
-            borderColor: random_rgba(),
-            fill: false,
-            data: [
-                /*[# th:each="motappa, iterStat: ${leaderBoard.minchinaOtappa}"]*/
-                    [(${motappa.value})],
-                /*[/]*/
-            ]
-        }]
-    };
-
-    var msThuliMagaChartConfig = {
-        labels: [
-            /*[# th:each="thuliMaga, iterStat: ${leaderBoard.msThuliMaga}"]*/
-                "[(${thuliMaga.key})]",
-            /*[/]*/
-        ],
-        datasets: [{
-            label: 'Rides',
-            borderColor: random_rgba(),
-            fill: false,
-            data: [
-                /*[# th:each="thuliMaga, iterStat: ${leaderBoard.msThuliMaga}"]*/
-                    [(${thuliMaga.value})],
-                /*[/]*/
-            ]
-        }]
-    };
-
-    var mrThuliMagaChartConfig = {
-        labels: [
-            /*[# th:each="thuliMaga, iterStat: ${leaderBoard.mrThuliMaga}"]*/
-                "[(${thuliMaga.key})]",
-            /*[/]*/
-        ],
-        datasets: [{
-            label: 'Rides',
-            borderColor: random_rgba(),
-            fill: false,
-            data: [
-                /*[# th:each="thuliMaga, iterStat: ${leaderBoard.mrThuliMaga}"]*/
-                    [(${thuliMaga.value})],
-                /*[/]*/
-            ]
-        }]
-    };
-
-    window.onload = function() {
-        var ctx4 = document.getElementById('teamAvgDistanceChart').getContext('2d');
-        window.myBar = new Chart(ctx4, {
-            type: 'bar',
-            data: teamAvgDistanceConfig,
-            options: {
-                maintainAspectRatio: false,
-                responsive: true,
-                legend: {
-                    display: false,
-                },
-                title: {
-                    display: true,
-                    text: 'Average Distance Per Rider (km)'
-                }
-            }
-        });
-
-        var ctx5 = document.getElementById('teamAvgElevationChart').getContext('2d');
-        window.myBar = new Chart(ctx5, {
-            type: 'bar',
-            data: teamAvgElevationConfig,
-            options: {
-                maintainAspectRatio: false,
-                responsive: true,
-                legend: {
-                    display: false,
-                },
-                title: {
-                    display: true,
-                    text: 'Average Elevation Per Rider (mts)'
-                }
-            }
-        });
-
-        var ctx6 = document.getElementById('teamAvgRidesChart').getContext('2d');
-        window.myBar = new Chart(ctx6, {
-            type: 'bar',
-            data: teamAvgRidesConfig,
-            options: {
-                maintainAspectRatio: false,
-                responsive: true,
-                legend: {
-                    display: false,
-                },
-                title: {
-                    display: true,
-                    text: 'Average Rides Per Rider'
-                }
-            }
-        });
-
-        var ctx7 = document.getElementById('msAlemaariChart').getContext('2d');
-        window.myLine = Chart.Line(ctx7, {
-            data: msAlemaariChartConfig,
-            options: {
-                maintainAspectRatio: false,
-                responsive: true,
-                hoverMode: 'index',
-                stacked: false
-            }
-        });
-
-        var ctx8 = document.getElementById('mrAlemaariChart').getContext('2d');
-        window.myLine = Chart.Line(ctx8, {
-            data: mrAlemaariChartConfig,
-            options: {
-                maintainAspectRatio: false,
-                responsive: true,
-                hoverMode: 'index',
-                stacked: false
-            }
-        });
-
-        var ctx9 = document.getElementById('bettammaChart').getContext('2d');
-        window.myLine = Chart.Line(ctx9, {
-            data: bettammaChartConfig,
-            options: {
-                maintainAspectRatio: false,
-                responsive: true,
-                hoverMode: 'index',
-                stacked: false
-            }
-        });
-
-        var ctx10 = document.getElementById('bettappaChart').getContext('2d');
-        window.myLine = Chart.Line(ctx10, {
-            data: bettappaChartConfig,
-            options: {
-                maintainAspectRatio: false,
-                responsive: true,
-                hoverMode: 'index',
-                stacked: false
-            }
-        });
-
-        var ctx11 = document.getElementById('minchinaOtammaChart').getContext('2d');
-        window.myLine = Chart.Line(ctx11, {
-            data: minchinaOtammaChartConfig,
-            options: {
-                maintainAspectRatio: false,
-                responsive: true,
-                hoverMode: 'index',
-                stacked: false
-            }
-        });
-
-        var ctx12 = document.getElementById('minchinaOtappaChart').getContext('2d');
-        window.myLine = Chart.Line(ctx12, {
-            data: minchinaOtappaChartConfig,
-            options: {
-                maintainAspectRatio: false,
-                responsive: true,
-                hoverMode: 'index',
-                stacked: false
-            }
-        });
-
-        var ctx13 = document.getElementById('msThuliMagaChart').getContext('2d');
-        window.myLine = Chart.Line(ctx13, {
-            data: msThuliMagaChartConfig,
-            options: {
-                maintainAspectRatio: false,
-                responsive: true,
-                hoverMode: 'index',
-                stacked: false
-            }
-        });
-
-        var ctx14 = document.getElementById('mrThuliMagaChart').getContext('2d');
-        window.myLine = Chart.Line(ctx14, {
-            data: mrThuliMagaChartConfig,
-            options: {
-                maintainAspectRatio: false,
-                responsive: true,
-                hoverMode: 'index',
-                stacked: false
-            }
-        });
-    };
-
-    $.get("/user", function(data) {
-        $("#user").html(data.name);
-        $(".unauthenticated").hide()
-        $(".authenticated").show()
-    });
-
-    var logout = function() {
-        $.post("/logout", function() {
-            $("#user").html('');
-            $(".unauthenticated").show();
-            $(".authenticated").hide();
-        })
-        return true;
-    }
-
-</script>
 
 </body>
 
