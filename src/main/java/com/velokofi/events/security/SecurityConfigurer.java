@@ -32,24 +32,27 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         // https://stackoverflow.com/questions/49273847/springboot-error-parsing-http-request-header
-        http.headers()
-                .httpStrictTransportSecurity()
-                .disable();
+        http.headers().httpStrictTransportSecurity().disable();
 
-        http.authorizeRequests()
-                .antMatchers("/",
-                        "/error",
-                        "/webjars/**",
-                        "/documents/totals"
-                ).permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .exceptionHandling(e -> e.authenticationEntryPoint(
-                        new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-                )
-                .oauth2Login()
-                .and()
-                .logout(l -> l.logoutSuccessUrl("/").permitAll());
+        http.authorizeRequests().anyRequest().permitAll();
+        http.authorizeRequests().antMatchers("/login/**").authenticated().and().oauth2Login();
+        http.exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
+        http.logout().logoutSuccessUrl("/");
+
+//        http.authorizeRequests()
+//                .antMatchers("/**",
+//                        "/error",
+//                        "/webjars/**",
+//                        "/documents/totals"
+//                ).permitAll()
+//                .anyRequest().authenticated()
+//                .and()
+//                .exceptionHandling(e -> e.authenticationEntryPoint(
+//                        new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+//                )
+//                .oauth2Login()
+//                .and()
+//                .logout(l -> l.logoutSuccessUrl("/").permitAll());
     }
 
     @Bean
