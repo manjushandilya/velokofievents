@@ -58,7 +58,7 @@ public final class HungryVelosController {
         this.restTemplate = restTemplate;
     }
 
-    @GetMapping("/")
+    @GetMapping("/hungryvelos")
     public ModelAndView execute() throws Exception {
         final LeaderBoard leaderBoard = new LeaderBoard();
 
@@ -237,7 +237,7 @@ public final class HungryVelosController {
         leaderBoard.setMrThuliMaga(summingAggregateLong(activities, teamMembers, "M"));
         leaderBoard.setMsThuliMaga(summingAggregateLong(activities, teamMembers, "F"));
 
-        final ModelAndView mav = new ModelAndView("index");
+        final ModelAndView mav = new ModelAndView("hv2022");
         mav.addObject("leaderBoard", leaderBoard);
         //mav.addObject("principalName", client.getPrincipalName());
         return mav;
