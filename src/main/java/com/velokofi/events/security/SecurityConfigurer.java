@@ -26,7 +26,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(final WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/resources/**", "/cache/**");
+        web.ignoring().antMatchers("/resources/**", "/cache/**").anyRequest();
     }
 
     @Override
