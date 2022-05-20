@@ -2,7 +2,7 @@
 
 Hungry Velos Challenge (Jan 2022):
 - Team with max average distance
-- Team with max average evelation
+- Team with max average elevation
 
 Individual awards category (monthly):
 - Ms and Mr Alemaari (Max distance)

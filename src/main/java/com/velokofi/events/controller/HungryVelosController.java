@@ -15,8 +15,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -56,16 +58,21 @@ public final class HungryVelosController {
         this.restTemplate = restTemplate;
     }
 
+    @GetMapping("/user")
+    public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
+        return Collections.singletonMap("name", principal.getAttribute("name"));
+    }
+
     @GetMapping("/")
-    public ModelAndView execute(@RegisteredOAuth2AuthorizedClient final OAuth2AuthorizedClient client) throws Exception {
+    public ModelAndView execute(/*@RegisteredOAuth2AuthorizedClient final OAuth2AuthorizedClient client*/) throws Exception {
+        final LeaderBoard leaderBoard = new LeaderBoard();
 
         final List<Team> teams = teamsRepository.listTeams();
         final List<TeamMember> teamMembers = teams.stream().flatMap(t -> t.getMembers().stream()).collect(toList());
-        final Optional<TeamMember> teamMemberLogin = teamMembers.stream().filter(tm -> String.valueOf(tm.getId()).equals(client.getPrincipalName())).findFirst();
+        /*final Optional<TeamMember> teamMemberLogin = teamMembers.stream().filter(tm -> String.valueOf(tm.getId()).equals(client.getPrincipalName())).findFirst();
 
         LOG.info("Team member logged in? " + teamMemberLogin.isPresent() + ", strava id: " + client.getPrincipalName());
 
-        final LeaderBoard leaderBoard = new LeaderBoard();
         final String tokenValue = client.getAccessToken().getTokenValue();
 
         final String profileResponse = getResponse(tokenValue, "https://www.strava.com/api/v3/athlete");
@@ -78,7 +85,7 @@ public final class HungryVelosController {
             OAuthorizedClient.setPrincipalName(client.getPrincipalName());
             OAuthorizedClient.setBytes(com.velokofi.events.model.OAuthorizedClient.toBytes(client));
             authorizedClientRepo.save(OAuthorizedClient);
-        }
+        }*/
 
         /*if (teamMemberLogin.isPresent()) {
             for (int page = 1; ; page++) {
@@ -278,7 +285,7 @@ public final class HungryVelosController {
 
         final ModelAndView mav = new ModelAndView("index");
         mav.addObject("leaderBoard", leaderBoard);
-        mav.addObject("principalName", client.getPrincipalName());
+        //mav.addObject("principalName", client.getPrincipalName());
         return mav;
     }
 

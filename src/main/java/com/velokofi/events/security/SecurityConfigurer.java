@@ -4,11 +4,13 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.web.client.RestTemplate;
 
 @EnableWebSecurity
@@ -38,12 +40,16 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .antMatchers("/",
                         "/error",
                         "/webjars/**",
-                        "/login",
-                        "/about",
-                        "/documents/totals",
-                        "/documents/activities"
+                        "/documents/totals"
                 ).permitAll()
-                .anyRequest().authenticated().and().oauth2Login();
+                .anyRequest().authenticated()
+                .and()
+                .exceptionHandling(e -> e.authenticationEntryPoint(
+                        new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+                )
+                .oauth2Login()
+                .and()
+                .logout(l -> l.logoutSuccessUrl("/").permitAll());
     }
 
     @Bean
