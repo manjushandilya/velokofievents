@@ -4,13 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.client.RestTemplate;
 
 @EnableWebSecurity
@@ -34,26 +33,11 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
         // https://stackoverflow.com/questions/49273847/springboot-error-parsing-http-request-header
         http.headers().httpStrictTransportSecurity().disable();
 
-        http
-                .authorizeRequests()
-                .antMatchers("/").permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .oauth2Login()
-                .and()
-                .exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
-
-        /*
-        // @formatter:off
-        http.authorizeRequests(a -> a
-                .antMatchers("/").permitAll()
+        http.antMatcher("/**").authorizeRequests()
+                .antMatchers("/", "/login**", "/webjars/**", "/error**").permitAll()
                 .anyRequest().authenticated()
-        ).exceptionHandling(e -> e
-                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-        ).oauth2Login();
-        // @formatter:on
-        */
+                .and().logout().logoutSuccessUrl("/").permitAll()
+                .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
     }
 
     @Bean
