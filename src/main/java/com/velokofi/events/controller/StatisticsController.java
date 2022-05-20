@@ -91,13 +91,16 @@ public class StatisticsController {
                     break;
                 } catch (final Exception e) {
                     LOG.error("Exception while fetching: " + e.getMessage());
-                    LOG.info("Refreshing auth token for clientId: " + clientId + ", old value: " + getTokenValue(clientId));
-                    try {
-                        refreshToken(clientId);
-                        LOG.debug("Successfully refreshed token for clientId: " + clientId + ", new value: " + getTokenValue(clientId));
+                    if (e.getMessage().indexOf("401") > -1) {
+                        LOG.info("Refreshing auth token for clientId: " + clientId + ", old value: " + getTokenValue(clientId));
+                        try {
+                            refreshToken(clientId);
+                            LOG.debug("Successfully refreshed token for clientId: " + clientId + ", new value: " + getTokenValue(clientId));
+                        } catch (final Exception re) {
+                            LOG.error("Error while refreshing token for clientId: " + clientId + " " + re.getMessage());
+                        }
+                    } else {
                         break;
-                    } catch (final Exception re) {
-                        LOG.error("Error while refreshing token for clientId: " + clientId + " " + re.getMessage());
                     }
                 }
             }
@@ -194,7 +197,6 @@ public class StatisticsController {
     public String getAthleteStatisticsSummary(final ActivityStats activityStats, final List<TeamMember> teamMembers) {
         final StringBuilder sb = new StringBuilder();
         final String athleteId = activityStats.getAthleteId();
-        //sb.append(athleteId).append(SEPARATOR);
         sb.append(NumberCruncher.getNameFromId(Long.parseLong(athleteId), teamMembers)).append(",");
 
         final BigDecimal ytdDistance = new BigDecimal(convertMetersToKilometers(

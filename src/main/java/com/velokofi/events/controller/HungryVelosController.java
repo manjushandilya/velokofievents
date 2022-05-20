@@ -59,52 +59,8 @@ public final class HungryVelosController {
     }
 
     @GetMapping("/")
-    public ModelAndView execute(/*@RegisteredOAuth2AuthorizedClient final OAuth2AuthorizedClient client*/) throws Exception {
+    public ModelAndView execute() throws Exception {
         final LeaderBoard leaderBoard = new LeaderBoard();
-
-        final List<Team> teams = teamsRepository.listTeams();
-        final List<TeamMember> teamMembers = teams.stream().flatMap(t -> t.getMembers().stream()).collect(toList());
-        /*final Optional<TeamMember> teamMemberLogin = teamMembers.stream().filter(tm -> String.valueOf(tm.getId()).equals(client.getPrincipalName())).findFirst();
-
-        LOG.info("Team member logged in? " + teamMemberLogin.isPresent() + ", strava id: " + client.getPrincipalName());
-
-        final String tokenValue = client.getAccessToken().getTokenValue();
-
-        final String profileResponse = getResponse(tokenValue, "https://www.strava.com/api/v3/athlete");
-        final AthleteProfile athleteProfile = Application.MAPPER.readValue(profileResponse, AthleteProfile.class);
-
-        leaderBoard.setAthleteProfile(athleteProfile);
-
-        if (teamMemberLogin.isPresent()) {
-            final OAuthorizedClient OAuthorizedClient = new OAuthorizedClient();
-            OAuthorizedClient.setPrincipalName(client.getPrincipalName());
-            OAuthorizedClient.setBytes(com.velokofi.events.model.OAuthorizedClient.toBytes(client));
-            authorizedClientRepo.save(OAuthorizedClient);
-        }*/
-
-        /*if (teamMemberLogin.isPresent()) {
-            for (int page = 1; ; page++) {
-                final StringBuilder url = new StringBuilder();
-                url.append("https://www.strava.com/api/v3/athlete/activities");
-                url.append("?per_page=200");
-                url.append("&after=").append(Application.START_TIMESTAMP);
-                url.append("&before=").append(Application.END_TIMESTAMP);
-                url.append("&page=").append(page);
-
-                LOG.debug("Hitting url: " + url);
-
-                final String activitiesResponse = getResponse(tokenValue, url.toString());
-
-                final AthleteActivity[] activitiesArray = Application.MAPPER.readValue(activitiesResponse, AthleteActivity[].class);
-                Stream.of(activitiesArray)
-                        .filter(a -> ((Long) a.getAthlete().getId() != null) && a.getType().equalsIgnoreCase("ride"))
-                        .forEach(activity -> athleteActivityRepo.save(activity));
-
-                if (activitiesArray.length < 200) {
-                    break;
-                }
-            }
-        }*/
 
         final List<AthleteActivity> activities = athleteActivityRepo.findAll().stream().filter(
                 a -> ((Long) a.getAthlete().getId()) != null
@@ -118,6 +74,9 @@ public final class HungryVelosController {
             final AthleteActivity rogueActivity = Application.MAPPER.readValue(field.get(null).toString(), AthleteActivity.class);
             activities.add(rogueActivity);
         }
+
+        final List<Team> teams = teamsRepository.listTeams();
+        final List<TeamMember> teamMembers = teams.stream().flatMap(t -> t.getMembers().stream()).collect(toList());
 
         { // event totals
             final Double totalDistance = round(activities.stream().collect(summingDouble(a -> a.getDistance())) / 1000L);

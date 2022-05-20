@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-@RestController
 @SpringBootApplication
 @EnableScheduling
 public class Application {
@@ -60,11 +59,6 @@ public class Application {
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
-    }
-
-    @GetMapping("/user")
-    public Map<String, Object> user(@AuthenticationPrincipal final OAuth2User principal) {
-        return Collections.singletonMap("name", principal.getName());
     }
 
     @Bean
