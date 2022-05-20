@@ -33,7 +33,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                                 "/error",
                                 "/webjars/**",
                                 "/css/**",
-                                "/image/**",
+                                "/img/**",
                                 "/js/**",
                                 "/vendor/**",
                                 "/favicon.ico"
