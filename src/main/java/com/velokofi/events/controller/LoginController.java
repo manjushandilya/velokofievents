@@ -1,4 +1,4 @@
-package com.velokofi.events.controller;
+/*package com.velokofi.events.controller;
 
 import com.velokofi.events.Application;
 import com.velokofi.events.model.AthleteActivity;
@@ -106,3 +106,4 @@ public class LoginController {
     }
 
 }
+*/
