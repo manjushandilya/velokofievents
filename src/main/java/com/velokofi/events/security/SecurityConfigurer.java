@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.client.RestTemplate;
 
 @EnableWebSecurity
@@ -33,11 +32,16 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
         // https://stackoverflow.com/questions/49273847/springboot-error-parsing-http-request-header
         http.headers().httpStrictTransportSecurity().disable();
 
-        http.antMatcher("/**").authorizeRequests()
-                .antMatchers("/", "/login**", "/webjars/**", "/error**").permitAll()
+        http
+                .authorizeRequests()
+                .antMatchers("/", "/home").permitAll()
                 .anyRequest().authenticated()
-                .and().logout().logoutSuccessUrl("/").permitAll()
-                .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+                .and()
+                .oauth2Login()
+                .permitAll()
+                .and()
+                .logout()
+                .permitAll();
     }
 
     @Bean
