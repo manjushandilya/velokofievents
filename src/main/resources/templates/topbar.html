@@ -18,10 +18,11 @@
     </ul>
     <ul th:if="${session.athleteProfile == null}" class="navbar-nav ml-auto">
         <li class="nav-item dropdown no-arrow">
-            <a class="btn btn-danger btn-icon-split" href="/oauth2/authorization/strava" role="button"
-               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a href="/oauth2/authorization/strava" class="btn btn-danger btn-icon-split">
+                <span class="icon text-white-50">
+                    <i class="fas fa-strava"></i>
+                </span>
                 <span class="text">Login with Strava</span>
-                <img width="25" height="25" src="img/strava.png"/>
             </a>
         </li>
     </ul>
