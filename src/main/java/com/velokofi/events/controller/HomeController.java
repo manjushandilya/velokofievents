@@ -8,9 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProvider;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
-import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,14 +19,26 @@ import org.springframework.web.servlet.ModelAndView;
 @RestController
 public class HomeController {
 
+    @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private OAuth2AuthorizedClientService clientService;
+
     @GetMapping("/")
-    public ModelAndView execute(@RegisteredOAuth2AuthorizedClient final OAuth2AuthorizedClient client) throws Exception {
+    public ModelAndView execute(@AuthenticationPrincipal final OAuth2User principal) throws Exception {
         final ModelAndView mav = new ModelAndView("index");
-        if (client != null) {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (principal != null) {
+            final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication.isAuthenticated()) {
+
+                final OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
+
+                final OAuth2AuthorizedClient client = clientService.loadAuthorizedClient(
+                        oauthToken.getAuthorizedClientRegistrationId(),
+                        oauthToken.getName()
+                );
+
                 final String profileResponse = getResponse(client.getAccessToken().getTokenValue(), "https://www.strava.com/api/v3/athlete");
                 final AthleteProfile athleteProfile = Application.MAPPER.readValue(profileResponse, AthleteProfile.class);
                 mav.addObject("athleteProfile", athleteProfile);
