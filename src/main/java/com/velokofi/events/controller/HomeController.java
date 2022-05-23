@@ -2,6 +2,7 @@ package com.velokofi.events.controller;
 
 import com.velokofi.events.Application;
 import com.velokofi.events.model.AthleteProfile;
+import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
+
 @RestController
 public class HomeController {
 
@@ -25,24 +28,26 @@ public class HomeController {
     @Autowired
     private OAuth2AuthorizedClientService clientService;
 
+    @Autowired
+    private ObjectFactory<HttpSession> sessionFactory;
+
     @GetMapping("/")
     public ModelAndView execute(@AuthenticationPrincipal final OAuth2User principal) throws Exception {
         final ModelAndView mav = new ModelAndView("index");
         if (principal != null) {
             final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication.isAuthenticated()) {
-
                 final OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
-
                 final OAuth2AuthorizedClient client = clientService.loadAuthorizedClient(
                         oauthToken.getAuthorizedClientRegistrationId(),
                         oauthToken.getName()
                 );
-
                 final String profileResponse = getResponse(client.getAccessToken().getTokenValue(), "https://www.strava.com/api/v3/athlete");
                 final AthleteProfile athleteProfile = Application.MAPPER.readValue(profileResponse, AthleteProfile.class);
-                mav.addObject("athleteProfile", athleteProfile);
+                sessionFactory.getObject().setAttribute("athleteProfile", athleteProfile);
             }
+        } else {
+            sessionFactory.getObject().setAttribute("athleteProfile", null);
         }
         return mav;
     }

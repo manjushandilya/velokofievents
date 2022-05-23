@@ -37,20 +37,10 @@
             <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
                 <!-- Topbar Navbar -->
-                <ul class="navbar-nav ml-auto">
-
-                    <div class="topbar-divider d-none d-sm-block"></div>
+                <ul th:if="${athleteProfile != null}" class="navbar-nav ml-auto">
 
                     <!-- Nav Item - User Information -->
-                    <div th:if="${athleteProfile == null}" class="unauthenticated">
-                        <a href="/oauth2/authorization/strava" class="btn btn-danger btn-icon-split">
-                            <span class="icon text-white-50">
-                                <i class="fas fa-brands fa-strava"></i>
-                            </span>
-                            <span class="text">Login</span>
-                        </a>
-                    </div>
-                    <li th:if="${athleteProfile != null}" class="nav-item dropdown no-arrow authenticated">
+                    <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="mr-2 d-none d-lg-inline text-gray-600 small"
@@ -58,10 +48,15 @@
                             <img class="img-profile rounded-circle"
                                  th:src="${athleteProfile.profile_medium}"/>
                         </a>
-                        <button onClick="logout()" class="btn btn-primary">Logout</button>
                     </li>
 
                 </ul>
+
+                <div th:if="${athleteProfile == null}">
+                    <a href="/oauth2/authorization/strava" class="btn btn-danger btn-icon-split">
+                        <span class="text">Login with Strava</span>
+                    </a>
+                </div>
 
             </nav>
             <!-- End of Topbar -->
@@ -84,9 +79,9 @@
                                 <h6 class="m-0 font-weight-bold text-primary">Hungry Velos</h6>
                             </div>
                             <div class="card-body">
-                                Hungry Velos was a 6 week long challenge starting from
-                                <b>00:00:00 on 08 Jan 2022 </b> and ending on
-                                <b>23:59:59 on 18 Feb 2022</b> to encourage the cyclist in you!
+                                Hungry Velos: A six week long challenge starting from
+                                <b>00:00 on 08 Jan 2022 </b> and ending on
+                                <b>23:59 on 18 Feb 2022</b> to encourage the cyclist in all of us!
                                 <br/>Click <a href="/hungryvelos">here</a> for details!
                             </div>
                         </div>
@@ -97,7 +92,7 @@
                                 <h6 class="m-0 font-weight-bold text-primary">4044 in 2022</h6>
                             </div>
                             <div class="card-body">
-                                Some members of VeloKofi tribe, have pledged to pedal a whopping
+                                Beloved members of the VeloKofi tribe, have pledged to pedal a whopping
                                 distance of 4044 kilometers in the calendar year of 2022!
                                 <br/>Click <a href="/pledge">here</a> for details!
                             </div>
