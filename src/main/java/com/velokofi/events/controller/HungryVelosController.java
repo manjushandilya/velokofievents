@@ -1,7 +1,9 @@
 package com.velokofi.events.controller;
 
 import com.velokofi.events.Application;
-import com.velokofi.events.model.*;
+import com.velokofi.events.model.AthleteActivity;
+import com.velokofi.events.model.AthleteSummary;
+import com.velokofi.events.model.TeamSummary;
 import com.velokofi.events.model.hungryvelos.LeaderBoard;
 import com.velokofi.events.model.hungryvelos.RogueActivities;
 import com.velokofi.events.model.hungryvelos.Team;
@@ -15,10 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
-import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -29,7 +27,6 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.velokofi.events.util.Formatter.convertMetersToKilometers;
 import static com.velokofi.events.util.Formatter.humanReadableFormat;

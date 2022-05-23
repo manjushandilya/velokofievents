@@ -67,10 +67,10 @@ public class LoginController {
         final AthleteProfile athleteProfile = Application.MAPPER.readValue(profileResponse, AthleteProfile.class);
 
         if (teamMemberLogin.isPresent()) {
-            final OAuthorizedClient OAuthorizedClient = new OAuthorizedClient();
-            OAuthorizedClient.setPrincipalName(client.getPrincipalName());
-            OAuthorizedClient.setBytes(com.velokofi.events.model.OAuthorizedClient.toBytes(client));
-            authorizedClientRepo.save(OAuthorizedClient);
+            final OAuthorizedClient authorizedClient = new OAuthorizedClient();
+            authorizedClient.setPrincipalName(client.getPrincipalName());
+            authorizedClient.setBytes(com.velokofi.events.model.OAuthorizedClient.toBytes(client));
+            authorizedClientRepo.save(authorizedClient);
         }
 
         if (teamMemberLogin.isPresent()) {
