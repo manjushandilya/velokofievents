@@ -8,22 +8,22 @@
 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
     <!-- Topbar Navbar -->
-    <ul th:if="${athleteProfile != null}" class="navbar-nav ml-auto">
+    <ul th:if="${session.athleteProfile != null}" class="navbar-nav ml-auto">
 
         <!-- Nav Item - User Information -->
         <li class="nav-item dropdown no-arrow">
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="mr-2 d-none d-lg-inline text-gray-600 small"
-                      th:text="${athleteProfile.firstname + ' ' + athleteProfile.lastname}"/>
+                      th:text="${session.athleteProfile.firstname + ' ' + athleteProfile.lastname}"/>
                 <img class="img-profile rounded-circle"
-                     th:src="${athleteProfile.profile_medium}"/>
+                     th:src="${session.athleteProfile.profile_medium}"/>
             </a>
         </li>
 
     </ul>
 
-    <div th:if="${athleteProfile == null}">
+    <div th:if="${session.athleteProfile == null}">
         <a href="/oauth2/authorization/strava" class="btn btn-danger btn-icon-split">
             <span class="text">Login with Strava</span>
         </a>

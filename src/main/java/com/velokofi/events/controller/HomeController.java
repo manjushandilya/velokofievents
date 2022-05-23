@@ -34,6 +34,8 @@ public class HomeController {
     @GetMapping("/")
     public ModelAndView execute(@AuthenticationPrincipal final OAuth2User principal) throws Exception {
         final ModelAndView mav = new ModelAndView("index");
+        sessionFactory.getObject().setAttribute("athleteProfile", null);
+
         if (principal != null) {
             final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication.isAuthenticated()) {
@@ -42,12 +44,12 @@ public class HomeController {
                         oauthToken.getAuthorizedClientRegistrationId(),
                         oauthToken.getName()
                 );
-                final String profileResponse = getResponse(client.getAccessToken().getTokenValue(), "https://www.strava.com/api/v3/athlete");
-                final AthleteProfile athleteProfile = Application.MAPPER.readValue(profileResponse, AthleteProfile.class);
-                sessionFactory.getObject().setAttribute("athleteProfile", athleteProfile);
+                if (client != null) {
+                    final String profileResponse = getResponse(client.getAccessToken().getTokenValue(), "https://www.strava.com/api/v3/athlete");
+                    final AthleteProfile athleteProfile = Application.MAPPER.readValue(profileResponse, AthleteProfile.class);
+                    sessionFactory.getObject().setAttribute("athleteProfile", athleteProfile);
+                }
             }
-        } else {
-            sessionFactory.getObject().setAttribute("athleteProfile", null);
         }
         return mav;
     }
