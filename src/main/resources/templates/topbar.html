@@ -4,26 +4,35 @@
 
 <body th:fragment="topbar">
 
-<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-    <ul th:if="${session.athleteProfile != null}" class="navbar-nav ml-auto">
-        <li class="nav-item dropdown no-arrow">
-            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small"
-                      th:text="${session.athleteProfile.firstname + ' ' + session.athleteProfile.lastname}"/>
-                <img class="img-profile rounded-circle"
-                     th:src="${session.athleteProfile.profile_medium}"/>
-            </a>
-        </li>
-    </ul>
-    <ul th:if="${session.athleteProfile == null}" class="navbar-nav ml-auto">
-        <li class="nav-item dropdown no-arrow">
-            <a href="/oauth2/authorization/strava" class="btn btn-danger btn-icon-split">
-                <span class="icon text-white-50">
-                    <i class="fas fa-strava"></i>
+<nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white" id="sidenavAccordion">
+    <!-- Navbar Brand-->
+    <!-- * * Tip * * You can use text or an image for your navbar brand.-->
+    <!-- * * * * * * When using an image, we recommend the SVG format.-->
+    <!-- * * * * * * Dimensions: Maximum height: 32px, maximum width: 240px-->
+    <a class="navbar-brand pe-3 ps-4 ps-lg-2" href="/">
+        <img src="assets/img/logo.png" style="width:135px;height:auto;"/>
+    </a>
+    <!-- Navbar Items-->
+    <ul class="navbar-nav align-items-center ms-auto">
+        <!-- User Dropdown-->
+        <li class="nav-item dropdown no-caret dropdown-user me-3 me-lg-4" th:if="${session.athleteProfile == null}">
+            <button class="btn btn-danger" onclick="location.href='/oauth2/authorization/strava'">
+                <i class="fab fa-strava"></i>
+                <span>
+                    &nbsp;&nbsp;Login
                 </span>
-                <span class="text">Login with Strava</span>
-            </a>
+            </button>
+        </li>
+        <li class="nav-item dropdown no-caret dropdown-user me-3 me-lg-4" th:if="${session.athleteProfile != null}">
+            <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img class="img-fluid" src="assets/img/illustrations/profiles/profile-1.png" /></a>
+            <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownUserImage">
+                <h6 class="dropdown-header d-flex align-items-center">
+                    <img class="dropdown-user-img" th:src="${session.athleteProfile.profile_medium}"/>
+                    <div class="dropdown-user-details">
+                        <div class="dropdown-user-details-name" th:text="${session.athleteProfile.firstname + ' ' + session.athleteProfile.lastname}"/>
+                    </div>
+                </h6>
+            </div>
         </li>
     </ul>
 </nav>

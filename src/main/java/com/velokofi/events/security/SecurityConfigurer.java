@@ -2,14 +2,10 @@ package com.velokofi.events.security;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
-import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @Getter
@@ -35,6 +31,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                                 "/pledge",
                                 "/webjars/**",
                                 "/css/**",
+                                "/assets/**",
                                 "/img/**",
                                 "/js/**",
                                 "/vendor/**",
@@ -42,15 +39,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
-                .exceptionHandling(e -> e
-                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-                )
                 .oauth2Login();
-    }
-
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
     }
 
 }
