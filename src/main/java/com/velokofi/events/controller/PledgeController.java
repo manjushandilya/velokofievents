@@ -47,7 +47,7 @@ public class PledgeController {
         ).collect(toList());
 
         final ModelAndView mav = new ModelAndView("pledge");
-        mav.addObject("activityStatisticsSummaries", activityStatistics);
+        mav.addObject("activityStatisticsSummaries", activityStatisticsSummaries);
         return mav;
     }
 
