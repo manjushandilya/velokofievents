@@ -1,6 +1,6 @@
 package com.velokofi.events;
 
-import com.velokofi.events.model.ActivityStats;
+import com.velokofi.events.model.ActivityStatistics;
 import com.velokofi.events.model.hungryvelos.Team;
 import com.velokofi.events.model.hungryvelos.TeamMember;
 import com.velokofi.events.persistence.TeamsRepository;
@@ -17,7 +17,7 @@ import java.util.List;
 import static com.velokofi.events.util.Formatter.convertMetersToKilometers;
 import static java.util.stream.Collectors.toList;
 
-public class ActivityStatsLeaderBoardTest {
+public class ActivityStatisticsLeaderBoardTest {
 
     public static final String SEPARATOR = ",";
 
@@ -29,7 +29,7 @@ public class ActivityStatsLeaderBoardTest {
 
         final Path path = Paths.get("src", "test", "resources", "activities", "allActivityStats.json");
         final byte[] bytes = Files.readAllBytes(path);
-        final ActivityStats[] activityStats = Application.MAPPER.readValue(bytes, ActivityStats[].class);
+        final ActivityStatistics[] activityStats = Application.MAPPER.readValue(bytes, ActivityStatistics[].class);
         //System.out.println("Read " + activityStats.length + " activity stats");
 
         Arrays.sort(activityStats, (o1, o2) -> Float.compare(o2.getYtd_ride_totals().getDistance(), o1.getYtd_ride_totals().getDistance()));
@@ -41,19 +41,19 @@ public class ActivityStatsLeaderBoardTest {
         list.forEach(System.out::println);
     }
 
-    public String getAthleteStatisticsSummary(final ActivityStats activityStats, final List<TeamMember> teamMembers) {
+    public String getAthleteStatisticsSummary(final ActivityStatistics activityStatistics, final List<TeamMember> teamMembers) {
         final StringBuilder sb = new StringBuilder();
-        final String athleteId = activityStats.getAthleteId();
+        final String athleteId = activityStatistics.getAthleteId();
         //sb.append(athleteId).append(SEPARATOR);
         sb.append(NumberCruncher.getNameFromId(Long.parseLong(athleteId), teamMembers)).append(SEPARATOR);
 
         final BigDecimal ytdDistance = new BigDecimal(convertMetersToKilometers(
-                NumberCruncher.getValue(Application.MetricType.DISTANCE, activityStats.getYtd_ride_totals().getDistance()
+                NumberCruncher.getValue(Application.MetricType.DISTANCE, activityStatistics.getYtd_ride_totals().getDistance()
                 )));
         sb.append(ytdDistance).append(SEPARATOR);
 
         final BigDecimal allTimeDistance = new BigDecimal(convertMetersToKilometers(
-                NumberCruncher.getValue(Application.MetricType.DISTANCE, activityStats.getAll_ride_totals().getDistance()
+                NumberCruncher.getValue(Application.MetricType.DISTANCE, activityStatistics.getAll_ride_totals().getDistance()
                 )));
         sb.append(allTimeDistance);
         return sb.toString();

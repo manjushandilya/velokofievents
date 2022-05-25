@@ -12,4 +12,9 @@ window.addEventListener('DOMContentLoaded', event => {
         new simpleDatatables.DataTable(teamSummaryTable);
     }
 
+    const athleteStatisticsSummaryTable = document.getElementById('athleteStatisticsSummaryTable');
+    if (athleteStatisticsSummaryTable) {
+        new simpleDatatables.DataTable(athleteStatisticsSummaryTable);
+    }
+
 });

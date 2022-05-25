@@ -1,7 +1,7 @@
 package com.velokofi.events.controller;
 
 import com.velokofi.events.Application;
-import com.velokofi.events.model.ActivityStats;
+import com.velokofi.events.model.ActivityStatistics;
 import com.velokofi.events.model.OAuthorizedClient;
 import com.velokofi.events.model.RefreshTokenRequest;
 import com.velokofi.events.model.RefreshTokenResponse;
@@ -45,7 +45,7 @@ public class StatisticsController {
 
     @GetMapping("/documents/statistics")
     public String getStatistics() throws Exception {
-        final List<ActivityStats> activityStatistics = getActivityStats();
+        final List<ActivityStatistics> activityStatistics = getActivityStats();
         activityStatsRepository.saveAll(activityStatistics);
         return Application.MAPPER.writeValueAsString(activityStatistics);
     }
@@ -56,7 +56,7 @@ public class StatisticsController {
         final List<Team> teams = teamsRepository.listTeams();
         final List<TeamMember> teamMembers = teams.stream().flatMap(t -> t.getMembers().stream()).collect(toList());
 
-        final List<ActivityStats> activityStats = activityStatsRepository.findAll();
+        final List<ActivityStatistics> activityStats = activityStatsRepository.findAll();
         final List<String> list = activityStats.stream()
                 .sorted((o1, o2) -> compareTotals(o1, o2))
                 .map(a -> getAthleteStatisticsSummary(a, teamMembers)
@@ -67,12 +67,12 @@ public class StatisticsController {
         return sb.toString();
     }
 
-    private int compareTotals(ActivityStats o1, ActivityStats o2) {
+    private int compareTotals(ActivityStatistics o1, ActivityStatistics o2) {
         return Float.compare(o2.getYtd_ride_totals().getDistance(), o1.getYtd_ride_totals().getDistance());
     }
 
-    private List<ActivityStats> getActivityStats() {
-        final List<ActivityStats> activityStatistics = new ArrayList<>();
+    private List<ActivityStatistics> getActivityStats() {
+        final List<ActivityStatistics> activityStatistics = new ArrayList<>();
         final List<OAuthorizedClient> clients = authorizedClientRepo.findAll();
         for (final OAuthorizedClient client : clients) {
             for (int attempt = 0; attempt < 3; attempt++) {
@@ -83,7 +83,7 @@ public class StatisticsController {
 
                     LOG.debug("Fetched statistics response: " + response);
 
-                    final ActivityStats activityStats = Application.MAPPER.readValue(response.getBody(), ActivityStats.class);
+                    final ActivityStatistics activityStats = Application.MAPPER.readValue(response.getBody(), ActivityStatistics.class);
                     activityStats.setAthleteId(clientId);
                     activityStatistics.add(activityStats);
 
@@ -194,18 +194,18 @@ public class StatisticsController {
         return tokenValue;
     }
 
-    public String getAthleteStatisticsSummary(final ActivityStats activityStats, final List<TeamMember> teamMembers) {
+    public String getAthleteStatisticsSummary(final ActivityStatistics activityStatistics, final List<TeamMember> teamMembers) {
         final StringBuilder sb = new StringBuilder();
-        final String athleteId = activityStats.getAthleteId();
+        final String athleteId = activityStatistics.getAthleteId();
         sb.append(NumberCruncher.getNameFromId(Long.parseLong(athleteId), teamMembers)).append(",");
 
         final BigDecimal ytdDistance = new BigDecimal(convertMetersToKilometers(
-                NumberCruncher.getValue(Application.MetricType.DISTANCE, activityStats.getYtd_ride_totals().getDistance()
+                NumberCruncher.getValue(Application.MetricType.DISTANCE, activityStatistics.getYtd_ride_totals().getDistance()
                 )));
         sb.append(ytdDistance).append(",");
 
         final BigDecimal allTimeDistance = new BigDecimal(convertMetersToKilometers(
-                NumberCruncher.getValue(Application.MetricType.DISTANCE, activityStats.getAll_ride_totals().getDistance()
+                NumberCruncher.getValue(Application.MetricType.DISTANCE, activityStatistics.getAll_ride_totals().getDistance()
                 )));
         sb.append(allTimeDistance);
         return sb.toString();
