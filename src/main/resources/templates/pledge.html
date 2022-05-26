@@ -76,9 +76,16 @@
                                 <tr th:each="activityStatisticsSummary: ${activityStatisticsSummaries}">
                                     <td><span th:text="${activityStatisticsSummary.athleteName}"></span></td>
                                     <td><span th:text="${activityStatisticsSummary.ytdDistance}"></span></td>
-                                    <td>
+                                    <td th:if="${activityStatisticsSummary.percentComplete >= 1.0}">
                                         <div class="progress">
                                             <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar"
+                                                 th:attr="style='width: ' + ${activityStatisticsSummary.percentCompleteString} + '%'">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td th:if="${activityStatisticsSummary.percentComplete < 1.0}">
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar"
                                                  th:attr="style='width: ' + ${activityStatisticsSummary.percentCompleteString} + '%'">
                                             </div>
                                         </div>
