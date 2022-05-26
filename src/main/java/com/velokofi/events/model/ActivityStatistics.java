@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
@@ -13,7 +14,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @ToString
 public class ActivityStatistics {
 
+    @Id
     private String athleteId;
+
+    private String athleteName;
 
     private double biggest_ride_distance;
 

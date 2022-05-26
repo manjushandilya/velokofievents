@@ -3,7 +3,7 @@ package com.velokofi.events.controller;
 import com.velokofi.events.Application;
 import com.velokofi.events.model.AthleteActivity;
 import com.velokofi.events.model.AthleteSummary;
-import com.velokofi.events.model.TeamSummary;
+import com.velokofi.events.model.hungryvelos.TeamSummary;
 import com.velokofi.events.model.hungryvelos.LeaderBoard;
 import com.velokofi.events.model.hungryvelos.RogueActivities;
 import com.velokofi.events.model.hungryvelos.Team;

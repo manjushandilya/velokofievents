@@ -20,8 +20,8 @@ public class ActivityStatisticsSummary {
 
     final BigDecimal allTimeDistance;
 
-    public ActivityStatisticsSummary(final ActivityStatistics activityStatistics, final List<TeamMember> teamMembers) {
-        this.athleteName = NumberCruncher.getNameFromId(Long.parseLong(activityStatistics.getAthleteId()), teamMembers);
+    public ActivityStatisticsSummary(final ActivityStatistics activityStatistics) {
+        this.athleteName = activityStatistics.getAthleteName();
 
         double totalYtdDistance = NumberCruncher.getValue(DISTANCE, activityStatistics.getYtd_ride_totals().getDistance());
         this.ytdDistance = new BigDecimal(convertMetersToKilometers(totalYtdDistance));

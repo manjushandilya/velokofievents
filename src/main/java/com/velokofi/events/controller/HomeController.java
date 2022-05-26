@@ -2,6 +2,8 @@ package com.velokofi.events.controller;
 
 import com.velokofi.events.Application;
 import com.velokofi.events.model.AthleteProfile;
+import com.velokofi.events.model.OAuthorizedClient;
+import com.velokofi.events.persistence.OAuthorizedClientRepository;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -31,11 +33,15 @@ public class HomeController {
     @Autowired
     private ObjectFactory<HttpSession> sessionFactory;
 
+    @Autowired
+    private OAuthorizedClientRepository authorizedClientRepo;
+
     @GetMapping("/")
     public ModelAndView execute(@AuthenticationPrincipal final OAuth2User principal) throws Exception {
         final ModelAndView mav = new ModelAndView("index");
         sessionFactory.getObject().setAttribute("athleteProfile", null);
 
+        // After a successful auth from Strava, store the client in the database
         if (principal != null) {
             final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication.isAuthenticated()) {
@@ -48,6 +54,12 @@ public class HomeController {
                     final String profileResponse = getResponse(client.getAccessToken().getTokenValue(), "https://www.strava.com/api/v3/athlete");
                     final AthleteProfile athleteProfile = Application.MAPPER.readValue(profileResponse, AthleteProfile.class);
                     sessionFactory.getObject().setAttribute("athleteProfile", athleteProfile);
+
+                    final OAuthorizedClient authorizedClient = new OAuthorizedClient();
+                    authorizedClient.setPrincipalName(client.getPrincipalName());
+                    authorizedClient.setAthleteName(athleteProfile.getFirstname() + ' ' + athleteProfile.getLastname());
+                    authorizedClient.setBytes(com.velokofi.events.model.OAuthorizedClient.toBytes(client));
+                    authorizedClientRepo.save(authorizedClient);
                 }
             }
         }

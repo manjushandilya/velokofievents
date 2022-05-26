@@ -1,4 +1,4 @@
-package com.velokofi.events.model;
+package com.velokofi.events.model.hungryvelos;
 
 import com.velokofi.events.util.NumberCruncher;
 import lombok.Getter;

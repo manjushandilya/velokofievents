@@ -1,9 +1,11 @@
 package com.velokofi.events.controller;
 
 import com.velokofi.events.Application;
+import com.velokofi.events.model.ActivityStatistics;
 import com.velokofi.events.model.AthleteActivity;
 import com.velokofi.events.model.OAuthorizedClient;
 import com.velokofi.events.model.hungryvelos.Team;
+import com.velokofi.events.persistence.ActivityStatisticsRepository;
 import com.velokofi.events.persistence.AthleteActivityRepository;
 import com.velokofi.events.persistence.OAuthorizedClientRepository;
 import com.velokofi.events.persistence.TeamsRepository;
@@ -32,6 +34,15 @@ public class DocumentController {
 
     @Autowired
     private OAuthorizedClientRepository authorizedClientRepo;
+
+    @Autowired
+    private ActivityStatisticsRepository activityStatisticsRepo;
+
+    @GetMapping("/documents/statistics")
+    public String getStatistics() throws Exception {
+        final List<ActivityStatistics> statistics = activityStatisticsRepo.findAll();
+        return Application.MAPPER.writeValueAsString(statistics);
+    }
 
     @GetMapping("/documents/activities")
     public String getActivities() throws Exception {
@@ -72,6 +83,9 @@ public class DocumentController {
     @GetMapping("/documents")
     public String operation(@RequestParam(name = "action") final String action) throws Exception {
         switch (action) {
+            case "clearStatistics":
+                activityStatisticsRepo.deleteAll();
+                break;
             case "clearActivities":
                 athleteActivityRepo.deleteAll();
                 break;
@@ -79,6 +93,7 @@ public class DocumentController {
                 authorizedClientRepo.deleteAll();
                 break;
             case "clearAll":
+                activityStatisticsRepo.deleteAll();
                 athleteActivityRepo.deleteAll();
                 authorizedClientRepo.deleteAll();
                 break;

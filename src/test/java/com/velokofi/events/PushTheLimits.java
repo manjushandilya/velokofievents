@@ -1,7 +1,7 @@
 package com.velokofi.events;
 
 import com.velokofi.events.model.AthleteActivity;
-import com.velokofi.events.model.PushTheLimit;
+import com.velokofi.events.model.hungryvelos.PushTheLimit;
 import com.velokofi.events.model.hungryvelos.RogueActivities;
 import com.velokofi.events.model.hungryvelos.Team;
 import com.velokofi.events.model.hungryvelos.TeamMember;

@@ -2,7 +2,6 @@ package com.velokofi.events.model.hungryvelos;
 
 import com.velokofi.events.model.AthleteProfile;
 import com.velokofi.events.model.AthleteSummary;
-import com.velokofi.events.model.TeamSummary;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

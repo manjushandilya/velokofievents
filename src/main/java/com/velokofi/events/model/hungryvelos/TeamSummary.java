@@ -1,4 +1,4 @@
-package com.velokofi.events.model;
+package com.velokofi.events.model.hungryvelos;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -24,6 +24,8 @@ public class OAuthorizedClient {
     @Id
     private String principalName;
 
+    private String athleteName;
+
     private byte[] bytes;
 
     public static OAuth2AuthorizedClient fromBytes(final byte[] bytes) {
