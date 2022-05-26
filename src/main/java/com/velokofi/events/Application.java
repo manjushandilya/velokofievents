@@ -6,10 +6,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -17,15 +13,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 @SpringBootApplication
 @EnableScheduling
 public class Application {
 
     public static final Long LEADER_BOARD_LIMIT = 5L;
+
+    public static final Long PLEDGE_DISTANCE = 4044L;
 
     public static final int ACTIVITIES_PER_PAGE = 200;
 

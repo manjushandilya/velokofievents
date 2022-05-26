@@ -58,6 +58,8 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Year To Date Distance</th>
+                                <th>Status</th>
+                                <th>Progress</th>
                                 <th>All Time Distance</th>
                             </tr>
                             </thead>
@@ -65,15 +67,31 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Year To Date Distance</th>
+                                <th>Status</th>
+                                <th>Progress</th>
                                 <th>All Time Distance</th>
                             </tr>
                             </tfoot>
                             <tbody>
-                            <tr th:each="activityStatisticsSummary: ${activityStatisticsSummaries}">
-                                <td><span th:text="${activityStatisticsSummary.athleteName}"></span></td>
-                                <td><span th:text="${activityStatisticsSummary.ytdDistance}"></span></td>
-                                <td><span th:text="${activityStatisticsSummary.allTimeDistance}"></span></td>
-                            </tr>
+                                <tr th:each="activityStatisticsSummary: ${activityStatisticsSummaries}">
+                                    <td><span th:text="${activityStatisticsSummary.athleteName}"></span></td>
+                                    <td><span th:text="${activityStatisticsSummary.ytdDistance}"></span></td>
+                                    <td>
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                                                 role="progressbar" style="width: 25%" aria-valuemin="0" aria-valuemax="4044"
+                                                 th:attr="aria-valuenow=${activityStatisticsSummary.percentComplete}">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td th:if="${activityStatisticsSummary.percentComplete >= 1.0}">
+                                        <div class="badge bg-success rounded-pill">Completed</div>
+                                    </td>
+                                    <td th:if="${activityStatisticsSummary.percentComplete < 1.0}">
+                                        <div class="badge bg-warning rounded-pill">Pending</div>
+                                    </td>
+                                    <td><span th:text="${activityStatisticsSummary.allTimeDistance}"></span></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
