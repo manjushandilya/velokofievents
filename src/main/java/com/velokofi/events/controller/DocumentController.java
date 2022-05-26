@@ -1,6 +1,7 @@
 package com.velokofi.events.controller;
 
 import com.velokofi.events.Application;
+import com.velokofi.events.cron.StatisticsUpdater;
 import com.velokofi.events.model.ActivityStatistics;
 import com.velokofi.events.model.AthleteActivity;
 import com.velokofi.events.model.OAuthorizedClient;
@@ -38,8 +39,18 @@ public class DocumentController {
     @Autowired
     private ActivityStatisticsRepository activityStatisticsRepo;
 
+    @Autowired
+    private StatisticsUpdater statisticsUpdater;
+
     @GetMapping("/documents/statistics")
-    public String getStatistics() throws Exception {
+    public String getStatistics(@RequestParam(name = "action") final String action) throws Exception {
+        if (action != null) {
+            switch (action) {
+                case "refresh":
+                    statisticsUpdater.run();
+                    break;
+            }
+        }
         final List<ActivityStatistics> statistics = activityStatisticsRepo.findAll();
         return Application.MAPPER.writeValueAsString(statistics);
     }
