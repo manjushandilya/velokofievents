@@ -79,7 +79,7 @@
                                     <td>
                                         <div class="progress">
                                             <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar"
-                                                 th:attr="style='width: ${#numbers.formatDecimal(activityStatisticsSummary.percentComplete,0,0,'NONE')}%'">
+                                                 th:attr="style='width: ' + ${activityStatisticsSummary.percentCompleteString} + '%'">
                                             </div>
                                         </div>
                                     </td>

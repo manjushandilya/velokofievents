@@ -6,6 +6,7 @@ import com.velokofi.events.model.hungryvelos.Team;
 import com.velokofi.events.model.hungryvelos.TeamMember;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.List;
 import java.util.Map;
@@ -190,6 +191,15 @@ public final class NumberCruncher {
 
     public static double round(final double val) {
         return new BigDecimal(val).setScale(2, RoundingMode.HALF_UP).doubleValue();
+    }
+
+    public static BigDecimal round(final BigDecimal input){
+        return input.round(
+                new MathContext(
+                        input.toBigInteger().toString().length(),
+                        RoundingMode.HALF_UP
+                )
+        );
     }
 
 }

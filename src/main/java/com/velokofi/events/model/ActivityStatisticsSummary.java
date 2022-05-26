@@ -20,6 +20,8 @@ public class ActivityStatisticsSummary {
 
     final BigDecimal percentComplete;
 
+    final String percentCompleteString;
+
     final BigDecimal allTimeDistance;
 
     public ActivityStatisticsSummary(final ActivityStatistics activityStatistics) {
@@ -29,6 +31,8 @@ public class ActivityStatisticsSummary {
         this.ytdDistance = new BigDecimal(convertMetersToKilometers(totalYtdDistance));
 
         this.percentComplete = new BigDecimal(totalYtdDistance / Application.PLEDGE_DISTANCE);
+
+        this.percentCompleteString = NumberCruncher.round(percentComplete).toPlainString();
 
         double totalAllTimeDistance = NumberCruncher.getValue(DISTANCE, activityStatistics.getAll_ride_totals().getDistance());
         this.allTimeDistance = new BigDecimal(convertMetersToKilometers(totalAllTimeDistance));
