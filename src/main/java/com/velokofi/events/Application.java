@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class Application {
 
     public static final Long LEADER_BOARD_LIMIT = 5L;
 
-    public static final Long PLEDGE_DISTANCE = 4044L;
+    public static final BigDecimal PLEDGE_DISTANCE = new BigDecimal(4044);
 
     public static final int ACTIVITIES_PER_PAGE = 200;
 

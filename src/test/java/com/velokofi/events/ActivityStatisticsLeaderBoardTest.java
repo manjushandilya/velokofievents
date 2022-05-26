@@ -1,6 +1,8 @@
 package com.velokofi.events;
 
+import com.velokofi.events.controller.PledgeController;
 import com.velokofi.events.model.ActivityStatistics;
+import com.velokofi.events.model.ActivityStatisticsSummary;
 import com.velokofi.events.model.hungryvelos.Team;
 import com.velokofi.events.model.hungryvelos.TeamMember;
 import com.velokofi.events.persistence.TeamsRepository;
@@ -23,10 +25,6 @@ public class ActivityStatisticsLeaderBoardTest {
 
     @Test
     public void test() throws Exception {
-        final TeamsRepository teamsRepository = new TeamsRepository();
-        final List<Team> teams = teamsRepository.listTeams();
-        final List<TeamMember> teamMembers = teams.stream().flatMap(t -> t.getMembers().stream()).collect(toList());
-
         final Path path = Paths.get("src", "test", "resources", "activities", "allActivityStats.json");
         final byte[] bytes = Files.readAllBytes(path);
         final ActivityStatistics[] activityStats = Application.MAPPER.readValue(bytes, ActivityStatistics[].class);
@@ -35,27 +33,25 @@ public class ActivityStatisticsLeaderBoardTest {
         Arrays.sort(activityStats, (o1, o2) -> Float.compare(o2.getYtd_ride_totals().getDistance(), o1.getYtd_ride_totals().getDistance()));
 
         final List<String> list = Arrays.stream(activityStats).map(
-                a -> getAthleteStatisticsSummary(a, teamMembers)
+                a -> getAthleteStatisticsSummary(a)
         ).collect(toList());
 
         list.forEach(System.out::println);
     }
 
-    public String getAthleteStatisticsSummary(final ActivityStatistics activityStatistics, final List<TeamMember> teamMembers) {
+    public String getAthleteStatisticsSummary(final ActivityStatistics activityStatistics) {
         final StringBuilder sb = new StringBuilder();
-        final String athleteId = activityStatistics.getAthleteId();
-        //sb.append(athleteId).append(SEPARATOR);
-        sb.append(NumberCruncher.getNameFromId(Long.parseLong(athleteId), teamMembers)).append(SEPARATOR);
 
-        final BigDecimal ytdDistance = new BigDecimal(convertMetersToKilometers(
-                NumberCruncher.getValue(Application.MetricType.DISTANCE, activityStatistics.getYtd_ride_totals().getDistance()
-                )));
-        sb.append(ytdDistance).append(SEPARATOR);
+        if (activityStatistics.getAthleteName() == null) {
+            activityStatistics.setAthleteName(PledgeController.STRAVA_ID_VS_NAME_MAP.get(activityStatistics.getAthleteId()));
+        }
 
-        final BigDecimal allTimeDistance = new BigDecimal(convertMetersToKilometers(
-                NumberCruncher.getValue(Application.MetricType.DISTANCE, activityStatistics.getAll_ride_totals().getDistance()
-                )));
-        sb.append(allTimeDistance);
+        final ActivityStatisticsSummary summary = new ActivityStatisticsSummary(activityStatistics);
+        sb.append(summary.getAthleteName()).append(SEPARATOR);
+        sb.append(summary.getYtdDistance()).append(SEPARATOR);
+        sb.append(summary.getAthleteName()).append(SEPARATOR);
+        sb.append(summary.getPercentComplete()).append(SEPARATOR);
+        sb.append(summary.getPercentCompleteString());
         return sb.toString();
     }
 

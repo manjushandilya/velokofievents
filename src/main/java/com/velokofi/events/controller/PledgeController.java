@@ -21,7 +21,8 @@ import static java.util.stream.Collectors.toList;
 public class PledgeController {
 
     private static final Logger LOG = LoggerFactory.getLogger(PledgeController.class);
-    private static final Map<String, String> STRAVA_ID_VS_NAME_MAP;
+
+    public static final Map<String, String> STRAVA_ID_VS_NAME_MAP;
 
     static {
         STRAVA_ID_VS_NAME_MAP = new HashMap<>();
