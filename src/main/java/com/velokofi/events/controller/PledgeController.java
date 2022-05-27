@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,13 +77,21 @@ public class PledgeController {
         STRAVA_ID_VS_NAME_MAP.put("70101578", "Chidanand Kawri Lokesh");
         STRAVA_ID_VS_NAME_MAP.put("67288162", "Harsha Gandhi");
         STRAVA_ID_VS_NAME_MAP.put("62471947", "Girish Jain Jain");
-        STRAVA_ID_VS_NAME_MAP.put("38148750", "Chandrakanth");
+        STRAVA_ID_VS_NAME_MAP.put("38148750", "Chandu :)");
         STRAVA_ID_VS_NAME_MAP.put("33762572", "Arun Bastin");
         STRAVA_ID_VS_NAME_MAP.put("28550167", "Sudarshan Gopinath");
         STRAVA_ID_VS_NAME_MAP.put("41081264", "Subhra Kanti Das");
         STRAVA_ID_VS_NAME_MAP.put("62775438", "Sandhya Santhosh");
         STRAVA_ID_VS_NAME_MAP.put("42776148", "Manas Chand Ryali");
         STRAVA_ID_VS_NAME_MAP.put("42777287", "Manavchand Ryali");
+        STRAVA_ID_VS_NAME_MAP.put("68380635", "Latha Rani");
+        STRAVA_ID_VS_NAME_MAP.put("36760093", "Manasa Bharadwaj");
+        STRAVA_ID_VS_NAME_MAP.put("78551177", "samrudh kishor");
+        STRAVA_ID_VS_NAME_MAP.put("88072624", "Niharikaa N");
+        STRAVA_ID_VS_NAME_MAP.put("88076285", "Tanu Pradeep Gorur");
+        STRAVA_ID_VS_NAME_MAP.put("88054379", "Aditya V K");
+        STRAVA_ID_VS_NAME_MAP.put("87964523", "Atharva Subramanya Kashyap");
+        STRAVA_ID_VS_NAME_MAP.put("81228572", "Jayashree Nandakumar");
     }
 
     @Autowired
@@ -93,7 +102,11 @@ public class PledgeController {
     @GetMapping("/pledge")
     public ModelAndView execute() throws Exception {
         final List<ActivityStatistics> activityStatistics = activityStatisticsRepo.findAll();
-        final List<ActivityStatisticsSummary> activityStatisticsSummaries = activityStatistics.stream().map(this::fetch).collect(toList());
+        final List<ActivityStatisticsSummary> activityStatisticsSummaries = activityStatistics.stream()
+                .filter(as->as.getBiggest_ride_distance() > 0)
+                .map(this::fetch).collect(toList());
+
+        Collections.sort(activityStatisticsSummaries, (ass1, ass2) -> ass2.getYtdDistance().compareTo(ass1.getYtdDistance()));
 
         final ModelAndView mav = new ModelAndView("pledge");
         mav.addObject("activityStatisticsSummaries", activityStatisticsSummaries);
