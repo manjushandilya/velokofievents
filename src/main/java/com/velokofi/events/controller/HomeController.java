@@ -1,8 +1,11 @@
 package com.velokofi.events.controller;
 
 import com.velokofi.events.Application;
+import com.velokofi.events.cron.StatisticsUpdater;
+import com.velokofi.events.model.ActivityStatistics;
 import com.velokofi.events.model.AthleteProfile;
 import com.velokofi.events.model.OAuthorizedClient;
+import com.velokofi.events.persistence.ActivityStatisticsRepository;
 import com.velokofi.events.persistence.OAuthorizedClientRepository;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +39,12 @@ public class HomeController {
     @Autowired
     private OAuthorizedClientRepository authorizedClientRepo;
 
+    @Autowired
+    private StatisticsUpdater statisticsUpdater;
+
+    @Autowired
+    private ActivityStatisticsRepository activityStatisticsRepo;
+
     @GetMapping("/")
     public ModelAndView execute(@AuthenticationPrincipal final OAuth2User principal) throws Exception {
         final ModelAndView mav = new ModelAndView("index");
@@ -60,6 +69,9 @@ public class HomeController {
                     authorizedClient.setAthleteName(athleteProfile.getFirstname() + ' ' + athleteProfile.getLastname());
                     authorizedClient.setBytes(com.velokofi.events.model.OAuthorizedClient.toBytes(client));
                     authorizedClientRepo.save(authorizedClient);
+
+                    final ActivityStatistics activityStatistics = statisticsUpdater.getActivityStatistics(authorizedClient);
+                    activityStatisticsRepo.save(activityStatistics);
                 }
             }
         }

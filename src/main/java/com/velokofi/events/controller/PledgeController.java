@@ -96,6 +96,7 @@ public class PledgeController {
 
     @Autowired
     private OAuthorizedClientRepository authorizedClientRepo;
+
     @Autowired
     private ActivityStatisticsRepository activityStatisticsRepo;
 

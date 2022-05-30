@@ -46,46 +46,53 @@ public final class StatisticsUpdater {
         LOG.info("Running StatisticsUpdater scheduled task at: " + LocalDateTime.now());
         activityStatisticsRepo.deleteAll();
 
-        final List<ActivityStatistics> activityStatisticsList = getActivityStatistics();
+        final List<ActivityStatistics> activityStatisticsList = getActivityStatisticsList();
         activityStatisticsRepo.saveAll(activityStatisticsList);
     }
 
-    private List<ActivityStatistics> getActivityStatistics() {
+    public List<ActivityStatistics> getActivityStatisticsList() {
         final List<ActivityStatistics> activityStatisticsList = new ArrayList<>();
         final List<OAuthorizedClient> clients = authorizedClientRepo.findAll();
         for (final OAuthorizedClient client : clients) {
-            for (int attempt = 0; attempt < 3; attempt++) {
-                final String clientId = client.getPrincipalName();
-                LOG.info("Fetching statistics for clientId: " + clientId);
-                try {
-                    final ResponseEntity<String> response = getStatisticsResponse(clientId);
-
-                    LOG.debug("Fetched statistics response: " + response);
-
-                    final ActivityStatistics activityStatistics = Application.MAPPER.readValue(response.getBody(), ActivityStatistics.class);
-                    activityStatistics.setAthleteId(clientId);
-                    activityStatistics.setAthleteName(client.getAthleteName());
-                    activityStatisticsList.add(activityStatistics);
-
-                    LOG.debug("Added activityStatisticsList bean to collection: " + activityStatistics);
-                    break;
-                } catch (final Exception e) {
-                    LOG.error("Exception while fetching: " + e.getMessage());
-                    if (e.getMessage().indexOf("401") > -1) {
-                        LOG.info("Refreshing auth token for clientId: " + clientId + ", old value: " + getTokenValue(clientId));
-                        try {
-                            refreshToken(clientId);
-                            LOG.debug("Successfully refreshed token for clientId: " + clientId + ", new value: " + getTokenValue(clientId));
-                        } catch (final Exception re) {
-                            LOG.error("Error while refreshing token for clientId: " + clientId + " " + re.getMessage());
-                        }
-                    } else {
-                        break;
-                    }
-                }
+            final ActivityStatistics activityStatistics = getActivityStatistics(client);
+            if (activityStatistics != null) {
+                activityStatisticsList.add(activityStatistics);
             }
         }
         return activityStatisticsList;
+    }
+
+    public ActivityStatistics getActivityStatistics(final OAuthorizedClient client) {
+        for (int attempt = 0; attempt < 3; attempt++) {
+            final String clientId = client.getPrincipalName();
+            LOG.info("Fetching statistics for clientId: " + clientId);
+            try {
+                final ResponseEntity<String> response = getStatisticsResponse(clientId);
+
+                LOG.debug("Fetched statistics response: " + response);
+
+                final ActivityStatistics activityStatistics = Application.MAPPER.readValue(response.getBody(), ActivityStatistics.class);
+                activityStatistics.setAthleteId(clientId);
+                activityStatistics.setAthleteName(client.getAthleteName());
+
+                LOG.debug("Added activityStatisticsList bean to collection: " + activityStatistics);
+                return activityStatistics;
+            } catch (final Exception e) {
+                if (e.getMessage().indexOf("401") > -1) {
+                    LOG.info("Refreshing auth token for clientId: " + clientId + ", old value: " + getTokenValue(clientId));
+                    try {
+                        refreshToken(clientId);
+                        LOG.debug("Successfully refreshed token for clientId: " + clientId + ", new value: " + getTokenValue(clientId));
+                    } catch (final Exception re) {
+                        LOG.error("Error while refreshing token for clientId: " + clientId + " " + re.getMessage());
+                    }
+                } else {
+                    LOG.error("Exception while fetching statistics for client " + clientId + ": " + e.getMessage());
+                    break;
+                }
+            }
+        }
+        return null;
     }
 
     private ResponseEntity<String> getStatisticsResponse(final String clientId) throws Exception {
@@ -126,24 +133,11 @@ public final class StatisticsUpdater {
         final String athleteName = byId.get().getAthleteName();
         authorizedClientRepo.deleteById(authorizedClient.getPrincipalName());
 
-        final OAuth2AccessToken accessToken = new OAuth2AccessToken(
-                OAuth2AccessToken.TokenType.BEARER,
-                refreshTokenResponse.getAccess_token(),
-                Instant.ofEpochSecond(refreshTokenResponse.getExpires_in()),
-                Instant.ofEpochSecond(refreshTokenResponse.getExpires_at())
-        );
+        final OAuth2AccessToken accessToken = new OAuth2AccessToken(OAuth2AccessToken.TokenType.BEARER, refreshTokenResponse.getAccess_token(), Instant.ofEpochSecond(refreshTokenResponse.getExpires_in()), Instant.ofEpochSecond(refreshTokenResponse.getExpires_at()));
 
-        final OAuth2RefreshToken refreshToken = new OAuth2RefreshToken(
-                refreshTokenResponse.getRefresh_token(),
-                Instant.ofEpochSecond(refreshTokenResponse.getExpires_in())
-        );
+        final OAuth2RefreshToken refreshToken = new OAuth2RefreshToken(refreshTokenResponse.getRefresh_token(), Instant.ofEpochSecond(refreshTokenResponse.getExpires_in()));
 
-        final OAuth2AuthorizedClient newClient = new OAuth2AuthorizedClient(
-                authorizedClient.getClientRegistration(),
-                authorizedClient.getPrincipalName(),
-                accessToken,
-                refreshToken
-        );
+        final OAuth2AuthorizedClient newClient = new OAuth2AuthorizedClient(authorizedClient.getClientRegistration(), authorizedClient.getPrincipalName(), accessToken, refreshToken);
 
         final OAuthorizedClient oAuthorizedClient = new OAuthorizedClient();
         oAuthorizedClient.setAthleteName(athleteName);
