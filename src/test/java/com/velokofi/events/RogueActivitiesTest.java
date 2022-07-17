@@ -2,9 +2,7 @@ package com.velokofi.events;
 
 import com.velokofi.events.model.AthleteActivity;
 import com.velokofi.events.model.hungryvelos.RogueActivities;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.util.Assert;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -17,7 +15,7 @@ public class RogueActivitiesTest {
         final List<AthleteActivity> activities = new ArrayList<>();
         final Field[] declaredFields = RogueActivities.class.getDeclaredFields();
         for (final Field field : declaredFields) {
-            final AthleteActivity rogueActivity = Application.MAPPER.readValue(field.get(null).toString(), AthleteActivity.class);
+            final AthleteActivity rogueActivity = VeloKofiEventsApplication.MAPPER.readValue(field.get(null).toString(), AthleteActivity.class);
             activities.add(rogueActivity);
         }
 

@@ -29,12 +29,12 @@ public class PushTheLimits {
 
         final Path path = Paths.get("src", "test", "resources", "activities/hungryVelos2.json");
         final byte[] bytes = Files.readAllBytes(path);
-        final AthleteActivity[] allActivitiesArray = Application.MAPPER.readValue(bytes, AthleteActivity[].class);
+        final AthleteActivity[] allActivitiesArray = VeloKofiEventsApplication.MAPPER.readValue(bytes, AthleteActivity[].class);
         final List<AthleteActivity> allActivities = Arrays.stream(allActivitiesArray).collect(toList());
 
         final Field[] rogueActivitiesAsFields = RogueActivities.class.getDeclaredFields();
         for (final Field field : rogueActivitiesAsFields) {
-            final AthleteActivity rogueActivity = Application.MAPPER.readValue(field.get(null).toString(), AthleteActivity.class);
+            final AthleteActivity rogueActivity = VeloKofiEventsApplication.MAPPER.readValue(field.get(null).toString(), AthleteActivity.class);
             allActivities.add(rogueActivity);
         }
 

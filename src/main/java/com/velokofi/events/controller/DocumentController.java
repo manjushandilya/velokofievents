@@ -1,6 +1,6 @@
 package com.velokofi.events.controller;
 
-import com.velokofi.events.Application;
+import com.velokofi.events.VeloKofiEventsApplication;
 import com.velokofi.events.cron.StatisticsUpdater;
 import com.velokofi.events.model.ActivityStatistics;
 import com.velokofi.events.model.AthleteActivity;
@@ -52,33 +52,33 @@ public class DocumentController {
             }
         }
         final List<ActivityStatistics> statistics = activityStatisticsRepo.findAll();
-        return Application.MAPPER.writeValueAsString(statistics);
+        return VeloKofiEventsApplication.MAPPER.writeValueAsString(statistics);
     }
 
     @GetMapping("/documents/activities")
     public String getActivities() throws Exception {
         final List<AthleteActivity> activities = athleteActivityRepo.findAll();
-        return Application.MAPPER.writeValueAsString(activities);
+        return VeloKofiEventsApplication.MAPPER.writeValueAsString(activities);
     }
 
     @GetMapping("/documents/activities/{athleteId}")
     public String getActivities(@PathVariable("athleteId") final Long athleteId) throws Exception {
         final List<AthleteActivity> allActivities = athleteActivityRepo.findAll();
         final List<AthleteActivity> athleteActivities = allActivities.stream().filter(a -> a.getAthlete().getId() == athleteId).collect(toList());
-        return Application.MAPPER.writeValueAsString(athleteActivities);
+        return VeloKofiEventsApplication.MAPPER.writeValueAsString(athleteActivities);
     }
 
     @GetMapping("/documents/clients")
     public String getClients() throws Exception {
         final List<OAuthorizedClient> clients = authorizedClientRepo.findAll();
-        return Application.MAPPER.writeValueAsString(clients);
+        return VeloKofiEventsApplication.MAPPER.writeValueAsString(clients);
     }
 
     @GetMapping("/documents/clients/{clientId}")
     public String getClient(@PathVariable("clientId") final Long clientId, @RequestParam(name = "action") final String action) throws Exception {
         final List<OAuthorizedClient> clients = authorizedClientRepo.findAll();
         final List<OAuthorizedClient> filteredClients = clients.stream().filter(c -> c.getPrincipalName().equals(clientId)).collect(toList());
-        final String clientAsString = Application.MAPPER.writeValueAsString(filteredClients);
+        final String clientAsString = VeloKofiEventsApplication.MAPPER.writeValueAsString(filteredClients);
 
         switch (action) {
             case "clear":

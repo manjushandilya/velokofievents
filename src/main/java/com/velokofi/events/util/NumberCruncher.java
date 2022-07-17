@@ -1,6 +1,6 @@
 package com.velokofi.events.util;
 
-import com.velokofi.events.Application;
+import com.velokofi.events.VeloKofiEventsApplication;
 import com.velokofi.events.model.AthleteActivity;
 import com.velokofi.events.model.hungryvelos.Team;
 import com.velokofi.events.model.hungryvelos.TeamMember;
@@ -41,7 +41,7 @@ public final class NumberCruncher {
     public static List<Map.Entry<String, Double>> summingAggregateDoubleNoLimit(final List<AthleteActivity> activities,
                                                                          final List<TeamMember> teamMembers,
                                                                          final String gender,
-                                                                         final Application.MetricType metricType) {
+                                                                         final VeloKofiEventsApplication.MetricType metricType) {
         final Map<String, Double> aggregateMap = activities.stream()
                 .filter(a -> filterBasedOnGender(a.getAthlete(), teamMembers, gender))
                 .collect(groupingBy(
@@ -56,7 +56,7 @@ public final class NumberCruncher {
     public static List<Map.Entry<String, Double>> summingAggregateDouble(final List<AthleteActivity> activities,
                                                                          final List<TeamMember> teamMembers,
                                                                          final String gender,
-                                                                         final Application.MetricType metricType) {
+                                                                         final VeloKofiEventsApplication.MetricType metricType) {
         final Map<String, Double> aggregateMap = activities.stream()
                 .filter(a -> filterBasedOnGender(a.getAthlete(), teamMembers, gender))
                 .collect(groupingBy(
@@ -65,13 +65,13 @@ public final class NumberCruncher {
                 );
 
         final Stream<Map.Entry<String, Double>> aggregateSorted = aggregateMap.entrySet().stream().sorted(comparingByValue(reverseOrder()));
-        return aggregateSorted.limit(Application.LEADER_BOARD_LIMIT).collect(toList());
+        return aggregateSorted.limit(VeloKofiEventsApplication.LEADER_BOARD_LIMIT).collect(toList());
     }
 
     public static List<Map.Entry<String, Double>> averagingAggregateDoubleNoLimit(final List<AthleteActivity> activities,
                                                                            final List<TeamMember> teamMembers,
                                                                            final String gender,
-                                                                           final Application.MetricType metricType) {
+                                                                           final VeloKofiEventsApplication.MetricType metricType) {
         final Map<String, Double> aggregateMap = activities.stream()
                 .filter(a -> filterBasedOnGender(a.getAthlete(), teamMembers, gender))
                 .collect(groupingBy(
@@ -86,7 +86,7 @@ public final class NumberCruncher {
     public static List<Map.Entry<String, Double>> averagingAggregateDouble(final List<AthleteActivity> activities,
                                                                            final List<TeamMember> teamMembers,
                                                                            final String gender,
-                                                                           final Application.MetricType metricType) {
+                                                                           final VeloKofiEventsApplication.MetricType metricType) {
         final Map<String, Double> aggregateMap = activities.stream()
                 .filter(a -> filterBasedOnGender(a.getAthlete(), teamMembers, gender))
                 .collect(groupingBy(
@@ -95,7 +95,7 @@ public final class NumberCruncher {
                 );
 
         final Stream<Map.Entry<String, Double>> aggregateSorted = aggregateMap.entrySet().stream().sorted(comparingByValue(reverseOrder()));
-        return aggregateSorted.limit(Application.LEADER_BOARD_LIMIT).collect(toList());
+        return aggregateSorted.limit(VeloKofiEventsApplication.LEADER_BOARD_LIMIT).collect(toList());
     }
 
     public static List<Map.Entry<String, Long>> summingAggregateLongNoLimit(final List<AthleteActivity> activities,
@@ -125,23 +125,23 @@ public final class NumberCruncher {
                 );
 
         final Stream<Map.Entry<String, Long>> aggregateSorted = map.entrySet().stream().sorted(comparingByValue(reverseOrder()));
-        return aggregateSorted.limit(Application.LEADER_BOARD_LIMIT).collect(toList());
+        return aggregateSorted.limit(VeloKofiEventsApplication.LEADER_BOARD_LIMIT).collect(toList());
     }
 
-    public static double getValue(Application.MetricType metricType, double a) {
-        if (metricType == Application.MetricType.DISTANCE) {
+    public static double getValue(VeloKofiEventsApplication.MetricType metricType, double a) {
+        if (metricType == VeloKofiEventsApplication.MetricType.DISTANCE) {
             return round(a);
-        } else if (metricType == Application.MetricType.ELEVATION) {
+        } else if (metricType == VeloKofiEventsApplication.MetricType.ELEVATION) {
             return a;
         } else {
             return a;
         }
     }
 
-    public static double getValue(Application.MetricType metricType, AthleteActivity a) {
-        if (metricType == Application.MetricType.DISTANCE) {
+    public static double getValue(VeloKofiEventsApplication.MetricType metricType, AthleteActivity a) {
+        if (metricType == VeloKofiEventsApplication.MetricType.DISTANCE) {
             return getValue(metricType, a.getDistance() / 1000D);
-        } else if (metricType == Application.MetricType.ELEVATION) {
+        } else if (metricType == VeloKofiEventsApplication.MetricType.ELEVATION) {
             return getValue(metricType, a.getTotal_elevation_gain());
         } else {
             return getValue(metricType, a.getAverage_speed());

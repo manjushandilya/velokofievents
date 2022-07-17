@@ -29,7 +29,7 @@ public class QuadsOfFury {
 
         final Path path = Paths.get("src", "test", "resources", "activities/allActivitiesTill15022022.json");
         final byte[] bytes = Files.readAllBytes(path);
-        final AthleteActivity[] allActivities = Application.MAPPER.readValue(bytes, AthleteActivity[].class);
+        final AthleteActivity[] allActivities = VeloKofiEventsApplication.MAPPER.readValue(bytes, AthleteActivity[].class);
         System.out.println("Read " + allActivities.length + " activities");
 
         final LocalDateTime after = Formatter.parse("2022-02-03T00:00:00Z");
@@ -43,8 +43,8 @@ public class QuadsOfFury {
 
         System.out.println("Selected " + factivities.size() + " activities for female gender:");
 
-        final List<Map.Entry<String, Double>> fsentries = averagingAggregateDoubleNoLimit(factivities, teamMembers, "F", Application.MetricType.AVG_SPEED);
-        final List<Map.Entry<String, Double>> fdentries = summingAggregateDoubleNoLimit(factivities, teamMembers, "F", Application.MetricType.DISTANCE);
+        final List<Map.Entry<String, Double>> fsentries = averagingAggregateDoubleNoLimit(factivities, teamMembers, "F", VeloKofiEventsApplication.MetricType.AVG_SPEED);
+        final List<Map.Entry<String, Double>> fdentries = summingAggregateDoubleNoLimit(factivities, teamMembers, "F", VeloKofiEventsApplication.MetricType.DISTANCE);
         for (final Map.Entry<String, Double> fsentry : fsentries) {
             final Double distance = getValue(fsentry.getKey(), fdentries);
             if (distance >= 200D) {
@@ -60,8 +60,8 @@ public class QuadsOfFury {
 
         System.out.println("Selected " + mactivities.size() + " activities for male gender:");
 
-        final List<Map.Entry<String, Double>> msentries = averagingAggregateDoubleNoLimit(mactivities, teamMembers, "M", Application.MetricType.AVG_SPEED);
-        final List<Map.Entry<String, Double>> mdentries = summingAggregateDoubleNoLimit(mactivities, teamMembers, "M", Application.MetricType.DISTANCE);
+        final List<Map.Entry<String, Double>> msentries = averagingAggregateDoubleNoLimit(mactivities, teamMembers, "M", VeloKofiEventsApplication.MetricType.AVG_SPEED);
+        final List<Map.Entry<String, Double>> mdentries = summingAggregateDoubleNoLimit(mactivities, teamMembers, "M", VeloKofiEventsApplication.MetricType.DISTANCE);
         for (final Map.Entry<String, Double> msentry : msentries) {
             final Double distance = getValue(msentry.getKey(), mdentries);
             if (distance >= 200D) {

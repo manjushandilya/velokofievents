@@ -1,6 +1,6 @@
 package com.velokofi.events.cron;
 
-import com.velokofi.events.Application;
+import com.velokofi.events.VeloKofiEventsApplication;
 import com.velokofi.events.model.ActivityStatistics;
 import com.velokofi.events.model.OAuthorizedClient;
 import com.velokofi.events.model.RefreshTokenRequest;
@@ -71,7 +71,7 @@ public final class StatisticsUpdater {
 
                 LOG.debug("Fetched statistics response: " + response);
 
-                final ActivityStatistics activityStatistics = Application.MAPPER.readValue(response.getBody(), ActivityStatistics.class);
+                final ActivityStatistics activityStatistics = VeloKofiEventsApplication.MAPPER.readValue(response.getBody(), ActivityStatistics.class);
                 activityStatistics.setAthleteId(clientId);
                 activityStatistics.setAthleteName(client.getAthleteName());
 
@@ -119,7 +119,7 @@ public final class StatisticsUpdater {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         final RefreshTokenRequest requestObj = getRefreshTokenRequest(authorizedClient);
-        final String body = Application.MAPPER.writeValueAsString(requestObj);
+        final String body = VeloKofiEventsApplication.MAPPER.writeValueAsString(requestObj);
 
         LOG.debug("Refresh token request: " + body);
 
@@ -128,7 +128,7 @@ public final class StatisticsUpdater {
         final ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
         LOG.debug("Refresh token response: " + response);
 
-        final RefreshTokenResponse refreshTokenResponse = Application.MAPPER.readValue(response.getBody(), RefreshTokenResponse.class);
+        final RefreshTokenResponse refreshTokenResponse = VeloKofiEventsApplication.MAPPER.readValue(response.getBody(), RefreshTokenResponse.class);
         final Optional<OAuthorizedClient> byId = authorizedClientRepo.findById(authorizedClient.getPrincipalName());
         final String athleteName = byId.get().getAthleteName();
         authorizedClientRepo.deleteById(authorizedClient.getPrincipalName());

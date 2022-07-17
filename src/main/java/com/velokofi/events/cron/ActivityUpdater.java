@@ -1,6 +1,6 @@
 package com.velokofi.events.cron;
 
-import com.velokofi.events.Application;
+import com.velokofi.events.VeloKofiEventsApplication;
 import com.velokofi.events.model.AthleteActivity;
 import com.velokofi.events.model.OAuthorizedClient;
 import com.velokofi.events.model.RefreshTokenRequest;
@@ -55,7 +55,7 @@ public final class ActivityUpdater {
                 if (activities.length > 0) {
                     LOG.info("Saving " + activities.length + " activities for clientId: " + clientId);
                     Stream.of(activities)
-                            .filter(a -> Application.SUPPORTED_RIDE_TYPES.contains(a.getType()))
+                            .filter(a -> VeloKofiEventsApplication.SUPPORTED_RIDE_TYPES.contains(a.getType()))
                             .forEach(activity -> athleteActivityRepo.save(activity));
                 }
             } catch (final Exception e) {
@@ -78,7 +78,7 @@ public final class ActivityUpdater {
 
         final HttpEntity<String> request = new HttpEntity<>(headers);
         final ResponseEntity<String> response = restTemplate.exchange(getUri(1), HttpMethod.GET, request, String.class);
-        return Application.MAPPER.readValue(response.getBody(), AthleteActivity[].class);
+        return VeloKofiEventsApplication.MAPPER.readValue(response.getBody(), AthleteActivity[].class);
     }
 
     private void refresh(final String clientId) throws Exception {
@@ -95,7 +95,7 @@ public final class ActivityUpdater {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         final RefreshTokenRequest requestObj = getRefreshTokenRequest(authorizedClient);
-        final String body = Application.MAPPER.writeValueAsString(requestObj);
+        final String body = VeloKofiEventsApplication.MAPPER.writeValueAsString(requestObj);
 
         LOG.debug("Refresh token request: " + body);
 
@@ -104,7 +104,7 @@ public final class ActivityUpdater {
         final ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
         LOG.debug("Refresh token response: " + response);
 
-        final RefreshTokenResponse refreshTokenResponse = Application.MAPPER.readValue(response.getBody(), RefreshTokenResponse.class);
+        final RefreshTokenResponse refreshTokenResponse = VeloKofiEventsApplication.MAPPER.readValue(response.getBody(), RefreshTokenResponse.class);
         authorizedClientRepo.deleteById(authorizedClient.getPrincipalName());
 
         final OAuth2AccessToken accessToken = new OAuth2AccessToken(
@@ -144,9 +144,9 @@ public final class ActivityUpdater {
     private URI getUri(final int pageNumber) throws URISyntaxException {
         final StringBuilder builder = new StringBuilder();
         builder.append("https://www.strava.com/api/v3/athlete/activities");
-        builder.append("?per_page=").append(Application.ACTIVITIES_PER_PAGE);
-        builder.append("&after=").append(Application.START_TIMESTAMP);
-        builder.append("&before=").append(Application.END_TIMESTAMP);
+        builder.append("?per_page=").append(VeloKofiEventsApplication.ACTIVITIES_PER_PAGE);
+        builder.append("&after=").append(VeloKofiEventsApplication.START_TIMESTAMP);
+        builder.append("&before=").append(VeloKofiEventsApplication.END_TIMESTAMP);
         builder.append("&page=").append(pageNumber);
 
         return new URI(builder.toString());

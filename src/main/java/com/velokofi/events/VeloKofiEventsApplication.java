@@ -18,7 +18,7 @@ import java.util.List;
 
 @SpringBootApplication
 @EnableScheduling
-public class Application {
+public class VeloKofiEventsApplication {
 
     public static final Long LEADER_BOARD_LIMIT = 5L;
 
@@ -56,7 +56,7 @@ public class Application {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(VeloKofiEventsApplication.class, args);
     }
 
     @Bean

@@ -28,7 +28,7 @@ public class ActivityCountTest {
         if (files != null) {
             for (final File file : files) {
                 final byte[] bytes = Files.readAllBytes(file.toPath());
-                final AthleteActivity[] activities = Application.MAPPER.readValue(bytes, AthleteActivity[].class);
+                final AthleteActivity[] activities = VeloKofiEventsApplication.MAPPER.readValue(bytes, AthleteActivity[].class);
                 allActivities.addAll(Arrays.asList(activities));
             }
         }

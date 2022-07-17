@@ -3,13 +3,8 @@ package com.velokofi.events;
 import com.velokofi.events.controller.PledgeController;
 import com.velokofi.events.model.ActivityStatistics;
 import com.velokofi.events.model.ActivityStatisticsSummary;
-import com.velokofi.events.model.hungryvelos.Team;
-import com.velokofi.events.model.hungryvelos.TeamMember;
-import com.velokofi.events.persistence.TeamsRepository;
-import com.velokofi.events.util.NumberCruncher;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -27,7 +22,7 @@ public class ActivityStatisticsLeaderBoardTest {
     public void test() throws Exception {
         final Path path = Paths.get("src", "test", "resources", "activities", "allActivityStats.json");
         final byte[] bytes = Files.readAllBytes(path);
-        final ActivityStatistics[] activityStats = Application.MAPPER.readValue(bytes, ActivityStatistics[].class);
+        final ActivityStatistics[] activityStats = VeloKofiEventsApplication.MAPPER.readValue(bytes, ActivityStatistics[].class);
         //System.out.println("Read " + activityStats.length + " activity stats");
 
         Arrays.sort(activityStats, (o1, o2) -> Float.compare(o2.getYtd_ride_totals().getDistance(), o1.getYtd_ride_totals().getDistance()));

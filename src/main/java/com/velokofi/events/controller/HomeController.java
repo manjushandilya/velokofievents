@@ -1,6 +1,6 @@
 package com.velokofi.events.controller;
 
-import com.velokofi.events.Application;
+import com.velokofi.events.VeloKofiEventsApplication;
 import com.velokofi.events.cron.StatisticsUpdater;
 import com.velokofi.events.model.ActivityStatistics;
 import com.velokofi.events.model.AthleteProfile;
@@ -61,7 +61,7 @@ public class HomeController {
                 );
                 if (client != null) {
                     final String profileResponse = getResponse(client.getAccessToken().getTokenValue(), "https://www.strava.com/api/v3/athlete");
-                    final AthleteProfile athleteProfile = Application.MAPPER.readValue(profileResponse, AthleteProfile.class);
+                    final AthleteProfile athleteProfile = VeloKofiEventsApplication.MAPPER.readValue(profileResponse, AthleteProfile.class);
                     sessionFactory.getObject().setAttribute("athleteProfile", athleteProfile);
 
                     final OAuthorizedClient authorizedClient = new OAuthorizedClient();

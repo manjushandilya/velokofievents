@@ -1,6 +1,6 @@
 package com.velokofi.events.persistence;
 
-import com.velokofi.events.Application;
+import com.velokofi.events.VeloKofiEventsApplication;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -14,7 +14,7 @@ public class Saver {
             final StringBuilder sb = new StringBuilder();
             sb.append(System.getProperty("user.home"));
             sb.append(File.separator);
-            sb.append(Application.class.getName());
+            sb.append(VeloKofiEventsApplication.class.getName());
             sb.append(File.separator);
             sb.append("activities");
 

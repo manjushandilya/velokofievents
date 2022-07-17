@@ -29,7 +29,7 @@ public class ElevationChallenge {
 
         final Path path = Paths.get("src", "test", "resources", "activities/allActivitiesTill25012022.json");
         final byte[] bytes = Files.readAllBytes(path);
-        final AthleteActivity[] allActivities = Application.MAPPER.readValue(bytes, AthleteActivity[].class);
+        final AthleteActivity[] allActivities = VeloKofiEventsApplication.MAPPER.readValue(bytes, AthleteActivity[].class);
         System.out.println("Read " + allActivities.length + " activities");
 
         final LocalDateTime after = Formatter.parse("2022-01-18T00:00:00Z");
@@ -39,7 +39,7 @@ public class ElevationChallenge {
                 .filter(a -> Formatter.isBetween(after, before, Formatter.parse(a.getStart_date_local())))
                 .collect(Collectors.toList());
 
-        final List<Map.Entry<String, Double>> entries = summingAggregateDouble(activities, teamMembers, "M", Application.MetricType.ELEVATION);
+        final List<Map.Entry<String, Double>> entries = summingAggregateDouble(activities, teamMembers, "M", VeloKofiEventsApplication.MetricType.ELEVATION);
         System.out.println(entries);
     }
 
@@ -51,7 +51,7 @@ public class ElevationChallenge {
 
         final Path path = Paths.get("src", "test", "resources", "activities/allActivitiesTill25012022.json");
         final byte[] bytes = Files.readAllBytes(path);
-        final AthleteActivity[] allActivities = Application.MAPPER.readValue(bytes, AthleteActivity[].class);
+        final AthleteActivity[] allActivities = VeloKofiEventsApplication.MAPPER.readValue(bytes, AthleteActivity[].class);
         System.out.println("Read " + allActivities.length + " activities");
 
         final LocalDateTime after = Formatter.parse("2022-01-18T00:00:00Z");
@@ -61,7 +61,7 @@ public class ElevationChallenge {
                 .filter(a -> Formatter.isBetween(after, before, Formatter.parse(a.getStart_date_local())))
                 .collect(Collectors.toList());
 
-        final List<Map.Entry<String, Double>> entries = summingAggregateDouble(activities, teamMembers, "F", Application.MetricType.ELEVATION);
+        final List<Map.Entry<String, Double>> entries = summingAggregateDouble(activities, teamMembers, "F", VeloKofiEventsApplication.MetricType.ELEVATION);
         System.out.println(entries);
     }
 

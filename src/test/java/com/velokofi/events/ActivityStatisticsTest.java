@@ -13,7 +13,7 @@ public class ActivityStatisticsTest {
     public void testDeserialization() throws Exception {
         final Path path = Paths.get("src", "test", "resources", "activities", "activityStats.json");
         final byte[] bytes = Files.readAllBytes(path);
-        final ActivityStatistics activityStatistics = Application.MAPPER.readValue(bytes, ActivityStatistics.class);
+        final ActivityStatistics activityStatistics = VeloKofiEventsApplication.MAPPER.readValue(bytes, ActivityStatistics.class);
         System.out.println(activityStatistics);
     }
 

@@ -15,7 +15,7 @@
     <description>events by velokofi</description>
 
     <properties>
-        <start-class>com.velokofi.events.Application</start-class>
+        <start-class>com.velokofi.events.VeloKofiEventsApplication</start-class>
     </properties>
 
     <dependencies>

@@ -1,6 +1,6 @@
 package com.velokofi.events.controller;
 
-import com.velokofi.events.Application;
+import com.velokofi.events.VeloKofiEventsApplication;
 import com.velokofi.events.model.AthleteActivity;
 import com.velokofi.events.model.AthleteSummary;
 import com.velokofi.events.model.hungryvelos.*;
@@ -64,7 +64,7 @@ public final class HungryVelosController {
         final Field[] rogueActivitiesAsFields = RogueActivities.class.getDeclaredFields();
         LOG.info("Adding " + rogueActivitiesAsFields.length + " rogue activities...");
         for (final Field field : rogueActivitiesAsFields) {
-            final AthleteActivity rogueActivity = Application.MAPPER.readValue(field.get(null).toString(), AthleteActivity.class);
+            final AthleteActivity rogueActivity = VeloKofiEventsApplication.MAPPER.readValue(field.get(null).toString(), AthleteActivity.class);
             activities.add(rogueActivity);
         }
 
@@ -218,14 +218,14 @@ public final class HungryVelosController {
             LOG.debug("teamSummaries: " + teamSummaries);
         }
 
-        leaderBoard.setMrAlemaari(summingAggregateDouble(activities, teamMembers, "M", Application.MetricType.DISTANCE));
-        leaderBoard.setMsAlemaari(summingAggregateDouble(activities, teamMembers, "F", Application.MetricType.DISTANCE));
+        leaderBoard.setMrAlemaari(summingAggregateDouble(activities, teamMembers, "M", VeloKofiEventsApplication.MetricType.DISTANCE));
+        leaderBoard.setMsAlemaari(summingAggregateDouble(activities, teamMembers, "F", VeloKofiEventsApplication.MetricType.DISTANCE));
 
-        leaderBoard.setBettappa(summingAggregateDouble(activities, teamMembers, "M", Application.MetricType.ELEVATION));
-        leaderBoard.setBettamma(summingAggregateDouble(activities, teamMembers, "F", Application.MetricType.ELEVATION));
+        leaderBoard.setBettappa(summingAggregateDouble(activities, teamMembers, "M", VeloKofiEventsApplication.MetricType.ELEVATION));
+        leaderBoard.setBettamma(summingAggregateDouble(activities, teamMembers, "F", VeloKofiEventsApplication.MetricType.ELEVATION));
 
-        leaderBoard.setMinchinaOtappa(averagingAggregateDouble(activities, teamMembers, "M", Application.MetricType.AVG_SPEED));
-        leaderBoard.setMinchinaOtamma(averagingAggregateDouble(activities, teamMembers, "F", Application.MetricType.AVG_SPEED));
+        leaderBoard.setMinchinaOtappa(averagingAggregateDouble(activities, teamMembers, "M", VeloKofiEventsApplication.MetricType.AVG_SPEED));
+        leaderBoard.setMinchinaOtamma(averagingAggregateDouble(activities, teamMembers, "F", VeloKofiEventsApplication.MetricType.AVG_SPEED));
 
         leaderBoard.setMrThuliMaga(summingAggregateLong(activities, teamMembers, "M"));
         leaderBoard.setMsThuliMaga(summingAggregateLong(activities, teamMembers, "F"));
