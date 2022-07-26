@@ -37,10 +37,6 @@ public class ActivityStatisticsLeaderBoardTest {
     public String getAthleteStatisticsSummary(final ActivityStatistics activityStatistics) {
         final StringBuilder sb = new StringBuilder();
 
-        if (activityStatistics.getAthleteName() == null) {
-            activityStatistics.setAthleteName(PledgeController.STRAVA_ID_VS_NAME_MAP.get(activityStatistics.getAthleteId()));
-        }
-
         final ActivityStatisticsSummary summary = new ActivityStatisticsSummary(activityStatistics);
         sb.append(summary.getAthleteName()).append(SEPARATOR);
         sb.append(summary.getYtdDistance()).append(SEPARATOR);
