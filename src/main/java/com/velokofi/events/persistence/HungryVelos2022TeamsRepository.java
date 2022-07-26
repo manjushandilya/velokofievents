@@ -14,7 +14,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 @Component
-public class TeamsRepository implements TeamConstants {
+public class HungryVelos2022TeamsRepository implements TeamConstants {
 
     public List<Team> listTeams() throws Exception {
         final StringReader reader = new StringReader(TEAMS_CSV);

@@ -3,7 +3,7 @@ package com.velokofi.events;
 import com.velokofi.events.model.AthleteActivity;
 import com.velokofi.events.model.hungryvelos.Team;
 import com.velokofi.events.model.hungryvelos.TeamMember;
-import com.velokofi.events.persistence.TeamsRepository;
+import com.velokofi.events.persistence.HungryVelos2022TeamsRepository;
 import com.velokofi.events.util.Formatter;
 import org.junit.jupiter.api.Test;
 
@@ -23,8 +23,8 @@ public class ElevationChallenge {
 
     @Test
     public void testBettappa() throws Exception {
-        final TeamsRepository teamsRepository = new TeamsRepository();
-        final List<Team> teams = teamsRepository.listTeams();
+        final HungryVelos2022TeamsRepository hungryVelos2022TeamsRepository = new HungryVelos2022TeamsRepository();
+        final List<Team> teams = hungryVelos2022TeamsRepository.listTeams();
         final List<TeamMember> teamMembers = teams.stream().flatMap(t -> t.getMembers().stream()).collect(toList());
 
         final Path path = Paths.get("src", "test", "resources", "activities/allActivitiesTill25012022.json");
@@ -45,8 +45,8 @@ public class ElevationChallenge {
 
     @Test
     public void testBettamma() throws Exception {
-        final TeamsRepository teamsRepository = new TeamsRepository();
-        final List<Team> teams = teamsRepository.listTeams();
+        final HungryVelos2022TeamsRepository hungryVelos2022TeamsRepository = new HungryVelos2022TeamsRepository();
+        final List<Team> teams = hungryVelos2022TeamsRepository.listTeams();
         final List<TeamMember> teamMembers = teams.stream().flatMap(t -> t.getMembers().stream()).collect(toList());
 
         final Path path = Paths.get("src", "test", "resources", "activities/allActivitiesTill25012022.json");

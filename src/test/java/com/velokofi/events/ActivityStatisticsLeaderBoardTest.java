@@ -1,6 +1,5 @@
 package com.velokofi.events;
 
-import com.velokofi.events.controller.PledgeController;
 import com.velokofi.events.model.ActivityStatistics;
 import com.velokofi.events.model.ActivityStatisticsSummary;
 import org.junit.jupiter.api.Test;

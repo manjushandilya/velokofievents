@@ -3,8 +3,6 @@ package com.velokofi.events.cron;
 import com.velokofi.events.VeloKofiEventsApplication;
 import com.velokofi.events.model.ActivityStatistics;
 import com.velokofi.events.model.OAuthorizedClient;
-import com.velokofi.events.model.RefreshTokenRequest;
-import com.velokofi.events.model.RefreshTokenResponse;
 import com.velokofi.events.persistence.ActivityStatisticsRepository;
 import com.velokofi.events.persistence.OAuthorizedClientRepository;
 import lombok.Getter;
@@ -14,24 +12,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
-import org.springframework.security.oauth2.core.OAuth2AccessToken;
-import org.springframework.security.oauth2.core.OAuth2RefreshToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.*;
 
 @Component
 @Getter
 @Setter
-public final class StatisticsUpdater {
+public final class Pledge2022StatisticsUpdater {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ActivityUpdater.class);
+    private static final Logger LOG = LoggerFactory.getLogger(HungryVelos2022ActivityUpdater.class);
 
     @Autowired
     private OAuthorizedClientRepository authorizedClientRepo;

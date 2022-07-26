@@ -3,8 +3,6 @@ package com.velokofi.events.cron;
 import com.velokofi.events.VeloKofiEventsApplication;
 import com.velokofi.events.model.AthleteActivity;
 import com.velokofi.events.model.OAuthorizedClient;
-import com.velokofi.events.model.RefreshTokenRequest;
-import com.velokofi.events.model.RefreshTokenResponse;
 import com.velokofi.events.persistence.AthleteActivityRepository;
 import com.velokofi.events.persistence.OAuthorizedClientRepository;
 import lombok.Getter;
@@ -13,15 +11,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
-import org.springframework.security.oauth2.core.OAuth2AccessToken;
-import org.springframework.security.oauth2.core.OAuth2RefreshToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Stream;
@@ -31,9 +25,9 @@ import static java.util.stream.Collectors.toList;
 @Component
 @Getter
 @Setter
-public final class ActivityUpdater {
+public final class HungryVelos2022ActivityUpdater {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ActivityUpdater.class);
+    private static final Logger LOG = LoggerFactory.getLogger(HungryVelos2022ActivityUpdater.class);
 
     @Autowired
     private AthleteActivityRepository athleteActivityRepo;
@@ -43,7 +37,7 @@ public final class ActivityUpdater {
 
     //@Scheduled(fixedDelay = 1 * 60 * 1000 * 60, initialDelay = 60 * 1000 * 60)
     public void run() throws Exception {
-        LOG.info("Running ActivityUpdater scheduled task at: " + LocalDateTime.now());
+        LOG.info("Running HungryVelos2022ActivityUpdater scheduled task at: " + LocalDateTime.now());
 
         final List<OAuthorizedClient> clients = authorizedClientRepo.findAll();
         final List<String> clientIds = clients.stream().map(c -> c.getPrincipalName()).collect(toList());

@@ -1,7 +1,7 @@
 package com.velokofi.events.controller;
 
 import com.velokofi.events.VeloKofiEventsApplication;
-import com.velokofi.events.cron.StatisticsUpdater;
+import com.velokofi.events.cron.Pledge2022StatisticsUpdater;
 import com.velokofi.events.model.ActivityStatistics;
 import com.velokofi.events.model.AthleteActivity;
 import com.velokofi.events.model.OAuthorizedClient;
@@ -9,7 +9,7 @@ import com.velokofi.events.model.hungryvelos.Team;
 import com.velokofi.events.persistence.ActivityStatisticsRepository;
 import com.velokofi.events.persistence.AthleteActivityRepository;
 import com.velokofi.events.persistence.OAuthorizedClientRepository;
-import com.velokofi.events.persistence.TeamsRepository;
+import com.velokofi.events.persistence.HungryVelos2022TeamsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class DocumentController {
     private static final Logger LOG = LoggerFactory.getLogger(DocumentController.class);
 
     @Autowired
-    private TeamsRepository teamsRepository;
+    private HungryVelos2022TeamsRepository hungryVelos2022TeamsRepository;
 
     @Autowired
     private AthleteActivityRepository athleteActivityRepo;
@@ -42,14 +42,14 @@ public class DocumentController {
     private ActivityStatisticsRepository activityStatisticsRepo;
 
     @Autowired
-    private StatisticsUpdater statisticsUpdater;
+    private Pledge2022StatisticsUpdater pledge2022StatisticsUpdater;
 
     @GetMapping("/documents/statistics")
     public String getStatistics(@RequestParam(name = "action") final String action) throws Exception {
         if (action != null) {
             switch (action) {
                 case "refresh":
-                    statisticsUpdater.run();
+                    pledge2022StatisticsUpdater.run();
                     break;
             }
         }
@@ -103,10 +103,14 @@ public class DocumentController {
                         final String principalName = client.getPrincipalName();
                         final String athleteName = STRAVA_ID_VS_NAME_MAP.get(principalName);
 
-                        LOG.error("AthleteName not found for clientId: " + principalName + " setting as: " + athleteName);
-
-                        client.setAthleteName(athleteName);
-                        authorizedClientRepo.save(client);
+                        LOG.error("AthleteName not found for clientId: " + principalName);
+                        if (athleteName != null) {
+                             LOG.error("Setting athleteName as: " + athleteName);
+                            client.setAthleteName(athleteName);
+                            authorizedClientRepo.save(client);
+                        } else {
+                            LOG.error("Ghost athlete with id: " + principalName);
+                        }
                     }
                 }
                 break;
@@ -125,7 +129,7 @@ public class DocumentController {
                 authorizedClientRepo.deleteAll();
                 break;
             case "cleanup":
-                final List<Team> teams = teamsRepository.listTeams();
+                final List<Team> teams = hungryVelos2022TeamsRepository.listTeams();
                 final List<Long> configuredClientIds = teams.stream().flatMap(t -> t.getMembers().stream()).map(tm -> tm.getId()).collect(toList());
 
                 LOG.debug("configuredClientIds: " + configuredClientIds);

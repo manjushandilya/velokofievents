@@ -8,7 +8,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RogueActivitiesTest {
+public class RogueSerializedTest {
 
     @Test
     public void test() throws Exception {

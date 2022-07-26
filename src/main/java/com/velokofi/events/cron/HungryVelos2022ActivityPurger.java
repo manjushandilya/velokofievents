@@ -6,7 +6,6 @@ import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -14,9 +13,9 @@ import java.time.LocalDateTime;
 @Component
 @Setter
 @Getter
-public final class ActivityPurger {
+public final class HungryVelos2022ActivityPurger {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ActivityUpdater.class);
+    private static final Logger LOG = LoggerFactory.getLogger(HungryVelos2022ActivityUpdater.class);
 
     @Autowired
     private AthleteActivityRepository athleteActivityRepo;

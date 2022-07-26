@@ -16,9 +16,9 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 @RestController
-public class PledgeController {
+public class Pledge2022Controller {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PledgeController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Pledge2022Controller.class);
 
     @Autowired
     private ActivityStatisticsRepository activityStatisticsRepo;

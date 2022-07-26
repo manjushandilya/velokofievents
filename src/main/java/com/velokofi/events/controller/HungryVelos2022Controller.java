@@ -4,22 +4,19 @@ import com.velokofi.events.VeloKofiEventsApplication;
 import com.velokofi.events.model.AthleteActivity;
 import com.velokofi.events.model.AthleteSummary;
 import com.velokofi.events.model.hungryvelos.*;
-import com.velokofi.events.persistence.AthleteActivityRepository;
-import com.velokofi.events.persistence.OAuthorizedClientRepository;
-import com.velokofi.events.persistence.TeamsRepository;
+import com.velokofi.events.persistence.HungryVelos2022TeamsRepository;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -32,43 +29,34 @@ import static java.util.stream.Collectors.*;
 @RestController
 @Getter
 @Setter
-public final class HungryVelosController {
+public final class HungryVelos2022Controller {
 
-    private static final Logger LOG = LoggerFactory.getLogger(HungryVelosController.class);
-
-    private final RestTemplate restTemplate;
+    private static final Logger LOG = LoggerFactory.getLogger(HungryVelos2022Controller.class);
 
     @Autowired
-    private TeamsRepository teamsRepository;
+    private HungryVelos2022TeamsRepository hungryVelos2022TeamsRepository;
 
-    @Autowired
-    private AthleteActivityRepository athleteActivityRepo;
-
-    @Autowired
-    private OAuthorizedClientRepository authorizedClientRepo;
-
-    public HungryVelosController(final RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
+    public HungryVelos2022Controller() {
     }
 
     @GetMapping("/hungryvelos")
     public ModelAndView execute() throws Exception {
         final LeaderBoard leaderBoard = new LeaderBoard();
-
-        final List<AthleteActivity> activities = athleteActivityRepo.findAll().stream().filter(
+        final byte[] bytes = Serialized.ACTIVITIES.getBytes(StandardCharsets.UTF_8);
+        final AthleteActivity[] allActivities = VeloKofiEventsApplication.MAPPER.readValue(bytes, AthleteActivity[].class);
+        final List<AthleteActivity> activities = Arrays.stream(allActivities).filter(
                 a -> ((Long) a.getAthlete().getId()) != null
         ).collect(toList());
-        LOG.info("Fetched " + activities.size() + " activities from db...");
-        LOG.debug("Activities: " + activities);
+        LOG.info("Fetched " + activities.size() + " activities...");
 
         final Field[] rogueActivitiesAsFields = RogueActivities.class.getDeclaredFields();
-        LOG.info("Adding " + rogueActivitiesAsFields.length + " rogue activities...");
+        LOG.debug("Adding " + rogueActivitiesAsFields.length + " rogue activities...");
         for (final Field field : rogueActivitiesAsFields) {
             final AthleteActivity rogueActivity = VeloKofiEventsApplication.MAPPER.readValue(field.get(null).toString(), AthleteActivity.class);
             activities.add(rogueActivity);
         }
 
-        final List<Team> teams = teamsRepository.listTeams();
+        final List<Team> teams = hungryVelos2022TeamsRepository.listTeams();
         final List<TeamMember> teamMembers = teams.stream().flatMap(t -> t.getMembers().stream()).collect(toList());
 
         { // event totals
@@ -232,18 +220,7 @@ public final class HungryVelosController {
 
         final ModelAndView mav = new ModelAndView("hv2022");
         mav.addObject("leaderBoard", leaderBoard);
-        //mav.addObject("principalName", client.getPrincipalName());
         return mav;
-    }
-
-    private String getResponse(final String tokenValue, final String url) {
-        final HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("Authorization", "Bearer " + tokenValue);
-        HttpEntity<String> request = new HttpEntity<String>(headers);
-
-        final ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
-        return response.getBody();
     }
 
 }
