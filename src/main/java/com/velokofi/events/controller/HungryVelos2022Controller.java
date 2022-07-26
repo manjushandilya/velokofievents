@@ -17,6 +17,9 @@ import org.springframework.web.servlet.ModelAndView;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -42,7 +45,8 @@ public final class HungryVelos2022Controller {
     @GetMapping("/hungryvelos")
     public ModelAndView execute() throws Exception {
         final LeaderBoard leaderBoard = new LeaderBoard();
-        final byte[] bytes = Serialized.ACTIVITIES.getBytes(StandardCharsets.UTF_8);
+        final Path path = Paths.get("src", "main", "resources", "activities/hungryVelos2.json");
+        final byte[] bytes = Files.readAllBytes(path);
         final AthleteActivity[] allActivities = VeloKofiEventsApplication.MAPPER.readValue(bytes, AthleteActivity[].class);
         final List<AthleteActivity> activities = Arrays.stream(allActivities).filter(
                 a -> ((Long) a.getAthlete().getId()) != null
