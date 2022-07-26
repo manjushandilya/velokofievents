@@ -45,7 +45,7 @@ public final class HungryVelos2022Controller {
     @GetMapping("/hungryvelos")
     public ModelAndView execute() throws Exception {
         final LeaderBoard leaderBoard = new LeaderBoard();
-        final Path path = Paths.get("src", "main", "resources", "activities/hungryVelos2.json");
+        final Path path = Paths.get("src", "main", "resources", "static", "json", "hungryVelos2.json");
         final byte[] bytes = Files.readAllBytes(path);
         final AthleteActivity[] allActivities = VeloKofiEventsApplication.MAPPER.readValue(bytes, AthleteActivity[].class);
         final List<AthleteActivity> activities = Arrays.stream(allActivities).filter(
