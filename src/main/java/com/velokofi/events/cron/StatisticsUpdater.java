@@ -24,9 +24,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 @Getter
@@ -41,8 +39,79 @@ public final class StatisticsUpdater {
     @Autowired
     private ActivityStatisticsRepository activityStatisticsRepo;
 
+    public static final Map<String, String> STRAVA_ID_VS_NAME_MAP;
+
+    static {
+        STRAVA_ID_VS_NAME_MAP = new HashMap<>();
+
+        STRAVA_ID_VS_NAME_MAP.put("43378948", "Shruthi Subbanna");
+        STRAVA_ID_VS_NAME_MAP.put("35940578", "Sai Srinivas");
+        STRAVA_ID_VS_NAME_MAP.put("37177283", "Manjunath Sathyanarayana");
+        STRAVA_ID_VS_NAME_MAP.put("28234693", "Goutham YV");
+        STRAVA_ID_VS_NAME_MAP.put("74963850", "Nandini Kishor");
+        STRAVA_ID_VS_NAME_MAP.put("69245380", "Siddharth Horee");
+        STRAVA_ID_VS_NAME_MAP.put("14463022", "Sagar MC");
+        STRAVA_ID_VS_NAME_MAP.put("3225831", "Prashanth S");
+        STRAVA_ID_VS_NAME_MAP.put("73010512", "Chandrashekar K");
+        STRAVA_ID_VS_NAME_MAP.put("15589851", "Sun'J Sharma");
+        STRAVA_ID_VS_NAME_MAP.put("3377091", "Sunil Gopala Chari");
+        STRAVA_ID_VS_NAME_MAP.put("9125629", "Deepu Fixie Beardo");
+        STRAVA_ID_VS_NAME_MAP.put("37178147", "Sandeep B N");
+        STRAVA_ID_VS_NAME_MAP.put("58389372", "Rupesh 🏃🚴🚵🏊");
+        STRAVA_ID_VS_NAME_MAP.put("6848467", "Shreenivasa K s");
+        STRAVA_ID_VS_NAME_MAP.put("62516649", "Anil Kumar");
+        STRAVA_ID_VS_NAME_MAP.put("20378999", "Rav Indra");
+        STRAVA_ID_VS_NAME_MAP.put("62411206", "Arun Bhaskar");
+        STRAVA_ID_VS_NAME_MAP.put("75083256", "Manu Gopinath");
+        STRAVA_ID_VS_NAME_MAP.put("38684955", "Premchand Ryali");
+        STRAVA_ID_VS_NAME_MAP.put("83728576", "Shyam Sundar K");
+        STRAVA_ID_VS_NAME_MAP.put("12244586", "Kirti Chalam");
+        STRAVA_ID_VS_NAME_MAP.put("64757576", "Bharadwaja S R");
+        STRAVA_ID_VS_NAME_MAP.put("78896766", "Rahul Padmanabha");
+        STRAVA_ID_VS_NAME_MAP.put("69757350", "Ravi Sunderrajan");
+        STRAVA_ID_VS_NAME_MAP.put("51400681", "Roopa Rupesh");
+        STRAVA_ID_VS_NAME_MAP.put("17249418", "Chandan Gaddehosur");
+        STRAVA_ID_VS_NAME_MAP.put("75500724", "Revathi M P");
+        STRAVA_ID_VS_NAME_MAP.put("65820756", "Nanda Kishor G D");
+        STRAVA_ID_VS_NAME_MAP.put("65392239", "Vipin Devis");
+        STRAVA_ID_VS_NAME_MAP.put("64907699", "Amarnath Vali");
+        STRAVA_ID_VS_NAME_MAP.put("63014939", "Srinidhi Bharadwaj");
+        STRAVA_ID_VS_NAME_MAP.put("61999014", "Vidyaprasanna Kambalur");
+        STRAVA_ID_VS_NAME_MAP.put("61335755", "Sampige Santhosh");
+        STRAVA_ID_VS_NAME_MAP.put("68355712", "Sandeep Vishwanath");
+        STRAVA_ID_VS_NAME_MAP.put("33590187", "Faraz Umar");
+        STRAVA_ID_VS_NAME_MAP.put("25409226", "Lakshmi Narasu");
+        STRAVA_ID_VS_NAME_MAP.put("16222927", "Mythri Sunil");
+        STRAVA_ID_VS_NAME_MAP.put("12920635", "Sukumar Sundaram");
+        STRAVA_ID_VS_NAME_MAP.put("19218746", "Raghu B V");
+        STRAVA_ID_VS_NAME_MAP.put("85387376", "Nischal Kumar");
+        STRAVA_ID_VS_NAME_MAP.put("74710582", "Zainab Shoaib");
+        STRAVA_ID_VS_NAME_MAP.put("74590313", "Venkat");
+        STRAVA_ID_VS_NAME_MAP.put("73629852", "Bharathi Malavalli");
+        STRAVA_ID_VS_NAME_MAP.put("73492491", "Savitha Naik");
+        STRAVA_ID_VS_NAME_MAP.put("71154685", "Ashwini Nischal (Ashu)");
+        STRAVA_ID_VS_NAME_MAP.put("70101578", "Chidanand Kawri Lokesh");
+        STRAVA_ID_VS_NAME_MAP.put("67288162", "Harsha Gandhi");
+        STRAVA_ID_VS_NAME_MAP.put("62471947", "Girish Jain Jain");
+        STRAVA_ID_VS_NAME_MAP.put("38148750", "Chandu :)");
+        STRAVA_ID_VS_NAME_MAP.put("33762572", "Arun Bastin");
+        STRAVA_ID_VS_NAME_MAP.put("28550167", "Sudarshan Gopinath");
+        STRAVA_ID_VS_NAME_MAP.put("41081264", "Subhra Kanti Das");
+        STRAVA_ID_VS_NAME_MAP.put("62775438", "Sandhya Santhosh");
+        STRAVA_ID_VS_NAME_MAP.put("42776148", "Manas Chand Ryali");
+        STRAVA_ID_VS_NAME_MAP.put("42777287", "Manavchand Ryali");
+        STRAVA_ID_VS_NAME_MAP.put("68380635", "Latha Rani");
+        STRAVA_ID_VS_NAME_MAP.put("36760093", "Manasa Bharadwaj");
+        STRAVA_ID_VS_NAME_MAP.put("78551177", "samrudh kishor");
+        STRAVA_ID_VS_NAME_MAP.put("88072624", "Niharikaa N");
+        STRAVA_ID_VS_NAME_MAP.put("88076285", "Tanu Pradeep Gorur");
+        STRAVA_ID_VS_NAME_MAP.put("88054379", "Aditya V K");
+        STRAVA_ID_VS_NAME_MAP.put("87964523", "Atharva Subramanya Kashyap");
+        STRAVA_ID_VS_NAME_MAP.put("81228572", "Jayashree Nandakumar");
+    }
+
     @Scheduled(cron = "0 0 0 * * *")
-    public void run() throws Exception {
+    public void run() {
         LOG.info("Running StatisticsUpdater scheduled task at: " + LocalDateTime.now());
         activityStatisticsRepo.deleteAll();
 
@@ -79,16 +148,17 @@ public final class StatisticsUpdater {
                 return activityStatistics;
             } catch (final Exception e) {
                 if (e.getMessage().indexOf("401") > -1) {
-                    LOG.info("Refreshing auth token for clientId: " + clientId + ", old value: " + getTokenValue(clientId));
+                    LOG.info("Refreshing auth token for clientId: " + clientId + ", old value: " +
+                            RefreshTokenHelper.getTokenValue(authorizedClientRepo, clientId));
                     try {
-                        refreshToken(clientId);
-                        LOG.debug("Successfully refreshed token for clientId: " + clientId + ", new value: " + getTokenValue(clientId));
+                        RefreshTokenHelper.refreshToken(authorizedClientRepo, clientId);
+                        LOG.debug("Successfully refreshed token for clientId: " + clientId + ", new value: " +
+                                RefreshTokenHelper.getTokenValue(authorizedClientRepo, clientId));
                     } catch (final Exception re) {
                         LOG.error("Error while refreshing token for clientId: " + clientId + " " + re.getMessage());
                     }
                 } else {
-                    LOG.error("Exception while fetching statistics for client " + clientId + ": " + e.getMessage());
-                    break;
+                    LOG.error("Exception while fetching statistics for clientId " + clientId + ": " + e.getMessage());
                 }
             }
         }
@@ -99,60 +169,10 @@ public final class StatisticsUpdater {
         final RestTemplate restTemplate = new RestTemplate();
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("Authorization", "Bearer " + getTokenValue(clientId));
+        headers.set("Authorization", "Bearer " + RefreshTokenHelper.getTokenValue(authorizedClientRepo, clientId));
 
         final HttpEntity<String> request = new HttpEntity<>(headers);
         return restTemplate.exchange(getUri(clientId), HttpMethod.GET, request, String.class);
-    }
-
-    private void refreshToken(final String clientId) throws Exception {
-        final OAuthorizedClient client = authorizedClientRepo.findById(clientId).get();
-        final OAuth2AuthorizedClient authorizedClient = OAuthorizedClient.fromBytes(client.getBytes());
-
-        final StringBuilder builder = new StringBuilder();
-        builder.append("https://www.strava.com/api/v3/oauth/token");
-
-        final URI uri = new URI(builder.toString());
-
-        final RestTemplate restTemplate = new RestTemplate();
-        final HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        final RefreshTokenRequest requestObj = getRefreshTokenRequest(authorizedClient);
-        final String body = VeloKofiEventsApplication.MAPPER.writeValueAsString(requestObj);
-
-        LOG.debug("Refresh token request: " + body);
-
-        final HttpEntity<String> request = new HttpEntity<>(body, headers);
-
-        final ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.POST, request, String.class);
-        LOG.debug("Refresh token response: " + response);
-
-        final RefreshTokenResponse refreshTokenResponse = VeloKofiEventsApplication.MAPPER.readValue(response.getBody(), RefreshTokenResponse.class);
-        final Optional<OAuthorizedClient> byId = authorizedClientRepo.findById(authorizedClient.getPrincipalName());
-        final String athleteName = byId.get().getAthleteName();
-        authorizedClientRepo.deleteById(authorizedClient.getPrincipalName());
-
-        final OAuth2AccessToken accessToken = new OAuth2AccessToken(OAuth2AccessToken.TokenType.BEARER, refreshTokenResponse.getAccess_token(), Instant.ofEpochSecond(refreshTokenResponse.getExpires_in()), Instant.ofEpochSecond(refreshTokenResponse.getExpires_at()));
-
-        final OAuth2RefreshToken refreshToken = new OAuth2RefreshToken(refreshTokenResponse.getRefresh_token(), Instant.ofEpochSecond(refreshTokenResponse.getExpires_in()));
-
-        final OAuth2AuthorizedClient newClient = new OAuth2AuthorizedClient(authorizedClient.getClientRegistration(), authorizedClient.getPrincipalName(), accessToken, refreshToken);
-
-        final OAuthorizedClient oAuthorizedClient = new OAuthorizedClient();
-        oAuthorizedClient.setAthleteName(athleteName);
-        oAuthorizedClient.setPrincipalName(authorizedClient.getPrincipalName());
-        oAuthorizedClient.setBytes(com.velokofi.events.model.OAuthorizedClient.toBytes(newClient));
-        authorizedClientRepo.save(oAuthorizedClient);
-    }
-
-    private RefreshTokenRequest getRefreshTokenRequest(final OAuth2AuthorizedClient authorizedClient) {
-        final RefreshTokenRequest requestObj = new RefreshTokenRequest();
-        requestObj.setClient_id(authorizedClient.getClientRegistration().getClientId());
-        requestObj.setClient_secret(authorizedClient.getClientRegistration().getClientSecret());
-        requestObj.setGrant_type("refresh_token");
-        requestObj.setRefresh_token(authorizedClient.getRefreshToken().getTokenValue());
-        return requestObj;
     }
 
     private URI getUri(final String athleteId) throws URISyntaxException {
@@ -162,13 +182,6 @@ public final class StatisticsUpdater {
         builder.append("/stats");
 
         return new URI(builder.toString());
-    }
-
-    private String getTokenValue(final String clientId) {
-        final OAuthorizedClient client = authorizedClientRepo.findById(clientId).get();
-        final OAuth2AuthorizedClient entry = OAuthorizedClient.fromBytes(client.getBytes());
-        final String tokenValue = entry.getAccessToken().getTokenValue();
-        return tokenValue;
     }
 
 }

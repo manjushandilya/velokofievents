@@ -27,6 +27,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                         .antMatchers(
                                 "/",
                                 "/error",
+                                "/documents/**",
                                 "/hungryvelos",
                                 "/pledge",
                                 "/webjars/**",
