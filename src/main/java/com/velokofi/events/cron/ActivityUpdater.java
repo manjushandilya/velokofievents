@@ -1,6 +1,5 @@
 package com.velokofi.events.cron;
 
-import com.velokofi.events.VeloKofiEventsApplication;
 import com.velokofi.events.model.AthleteActivity;
 import com.velokofi.events.model.OAuthorizedClient;
 import com.velokofi.events.persistence.AthleteActivityRepository;
@@ -18,11 +17,11 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
+import static com.velokofi.events.VeloKofiEventsApplication.*;
 import static java.util.stream.Collectors.toList;
 
 @Component
@@ -31,8 +30,6 @@ import static java.util.stream.Collectors.toList;
 public class ActivityUpdater {
 
     private static final Logger LOG = LoggerFactory.getLogger(ActivityUpdater.class);
-    public static final ZoneOffset IST = ZoneOffset.of("+05:30");
-
     @Autowired
     private AthleteActivityRepository athleteActivityRepo;
 
@@ -50,12 +47,13 @@ public class ActivityUpdater {
         for (final String clientId : clientIds) {
             LOG.info("Fetching activities for clientId: " + clientId);
             try {
-                final AthleteActivity[] activities = getActivities(clientId);
-                if (activities.length > 0) {
-                    LOG.info("Saving " + activities.length + " activities for clientId: " + clientId);
-                    Stream.of(activities)
-                            .filter(a -> VeloKofiEventsApplication.SUPPORTED_RIDE_TYPES.contains(a.getType()))
-                            .forEach(activity -> athleteActivityRepo.save(activity));
+                final List<AthleteActivity> activities = getActivities(clientId);
+                if (!activities.isEmpty()) {
+                    LOG.info("Saving " + activities.size() + " activities for clientId: " + clientId);
+                    final List<AthleteActivity> filteredActivities = activities.stream()
+                            .filter(a -> SUPPORTED_RIDE_TYPES.contains(a.getType()))
+                            .collect(toList());
+                    athleteActivityRepo.saveAll(filteredActivities);
                 }
             } catch (final Exception e) {
                 if (e.getMessage().indexOf("401") > -1) {
@@ -75,28 +73,38 @@ public class ActivityUpdater {
         }
     }
 
-    private AthleteActivity[] getActivities(final String clientId) throws Exception {
+    private List<AthleteActivity> getActivities(final String clientId) throws Exception {
         final RestTemplate restTemplate = new RestTemplate();
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", "Bearer " + RefreshTokenHelper.getTokenValue(authorizedClientRepo, clientId));
 
         final HttpEntity<String> request = new HttpEntity<>(headers);
-        final ResponseEntity<String> response = restTemplate.exchange(getUri(1),
-                HttpMethod.GET, request, String.class);
-        return VeloKofiEventsApplication.MAPPER.readValue(response.getBody(), AthleteActivity[].class);
+
+        final List<AthleteActivity> activities = new ArrayList<>();
+        int pageNumber = 1;
+        while (true) {
+            final ResponseEntity<String> response = restTemplate.exchange(
+                    getUri(pageNumber), HttpMethod.GET, request, String.class
+            );
+            final AthleteActivity[] athleteActivities = MAPPER.readValue(
+                    response.getBody(), AthleteActivity[].class
+            );
+            if (athleteActivities.length < MAX_ACTIVITIES_PER_PAGE) {
+                break;
+            }
+            activities.addAll(Arrays.asList(athleteActivities));
+            pageNumber++;
+        }
+        return activities;
     }
 
     private URI getUri(final int pageNumber) throws URISyntaxException {
         final StringBuilder builder = new StringBuilder();
         builder.append("https://www.strava.com/api/v3/athlete/activities");
-        builder.append("?per_page=").append(VeloKofiEventsApplication.ACTIVITIES_PER_PAGE);
-        builder.append("&after=").append(VeloKofiEventsApplication.BY_2021_START_TIMESTAMP);
-        final OffsetDateTime after = OffsetDateTime.of(2022, 1, 1, 0, 0, 0, 0, IST);
-        builder.append("&after=").append(after.toEpochSecond());
-        //builder.append("&before=").append(VeloKofiEventsApplication.BY_2021_END_TIMESTAMP);
-        //final OffsetDateTime before = OffsetDateTime.of(2022, 7, 31, 23, 59, 59, 999999999, ZoneOffset.of("+05:30"));
-        //builder.append("&before=").append(before.toEpochSecond());
+        builder.append("?per_page=").append(MAX_ACTIVITIES_PER_PAGE);
+        builder.append("&after=").append(TS_START);
+        builder.append("&before=").append(TS_END);
         builder.append("&page=").append(pageNumber);
 
         return new URI(builder.toString());

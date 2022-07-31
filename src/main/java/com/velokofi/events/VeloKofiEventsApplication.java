@@ -22,32 +22,38 @@ public class VeloKofiEventsApplication {
 
     public static final Long LEADER_BOARD_LIMIT = 5L;
 
+    public static final ZoneOffset IST = ZoneOffset.of("+05:30");
+
     public static final BigDecimal PLEDGE_DISTANCE = new BigDecimal(4044);
 
-    public static final int ACTIVITIES_PER_PAGE = 200;
+    public static final int MAX_ACTIVITIES_PER_PAGE = 200;
 
     public static final String HV_2022_START_TIMESTAMP; // 00:00:00 on 08 Jan 2022
+
     static {
-        final OffsetDateTime dateTime = OffsetDateTime.of(2022, 1, 8, 0, 0, 0, 0, ZoneOffset.of("+05:30"));
+        final OffsetDateTime dateTime = OffsetDateTime.of(2022, 1, 8, 0, 0, 0, 0, IST);
         HV_2022_START_TIMESTAMP = String.valueOf(dateTime.toEpochSecond());
     }
 
     public static final String HV_2022_END_TIMESTAMP; // 23:59:59 on 18 Feb 2022
+
     static {
-        final OffsetDateTime dateTime = OffsetDateTime.of(2022, 2, 18, 23, 59, 59, 0, ZoneOffset.of("+05:30"));
+        final OffsetDateTime dateTime = OffsetDateTime.of(2022, 2, 18, 23, 59, 59, 0, IST);
         HV_2022_END_TIMESTAMP = String.valueOf(dateTime.toEpochSecond());
     }
 
-    public static final String BY_2021_START_TIMESTAMP; // 00:00:00 on 01 Aug 2021
+    public static final String TS_START;
+
     static {
-        final OffsetDateTime dateTime = OffsetDateTime.of(2021, 8, 1, 0, 0, 0, 0, ZoneOffset.of("+05:30"));
-        BY_2021_START_TIMESTAMP = String.valueOf(dateTime.toEpochSecond());
+        final OffsetDateTime dateTime = OffsetDateTime.of(2022, 5, 1, 0, 0, 0, 0, IST);
+        TS_START = String.valueOf(dateTime.toEpochSecond());
     }
 
-    public static final String BY_2021_END_TIMESTAMP; // 23:59:59 on 31 Oct 2021
+    public static final String TS_END;
+
     static {
-        final OffsetDateTime dateTime = OffsetDateTime.of(2021, 10, 31, 23, 59, 59, 999, ZoneOffset.of("+05:30"));
-        BY_2021_END_TIMESTAMP = String.valueOf(dateTime.toEpochSecond());
+        final OffsetDateTime dateTime = OffsetDateTime.of(2022, 7, 31, 23, 59, 59, 999, IST);
+        TS_END = String.valueOf(dateTime.toEpochSecond());
     }
 
     public static final ObjectMapper MAPPER;
