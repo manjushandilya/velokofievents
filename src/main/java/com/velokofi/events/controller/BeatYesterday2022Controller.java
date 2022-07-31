@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -43,20 +44,27 @@ public class BeatYesterday2022Controller {
         );
 
         final List<AthleteActivity> activities = athleteActivityRepository.findAll();
-        final Map<Long, List<AthleteActivity>> athleteActivities = activities.stream().collect(
-                Collectors.groupingBy(a -> a.getAthlete().getId())
+        final Map<String, List<AthleteActivity>> athleteActivities = activities.stream().collect(
+                Collectors.groupingBy(a -> String.valueOf(a.getAthlete().getId()))
         );
 
         final List<BeatYesterdayPhasesSummary> beatYesterdayPhasesSummaries = new ArrayList<>();
         for (final String clientId : clientIdVsAthleteNameMap.keySet()) {
             final String athleteName = clientIdVsAthleteNameMap.get(clientId);
-            final List<AthleteActivity> athleteActivitiesList = athleteActivities.get(String.valueOf(clientId));
-            LOG.info("ClientId: " + clientId + ", AthleteName: " + athleteName
-                    + ", Activity Count" + athleteActivitiesList.size());
+            LOG.info("ClientId: " + clientId + ", AthleteName: " + athleteName);
+
+            final List<AthleteActivity> athleteActivitiesList;
+            if (athleteActivities.get(clientId) != null) {
+                athleteActivitiesList = athleteActivities.get(clientId);
+            } else {
+                athleteActivitiesList = Collections.EMPTY_LIST;
+            }
+            LOG.info("Activity Count: " + athleteActivitiesList.size());
+
             final BeatYesterdayPhasesSummary beatYesterdayPhasesSummary =
                     new BeatYesterdayPhasesSummary(
                             clientId, athleteName,
-                            athleteActivitiesList, 2021, Month.AUGUST, Month.OCTOBER
+                            athleteActivitiesList, 2022, startMonth, endMonth
                     );
             beatYesterdayPhasesSummaries.add(beatYesterdayPhasesSummary);
         }
