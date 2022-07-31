@@ -50,7 +50,9 @@ public class BeatYesterday2022Controller {
         final List<BeatYesterdayPhasesSummary> beatYesterdayPhasesSummaries = new ArrayList<>();
         for (final String clientId : clientIdVsAthleteNameMap.keySet()) {
             final String athleteName = clientIdVsAthleteNameMap.get(clientId);
-            final List<AthleteActivity> athleteActivitiesList = athleteActivities.get(Long.parseLong(clientId));
+            final List<AthleteActivity> athleteActivitiesList = athleteActivities.get(String.valueOf(clientId));
+            LOG.info("ClientId: " + clientId + ", AthleteName: " + athleteName
+                    + ", Activity Count" + athleteActivitiesList.size());
             final BeatYesterdayPhasesSummary beatYesterdayPhasesSummary =
                     new BeatYesterdayPhasesSummary(
                             clientId, athleteName,
