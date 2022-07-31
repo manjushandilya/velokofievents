@@ -8,8 +8,6 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class BeatYesterdayTest {
 
@@ -22,7 +20,7 @@ public class BeatYesterdayTest {
         }
 
         final BeatYesterdayPhasesSummary summary = new BeatYesterdayPhasesSummary(
-                37177283L, "Manjunath Sathyanarayana",
+                "37177283", "Manjunath Sathyanarayana",
                 athleteActivities, 2021, Month.JUNE, Month.SEPTEMBER
         );
 
@@ -41,7 +39,7 @@ public class BeatYesterdayTest {
         }
 
         final BeatYesterdayPhasesSummary summary = new BeatYesterdayPhasesSummary(
-                37177283L, "Manjunath Sathyanarayana",
+                "37177283", "Manjunath Sathyanarayana",
                 athleteActivities, 2021, Month.JUNE, Month.SEPTEMBER
         );
 
@@ -60,7 +58,7 @@ public class BeatYesterdayTest {
         }
 
         final BeatYesterdayPhasesSummary summary = new BeatYesterdayPhasesSummary(
-                37177283L, "Manjunath Sathyanarayana",
+                "37177283", "Manjunath Sathyanarayana",
                 athleteActivities, 2021, Month.JUNE, Month.SEPTEMBER
         );
 
@@ -79,7 +77,7 @@ public class BeatYesterdayTest {
         }
 
         final BeatYesterdayPhasesSummary summary = new BeatYesterdayPhasesSummary(
-                37177283L, "Manjunath Sathyanarayana",
+                "37177283", "Manjunath Sathyanarayana",
                 athleteActivities, 2021, Month.JUNE, Month.SEPTEMBER
         );
 
@@ -98,7 +96,7 @@ public class BeatYesterdayTest {
         }
 
         final BeatYesterdayPhasesSummary summary = new BeatYesterdayPhasesSummary(
-                37177283L, "Manjunath Sathyanarayana",
+                "37177283", "Manjunath Sathyanarayana",
                 athleteActivities, 2021, Month.JUNE, Month.SEPTEMBER
         );
 
@@ -117,7 +115,7 @@ public class BeatYesterdayTest {
         }
 
         final BeatYesterdayPhasesSummary summary = new BeatYesterdayPhasesSummary(
-                37177283L, "Manjunath Sathyanarayana",
+                "37177283", "Manjunath Sathyanarayana",
                 athleteActivities, 2021, Month.JUNE, Month.SEPTEMBER
         );
 

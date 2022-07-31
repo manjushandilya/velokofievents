@@ -55,12 +55,12 @@ public class BeatYesterdayPhasesSummary {
         }
     }
 
-    private final Long athleteId;
+    private final String athleteId;
     private final String athleteName;
     private final Map<Month, PhaseMetric> phaseMetrics;
 
     public BeatYesterdayPhasesSummary(
-            final Long athleteId, final String athleteName,
+            final String athleteId, final String athleteName,
             final List<AthleteActivity> athleteActivities,
             final int year, final Month start, final Month end) {
         this.athleteId = athleteId;
@@ -74,8 +74,8 @@ public class BeatYesterdayPhasesSummary {
             final LocalDateTime phaseEnd = yearMonth.atEndOfMonth().atTime(23, 59, 59);
             final List<AthleteActivity> phaseActivities = filter(athleteActivities, phaseStart, phaseEnd);
 
-            //LOG.debug("Filtering activities from: " + phaseStart + " till " + phaseEnd + " and found "
-                    //+ phaseActivities.size() + " activities");
+            LOG.debug("Filtering activities from: " + phaseStart + " till " + phaseEnd + " and found "
+                    + phaseActivities.size() + " activities");
 
             final PhaseMetric metric = crunch(phaseActivities, baseLineLongestRideDistance, baseLineTotalDistance);
             phaseMetrics.put(Month.of(month), metric);
