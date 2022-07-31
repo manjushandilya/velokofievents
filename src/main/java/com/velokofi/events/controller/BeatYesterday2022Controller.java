@@ -32,7 +32,7 @@ public class BeatYesterday2022Controller {
 
     @GetMapping("/beatYesterday")
     public ModelAndView execute() throws Exception {
-        final Month startMonth = Month.JUNE, endMonth = Month.SEPTEMBER;
+        final Month startMonth = Month.MAY, endMonth = Month.JULY;
 
         final List<Month> months = rangeClosed(startMonth.getValue(), endMonth.getValue())
                 .mapToObj(m -> Month.of(m)).collect(toUnmodifiableList());
