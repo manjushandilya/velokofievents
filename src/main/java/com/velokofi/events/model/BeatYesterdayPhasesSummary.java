@@ -136,6 +136,10 @@ public class BeatYesterdayPhasesSummary {
     private List<AthleteActivity> filter(final List<AthleteActivity> athleteActivities,
                                          final LocalDateTime after,
                                          final LocalDateTime before) {
+        if (athleteActivities == null || athleteActivities.isEmpty()) {
+            return Collections.emptyList();
+        }
+
         return athleteActivities.stream()
                 .filter(a -> isBetween(after, before, parse(a.getStart_date_local())))
                 .collect(toList());

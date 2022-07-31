@@ -50,11 +50,11 @@ public class BeatYesterday2022Controller {
         final List<BeatYesterdayPhasesSummary> beatYesterdayPhasesSummaries = new ArrayList<>();
         for (final String clientId : clientIdVsAthleteNameMap.keySet()) {
             final String athleteName = clientIdVsAthleteNameMap.get(clientId);
-            final List<AthleteActivity> clientActivities = athleteActivities.get(clientId);
+            final List<AthleteActivity> athleteActivitiesList = athleteActivities.get(clientId);
             final BeatYesterdayPhasesSummary beatYesterdayPhasesSummary =
                     new BeatYesterdayPhasesSummary(
                             clientId, athleteName,
-                            clientActivities, 2021, Month.AUGUST, Month.OCTOBER
+                            athleteActivitiesList, 2021, Month.AUGUST, Month.OCTOBER
                     );
             beatYesterdayPhasesSummaries.add(beatYesterdayPhasesSummary);
         }
