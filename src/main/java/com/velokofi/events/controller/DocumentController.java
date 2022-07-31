@@ -44,8 +44,8 @@ public class DocumentController {
     @Autowired
     private Pledge2022StatisticsUpdater pledge2022StatisticsUpdater;
 
-    @GetMapping("/documents/statistics")
-    public String getStatistics(@RequestParam(name = "action") final String action) throws Exception {
+    @GetMapping("/documents/activities")
+    public String getAthleteActivities(@RequestParam(name = "action") final String action) throws Exception {
         if (action != null) {
             switch (action) {
                 case "refresh":
@@ -57,14 +57,8 @@ public class DocumentController {
         return VeloKofiEventsApplication.MAPPER.writeValueAsString(statistics);
     }
 
-    @GetMapping("/documents/activities")
-    public String getActivities() throws Exception {
-        final List<AthleteActivity> activities = athleteActivityRepo.findAll();
-        return VeloKofiEventsApplication.MAPPER.writeValueAsString(activities);
-    }
-
     @GetMapping("/documents/activities/{athleteId}")
-    public String getActivities(@PathVariable("athleteId") final Long athleteId) throws Exception {
+    public String getAthleteActivities(@PathVariable("athleteId") final Long athleteId) throws Exception {
         final List<AthleteActivity> allActivities = athleteActivityRepo.findAll();
         final List<AthleteActivity> athleteActivities = allActivities.stream().filter(a -> a.getAthlete().getId() == athleteId).collect(toList());
         return VeloKofiEventsApplication.MAPPER.writeValueAsString(athleteActivities);

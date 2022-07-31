@@ -30,6 +30,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                                 "/documents/**",
                                 "/hungryvelos",
                                 "/pledge",
+                                "/beatYesterday",
                                 "/webjars/**",
                                 "/css/**",
                                 "/assets/**",

@@ -25,7 +25,7 @@ import java.util.*;
 @Setter
 public final class Pledge2022StatisticsUpdater {
 
-    private static final Logger LOG = LoggerFactory.getLogger(HungryVelos2022ActivityUpdater.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Pledge2022StatisticsUpdater.class);
 
     @Autowired
     private OAuthorizedClientRepository authorizedClientRepo;

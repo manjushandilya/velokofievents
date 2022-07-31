@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head></head>
+    <body>
+        <table id="athleteStatisticsSummaryTable" border="1">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th th:each="month: ${months}">
+                        <span th:text="${month}"></span>
+                    </th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>Name</th>
+                    <th th:each="month: ${months}">
+                        <span th:text="${month}"></span>
+                    </th>
+                </tr>
+            </tfoot>
+            <tbody>
+                <tr th:each="beatYesterdayPhasesSummary: ${beatYesterdayPhasesSummaries}">
+                    <td><span th:text="${beatYesterdayPhasesSummary.athleteName}"></span></td>
+                    <td th:each="phaseMetric: ${beatYesterdayPhasesSummary.phaseMetrics}">
+                        <table border="1">
+                            <tr>
+                                <td>
+                                    Actual Longest Ride
+                                </td>
+                                <td>
+                                    <span th:text="${phaseMetric.value.actualLongestRideDistance}"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Target Longest Ride
+                                </td>
+                                <td>
+                                    <span th:text="${phaseMetric.value.targetLongestRideDistance}"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Longest Ride Distance Target Achieved
+                                </td>
+                                <td>
+                                    <span th:text="${phaseMetric.value.longestRideDistanceTargetAchieved}"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Actual Total Distance
+                                </td>
+                                <td>
+                                    <span th:text="${phaseMetric.value.actualTotalDistance}"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Target Total Distance
+                                </td>
+                                <td>
+                                    <span th:text="${phaseMetric.value.targetTotalDistance}"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Total Distance Target Achieved
+                                </td>
+                                <td>
+                                    <span th:text="${phaseMetric.value.totalDistanceTargetAchieved}"></span>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

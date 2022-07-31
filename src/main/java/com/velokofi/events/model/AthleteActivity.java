@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -14,6 +15,7 @@ import java.util.Objects;
 @Document
 @Getter
 @Setter
+@Accessors(chain = true)
 @NoArgsConstructor
 @ToString
 public class AthleteActivity implements Serializable {

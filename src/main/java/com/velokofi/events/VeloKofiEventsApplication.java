@@ -26,18 +26,28 @@ public class VeloKofiEventsApplication {
 
     public static final int ACTIVITIES_PER_PAGE = 200;
 
-    public static final String START_TIMESTAMP; // 00:00:00 on 08 Jan 2022
-
+    public static final String HV_2022_START_TIMESTAMP; // 00:00:00 on 08 Jan 2022
     static {
-        final OffsetDateTime after = OffsetDateTime.of(2022, 1, 8, 0, 0, 0, 0, ZoneOffset.of("+05:30"));
-        START_TIMESTAMP = String.valueOf(after.toEpochSecond());
+        final OffsetDateTime dateTime = OffsetDateTime.of(2022, 1, 8, 0, 0, 0, 0, ZoneOffset.of("+05:30"));
+        HV_2022_START_TIMESTAMP = String.valueOf(dateTime.toEpochSecond());
     }
 
-    public static final String END_TIMESTAMP; // 23:59:59 on 18 Feb 2022
-
+    public static final String HV_2022_END_TIMESTAMP; // 23:59:59 on 18 Feb 2022
     static {
-        final OffsetDateTime before = OffsetDateTime.of(2022, 2, 18, 23, 59, 59, 0, ZoneOffset.of("+05:30"));
-        END_TIMESTAMP = String.valueOf(before.toEpochSecond());
+        final OffsetDateTime dateTime = OffsetDateTime.of(2022, 2, 18, 23, 59, 59, 0, ZoneOffset.of("+05:30"));
+        HV_2022_END_TIMESTAMP = String.valueOf(dateTime.toEpochSecond());
+    }
+
+    public static final String BY_2021_START_TIMESTAMP; // 00:00:00 on 01 Aug 2021
+    static {
+        final OffsetDateTime dateTime = OffsetDateTime.of(2021, 8, 1, 0, 0, 0, 0, ZoneOffset.of("+05:30"));
+        BY_2021_START_TIMESTAMP = String.valueOf(dateTime.toEpochSecond());
+    }
+
+    public static final String BY_2021_END_TIMESTAMP; // 23:59:59 on 31 Oct 2021
+    static {
+        final OffsetDateTime dateTime = OffsetDateTime.of(2021, 10, 31, 23, 59, 59, 999, ZoneOffset.of("+05:30"));
+        BY_2021_END_TIMESTAMP = String.valueOf(dateTime.toEpochSecond());
     }
 
     public static final ObjectMapper MAPPER;
