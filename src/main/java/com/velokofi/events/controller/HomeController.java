@@ -1,7 +1,7 @@
 package com.velokofi.events.controller;
 
 import com.velokofi.events.VeloKofiEventsApplication;
-import com.velokofi.events.cron.Pledge2022StatisticsUpdater;
+import com.velokofi.events.cron.StatisticsUpdater;
 import com.velokofi.events.model.ActivityStatistics;
 import com.velokofi.events.model.AthleteProfile;
 import com.velokofi.events.model.OAuthorizedClient;
@@ -40,7 +40,7 @@ public class HomeController {
     private OAuthorizedClientRepository authorizedClientRepo;
 
     @Autowired
-    private Pledge2022StatisticsUpdater pledge2022StatisticsUpdater;
+    private StatisticsUpdater statisticsUpdater;
 
     @Autowired
     private ActivityStatisticsRepository activityStatisticsRepo;
@@ -70,7 +70,7 @@ public class HomeController {
                     authorizedClient.setBytes(com.velokofi.events.model.OAuthorizedClient.toBytes(client));
                     authorizedClientRepo.save(authorizedClient);
 
-                    final ActivityStatistics activityStatistics = pledge2022StatisticsUpdater.getActivityStatistics(authorizedClient);
+                    final ActivityStatistics activityStatistics = statisticsUpdater.getActivityStatistics(authorizedClient);
                     activityStatisticsRepo.save(activityStatistics);
                 }
             }

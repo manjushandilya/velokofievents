@@ -1,7 +1,7 @@
 package com.velokofi.events.controller;
 
 import com.velokofi.events.VeloKofiEventsApplication;
-import com.velokofi.events.cron.Pledge2022StatisticsUpdater;
+import com.velokofi.events.cron.StatisticsUpdater;
 import com.velokofi.events.model.ActivityStatistics;
 import com.velokofi.events.model.AthleteActivity;
 import com.velokofi.events.model.OAuthorizedClient;
@@ -42,14 +42,14 @@ public class DocumentController {
     private ActivityStatisticsRepository activityStatisticsRepo;
 
     @Autowired
-    private Pledge2022StatisticsUpdater pledge2022StatisticsUpdater;
+    private StatisticsUpdater statisticsUpdater;
 
     @GetMapping("/documents/statistics")
     public String getStatistics(@RequestParam(name = "action", required = false) final String action) throws Exception {
         if (action != null) {
             switch (action) {
                 case "refresh":
-                    pledge2022StatisticsUpdater.run();
+                    statisticsUpdater.run();
                     break;
             }
         }
@@ -62,7 +62,7 @@ public class DocumentController {
         if (action != null) {
             switch (action) {
                 case "refresh":
-                    pledge2022StatisticsUpdater.run();
+                    statisticsUpdater.run();
                     break;
             }
         }

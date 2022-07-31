@@ -23,9 +23,9 @@ import java.util.*;
 @Component
 @Getter
 @Setter
-public final class Pledge2022StatisticsUpdater {
+public final class StatisticsUpdater {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Pledge2022StatisticsUpdater.class);
+    private static final Logger LOG = LoggerFactory.getLogger(StatisticsUpdater.class);
 
     @Autowired
     private OAuthorizedClientRepository authorizedClientRepo;

@@ -18,8 +18,6 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -28,9 +26,9 @@ import static java.util.stream.Collectors.toList;
 @Component
 @Setter
 @Getter
-public class BeatYesterday2022ActivityUpdater {
+public class ActivityUpdater {
 
-    private static final Logger LOG = LoggerFactory.getLogger(BeatYesterday2022ActivityUpdater.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ActivityUpdater.class);
 
     @Autowired
     private AthleteActivityRepository athleteActivityRepo;
@@ -91,11 +89,11 @@ public class BeatYesterday2022ActivityUpdater {
         builder.append("https://www.strava.com/api/v3/athlete/activities");
         builder.append("?per_page=").append(VeloKofiEventsApplication.ACTIVITIES_PER_PAGE);
         //builder.append("&after=").append(VeloKofiEventsApplication.BY_2021_START_TIMESTAMP);
-        final OffsetDateTime after = OffsetDateTime.of(2022, 5, 1, 0, 0, 0, 0, ZoneOffset.of("+05:30"));
-        builder.append("&after=").append(after.toEpochSecond());
+        //final OffsetDateTime after = OffsetDateTime.of(2022, 5, 1, 0, 0, 0, 0, ZoneOffset.of("+05:30"));
+        //builder.append("&after=").append(after.toEpochSecond());
         //builder.append("&before=").append(VeloKofiEventsApplication.BY_2021_END_TIMESTAMP);
-        final OffsetDateTime before = OffsetDateTime.of(2022, 7, 31, 23, 59, 59, 999999999, ZoneOffset.of("+05:30"));
-        builder.append("&before=").append(before.toEpochSecond());
+        //final OffsetDateTime before = OffsetDateTime.of(2022, 7, 31, 23, 59, 59, 999999999, ZoneOffset.of("+05:30"));
+        //builder.append("&before=").append(before.toEpochSecond());
         builder.append("&page=").append(pageNumber);
 
         return new URI(builder.toString());
