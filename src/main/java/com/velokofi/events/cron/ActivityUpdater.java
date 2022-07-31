@@ -90,11 +90,11 @@ public class ActivityUpdater {
             final AthleteActivity[] athleteActivities = MAPPER.readValue(
                     response.getBody(), AthleteActivity[].class
             );
+            activities.addAll(Arrays.asList(athleteActivities));
+            pageNumber++;
             if (athleteActivities.length < MAX_ACTIVITIES_PER_PAGE) {
                 break;
             }
-            activities.addAll(Arrays.asList(athleteActivities));
-            pageNumber++;
         }
         return activities;
     }
