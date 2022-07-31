@@ -128,7 +128,7 @@ public final class NumberCruncher {
         return aggregateSorted.limit(VeloKofiEventsApplication.LEADER_BOARD_LIMIT).collect(toList());
     }
 
-    public static double getValue(VeloKofiEventsApplication.MetricType metricType, double a) {
+    public static double getValue(final VeloKofiEventsApplication.MetricType metricType, double a) {
         if (metricType == VeloKofiEventsApplication.MetricType.DISTANCE) {
             return round(a);
         } else if (metricType == VeloKofiEventsApplication.MetricType.ELEVATION) {
@@ -138,7 +138,7 @@ public final class NumberCruncher {
         }
     }
 
-    public static double getValue(VeloKofiEventsApplication.MetricType metricType, AthleteActivity a) {
+    public static double getValue(final VeloKofiEventsApplication.MetricType metricType, final AthleteActivity a) {
         if (metricType == VeloKofiEventsApplication.MetricType.DISTANCE) {
             return getValue(metricType, a.getDistance() / 1000D);
         } else if (metricType == VeloKofiEventsApplication.MetricType.ELEVATION) {

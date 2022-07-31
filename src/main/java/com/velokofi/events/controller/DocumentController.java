@@ -234,6 +234,10 @@ public class DocumentController {
         STRAVA_ID_VS_NAME_MAP.put("88054379", "Aditya V K");
         STRAVA_ID_VS_NAME_MAP.put("87964523", "Atharva Subramanya Kashyap");
         STRAVA_ID_VS_NAME_MAP.put("81228572", "Jayashree Nandakumar");
+        STRAVA_ID_VS_NAME_MAP.put("69378718", "Varun Kamath");
+        STRAVA_ID_VS_NAME_MAP.put("44516714", "Amit Krishna");
+        STRAVA_ID_VS_NAME_MAP.put("95295744", "Roopa Rangaswamy");
+        STRAVA_ID_VS_NAME_MAP.put("85359369", "Madhusudan Bangalore Prabhakar");
     }
 
 }

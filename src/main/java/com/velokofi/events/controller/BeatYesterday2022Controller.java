@@ -39,7 +39,7 @@ public class BeatYesterday2022Controller {
 
         final List<OAuthorizedClient> clients = authorizedClientRepo.findAll();
         final Map<String, String> clientIdVsAthleteNameMap = clients.stream().collect(
-                Collectors.toMap(c -> c.getPrincipalName(), c -> c.getAthleteName())
+                Collectors.toMap(OAuthorizedClient::getPrincipalName, BeatYesterday2022Controller::apply)
         );
 
         final List<AthleteActivity> activities = athleteActivityRepository.findAll();
@@ -81,6 +81,11 @@ public class BeatYesterday2022Controller {
 
     private ActivityStatisticsSummary fetch(final ActivityStatistics activityStatistics) {
         return new ActivityStatisticsSummary(activityStatistics);
+    }
+
+    private static String apply(final OAuthorizedClient client) {
+        LOG.error("client.getAthleteName() is null for: " + client.getPrincipalName());
+        return client.getAthleteName() != null ? client.getAthleteName() : client.getPrincipalName();
     }
 
 }

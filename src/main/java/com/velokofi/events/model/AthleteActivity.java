@@ -1,6 +1,7 @@
 package com.velokofi.events.model;
 
 import com.opencsv.bean.CsvIgnore;
+import com.velokofi.events.controller.DocumentController;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -94,6 +95,20 @@ public class AthleteActivity implements Serializable {
 
         @CsvIgnore
         private int resource_state;
+    }
+
+    public String toCSV() {
+        final StringBuilder sb = new StringBuilder();
+        final String athleteId = String.valueOf(getAthlete().getId());
+        final String athleteName = DocumentController.STRAVA_ID_VS_NAME_MAP.get(athleteId);
+        final double distance = getDistance() / 1000L;
+        sb.append(athleteName)
+                .append(",").append(athleteId)
+                .append(",").append(getStart_date_local())
+                .append(",").append(distance)
+                .append(",").append(getTotal_elevation_gain())
+                .append(",").append(getElapsed_time());
+        return sb.toString();
     }
 
 }
