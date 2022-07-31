@@ -1,7 +1,9 @@
 package com.velokofi.events.model;
 
 import com.opencsv.bean.CsvIgnore;
+import com.velokofi.events.VeloKofiEventsApplication;
 import com.velokofi.events.controller.DocumentController;
+import com.velokofi.events.util.NumberCruncher;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -101,7 +103,7 @@ public class AthleteActivity implements Serializable {
         final StringBuilder sb = new StringBuilder();
         final String athleteId = String.valueOf(getAthlete().getId());
         final String athleteName = DocumentController.STRAVA_ID_VS_NAME_MAP.get(athleteId);
-        final double distance = getDistance() / 1000L;
+        final double distance = NumberCruncher.round(NumberCruncher.getValue(VeloKofiEventsApplication.MetricType.DISTANCE, this));
         sb.append(athleteName)
                 .append(",").append(athleteId)
                 .append(",").append(getStart_date_local())
