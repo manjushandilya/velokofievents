@@ -1,6 +1,7 @@
 package com.velokofi.events.controller;
 
 import com.velokofi.events.VeloKofiEventsApplication;
+import com.velokofi.events.cron.ActivityUpdater;
 import com.velokofi.events.cron.StatisticsUpdater;
 import com.velokofi.events.model.ActivityStatistics;
 import com.velokofi.events.model.AthleteActivity;
@@ -44,6 +45,9 @@ public class DocumentController {
     @Autowired
     private StatisticsUpdater statisticsUpdater;
 
+    @Autowired
+    private ActivityUpdater activityUpdater;
+
     @GetMapping("/documents/statistics")
     public String getStatistics(@RequestParam(name = "action", required = false) final String action) throws Exception {
         if (action != null) {
@@ -62,7 +66,7 @@ public class DocumentController {
         if (action != null) {
             switch (action) {
                 case "refresh":
-                    statisticsUpdater.run();
+                    activityUpdater.run();
                     break;
             }
         }

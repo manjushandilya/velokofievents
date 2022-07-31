@@ -18,6 +18,8 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -29,6 +31,7 @@ import static java.util.stream.Collectors.toList;
 public class ActivityUpdater {
 
     private static final Logger LOG = LoggerFactory.getLogger(ActivityUpdater.class);
+    public static final ZoneOffset IST = ZoneOffset.of("+05:30");
 
     @Autowired
     private AthleteActivityRepository athleteActivityRepo;
@@ -39,7 +42,7 @@ public class ActivityUpdater {
     //@Scheduled(fixedDelay = 1 * 60 * 1000 * 60, initialDelay = 60 * 1000 * 60)
     @Scheduled(cron = "0 0 0 * * *")
     public void run() throws Exception {
-        LOG.info("Running BeatYesterday2022ActivityUpdater scheduled task at: " + LocalDateTime.now());
+        LOG.info("Running ActivityUpdater scheduled task at: " + LocalDateTime.now());
 
         final List<OAuthorizedClient> clients = authorizedClientRepo.findAll();
         final List<String> clientIds = clients.stream().map(c -> c.getPrincipalName()).collect(toList());
@@ -88,9 +91,9 @@ public class ActivityUpdater {
         final StringBuilder builder = new StringBuilder();
         builder.append("https://www.strava.com/api/v3/athlete/activities");
         builder.append("?per_page=").append(VeloKofiEventsApplication.ACTIVITIES_PER_PAGE);
-        //builder.append("&after=").append(VeloKofiEventsApplication.BY_2021_START_TIMESTAMP);
-        //final OffsetDateTime after = OffsetDateTime.of(2022, 5, 1, 0, 0, 0, 0, ZoneOffset.of("+05:30"));
-        //builder.append("&after=").append(after.toEpochSecond());
+        builder.append("&after=").append(VeloKofiEventsApplication.BY_2021_START_TIMESTAMP);
+        final OffsetDateTime after = OffsetDateTime.of(2022, 1, 1, 0, 0, 0, 0, IST);
+        builder.append("&after=").append(after.toEpochSecond());
         //builder.append("&before=").append(VeloKofiEventsApplication.BY_2021_END_TIMESTAMP);
         //final OffsetDateTime before = OffsetDateTime.of(2022, 7, 31, 23, 59, 59, 999999999, ZoneOffset.of("+05:30"));
         //builder.append("&before=").append(before.toEpochSecond());
