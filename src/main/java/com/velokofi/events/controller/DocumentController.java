@@ -44,8 +44,8 @@ public class DocumentController {
     @Autowired
     private Pledge2022StatisticsUpdater pledge2022StatisticsUpdater;
 
-    @GetMapping("/documents/activities")
-    public String getAthleteActivities(@RequestParam(name = "action") final String action) throws Exception {
+    @GetMapping("/documents/statistics")
+    public String getStatistics(@RequestParam(name = "action", required = false) final String action) throws Exception {
         if (action != null) {
             switch (action) {
                 case "refresh":
@@ -55,6 +55,19 @@ public class DocumentController {
         }
         final List<ActivityStatistics> statistics = activityStatisticsRepo.findAll();
         return VeloKofiEventsApplication.MAPPER.writeValueAsString(statistics);
+    }
+
+    @GetMapping("/documents/activities")
+    public String getAthleteActivities(@RequestParam(name = "action", required = false) final String action) throws Exception {
+        if (action != null) {
+            switch (action) {
+                case "refresh":
+                    pledge2022StatisticsUpdater.run();
+                    break;
+            }
+        }
+        final List<AthleteActivity> activities = athleteActivityRepo.findAll();
+        return VeloKofiEventsApplication.MAPPER.writeValueAsString(activities);
     }
 
     @GetMapping("/documents/activities/{athleteId}")
@@ -78,6 +91,7 @@ public class DocumentController {
 
         switch (action) {
             case "clear":
+                LOG.info("Clearing clearClient with id: " + clientId);
                 authorizedClientRepo.deleteById(String.valueOf(clientId));
                 break;
             default:
@@ -91,6 +105,7 @@ public class DocumentController {
     public String operation(@RequestParam(name = "action") final String action) throws Exception {
         switch (action) {
             case "updateAthleteNames":
+                LOG.info("Updating athleteNames...");
                 final List<OAuthorizedClient> clients = authorizedClientRepo.findAll();
                 for (final OAuthorizedClient client: clients) {
                     if (client.getAthleteName() == null || client.getAthleteName().isBlank()) {
@@ -109,20 +124,27 @@ public class DocumentController {
                 }
                 break;
             case "clearStatistics":
+                LOG.info("Clearing activityStatisticsRepo...");
                 activityStatisticsRepo.deleteAll();
                 break;
             case "clearActivities":
+                LOG.info("Clearing clearActivities...");
                 athleteActivityRepo.deleteAll();
                 break;
             case "clearClients":
+                LOG.info("Clearing clearClients...");
                 authorizedClientRepo.deleteAll();
                 break;
             case "clearAll":
+                LOG.info("Clearing activityStatisticsRepo...");
                 activityStatisticsRepo.deleteAll();
+                LOG.info("Clearing clearActivities...");
                 athleteActivityRepo.deleteAll();
+                LOG.info("Clearing clearClients...");
                 authorizedClientRepo.deleteAll();
                 break;
             case "cleanup":
+                LOG.info("Cleaning up...");
                 final List<Team> teams = hungryVelos2022TeamsRepository.listTeams();
                 final List<Long> configuredClientIds = teams.stream().flatMap(t -> t.getMembers().stream()).map(tm -> tm.getId()).collect(toList());
 
