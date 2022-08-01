@@ -201,6 +201,7 @@ public class DocumentController {
         STRAVA_ID_VS_NAME_MAP.put("65820756", "Nanda Kishor G D");
         STRAVA_ID_VS_NAME_MAP.put("65392239", "Vipin Devis");
         STRAVA_ID_VS_NAME_MAP.put("64907699", "Amarnath Vali");
+        STRAVA_ID_VS_NAME_MAP.put("93507523", "Amarnath Vali");
         STRAVA_ID_VS_NAME_MAP.put("63014939", "Srinidhi Bharadwaj");
         STRAVA_ID_VS_NAME_MAP.put("61999014", "Vidyaprasanna Kambalur");
         STRAVA_ID_VS_NAME_MAP.put("61335755", "Sampige Santhosh");
