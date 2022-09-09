@@ -62,11 +62,19 @@ public class DocumentController {
     }
 
     @GetMapping("/documents/activities")
-    public String getAthleteActivities(@RequestParam(name = "action", required = false) final String action) throws Exception {
+    public String getAthleteActivities(
+            @RequestParam(name = "action", required = false) final String action,
+            @RequestParam(name = "after", required = false) final String after,
+            @RequestParam(name = "before", required = false) final String before
+    ) throws Exception {
         if (action != null) {
             switch (action) {
                 case "refresh":
-                    activityUpdater.run();
+                    if (after != null && before != null) {
+                        activityUpdater.fetch(after, before);
+                    } else {
+                        activityUpdater.run();
+                    }
                     break;
             }
         }

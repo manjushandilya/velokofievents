@@ -39,6 +39,10 @@ public class ActivityUpdater {
     //@Scheduled(fixedDelay = 1 * 60 * 1000 * 60, initialDelay = 60 * 1000 * 60)
     @Scheduled(cron = "0 0 0 * * *")
     public void run() throws Exception {
+        fetch(TS_START, TS_END);
+    }
+
+    public void fetch(final String after, final String before) throws Exception {
         LOG.info("Running ActivityUpdater scheduled task at: " + LocalDateTime.now());
 
         final List<OAuthorizedClient> clients = authorizedClientRepo.findAll();
@@ -47,7 +51,7 @@ public class ActivityUpdater {
         for (final String clientId : clientIds) {
             LOG.info("Fetching activities for clientId: " + clientId);
             try {
-                final List<AthleteActivity> activities = getActivities(clientId);
+                final List<AthleteActivity> activities = getActivities(clientId, after, before);
                 if (!activities.isEmpty()) {
                     LOG.info("Saving " + activities.size() + " activities for clientId: " + clientId);
                     final List<AthleteActivity> filteredActivities = activities.stream()
@@ -73,7 +77,7 @@ public class ActivityUpdater {
         }
     }
 
-    private List<AthleteActivity> getActivities(final String clientId) throws Exception {
+    private List<AthleteActivity> getActivities(final String clientId, final String after, final String before) throws Exception {
         final RestTemplate restTemplate = new RestTemplate();
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -85,7 +89,7 @@ public class ActivityUpdater {
         int pageNumber = 1;
         while (true) {
             final ResponseEntity<String> response = restTemplate.exchange(
-                    getUri(pageNumber), HttpMethod.GET, request, String.class
+                    getUri(pageNumber, after, before), HttpMethod.GET, request, String.class
             );
             final AthleteActivity[] athleteActivities = MAPPER.readValue(
                     response.getBody(), AthleteActivity[].class
@@ -99,12 +103,12 @@ public class ActivityUpdater {
         return activities;
     }
 
-    private URI getUri(final int pageNumber) throws URISyntaxException {
+    private URI getUri(final int pageNumber, final String after, final String before) throws URISyntaxException {
         final StringBuilder builder = new StringBuilder();
         builder.append("https://www.strava.com/api/v3/athlete/activities");
         builder.append("?per_page=").append(MAX_ACTIVITIES_PER_PAGE);
-        builder.append("&after=").append(TS_START);
-        builder.append("&before=").append(TS_END);
+        builder.append("&after=").append(after);
+        builder.append("&before=").append(before);
         builder.append("&page=").append(pageNumber);
 
         return new URI(builder.toString());

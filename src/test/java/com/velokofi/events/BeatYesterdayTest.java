@@ -5,6 +5,8 @@ import com.velokofi.events.model.BeatYesterdayPhasesSummary;
 import org.junit.jupiter.api.Test;
 
 import java.time.Month;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -127,10 +129,15 @@ public class BeatYesterdayTest {
 
     @Test
     public void deleteMe() {
-        for (int month = Month.AUGUST.getValue(); month < Month.DECEMBER.getValue(); month++) {
+        final ZoneOffset IST = ZoneOffset.of("+05:30");
+        final OffsetDateTime after = OffsetDateTime.of(2022, 8, 1, 0, 0, 0, 0, IST);
+        System.out.println("After: " + after.toEpochSecond());
 
-        }
+        final OffsetDateTime before = OffsetDateTime.of(2022, 8, 31, 11, 59, 59, 0, IST);
+        System.out.println("Before: " + before.toEpochSecond());
 
     }
+
+
 
 }

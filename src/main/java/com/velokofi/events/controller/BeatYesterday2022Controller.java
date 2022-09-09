@@ -26,7 +26,7 @@ public class BeatYesterday2022Controller {
     private static final Logger LOG = LoggerFactory.getLogger(BeatYesterday2022Controller.class);
 
     @Autowired
-    private AthleteActivityRepository athleteActivityRepository;
+    private AthleteActivityRepository athleteActivityRepo;
 
     @Autowired
     private OAuthorizedClientRepository authorizedClientRepo;
@@ -43,7 +43,7 @@ public class BeatYesterday2022Controller {
                 Collectors.toMap(OAuthorizedClient::getPrincipalName, BeatYesterday2022Controller::apply)
         );
 
-        final List<AthleteActivity> activities = athleteActivityRepository.findAll();
+        final List<AthleteActivity> activities = athleteActivityRepo.findAll();
         final Map<String, List<AthleteActivity>> athleteActivities = activities.stream().collect(
                 Collectors.groupingBy(a -> String.valueOf(a.getAthlete().getId()))
         );
@@ -68,20 +68,6 @@ public class BeatYesterday2022Controller {
                     );
             beatYesterdayPhasesSummaries.add(beatYesterdayPhasesSummary);
         }
-
-        /*
-        final List<AthleteActivity> athleteActivities = new ArrayList<>();
-        for (int i = 1; i <= 31; i++) {
-            athleteActivities.add(new AthleteActivity()
-                    .setStart_date_local("2021-06-" + (i > 9 ? "" : "0") + i + "T06:00:00Z").setDistance(i * 1000));
-        }
-
-        final BeatYesterdayPhasesSummary summary = new BeatYesterdayPhasesSummary(
-                37177283L, "Manjunath Sathyanarayana",
-                athleteActivities, 2021, startMonth, endMonth
-        );
-        beatYesterdayPhasesSummaries.add(summary);
-        */
 
         final ModelAndView mav = new ModelAndView("beatYesterday");
         mav.addObject("months", months);
