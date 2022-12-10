@@ -16,11 +16,10 @@ spring:
           strava:
             provider: strava-provider
             client-id: 58845
-            client-secret: c82e3a33a6370664bc5cc688082e041561226a76
+            client-secret: 17d785489dab9c4242d13aa0711fcbcb5edca6a0
             client-authentication-method: POST
             authorization-grant-type: authorization_code
-            redirect-uri: https://neois.online/login/oauth2/code
-            #redirect-uri: http://localhost:8080/login/oauth2/code/
+            redirect-uri: https://neois.online/login/oauth2/code/
             scope:
               - activity:read,profile:read_all
         provider:
