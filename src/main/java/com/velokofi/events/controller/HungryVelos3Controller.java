@@ -2,8 +2,8 @@ package com.velokofi.events.controller;
 
 import com.velokofi.events.VeloKofiEventsApplication;
 import com.velokofi.events.model.*;
-import com.velokofi.events.model.hungryvelos2.LeaderBoard;
-import com.velokofi.events.model.hungryvelos2.RogueActivities;
+import com.velokofi.events.model.hungryvelos3.LeaderBoard;
+import com.velokofi.events.model.hungryvelos3.RogueActivities;
 import com.velokofi.events.persistence.AthleteActivityRepository;
 import com.velokofi.events.persistence.HungryVelos3TeamsRepository;
 import lombok.Getter;
@@ -218,7 +218,7 @@ public final class HungryVelos3Controller {
         leaderBoard.setMrThuliMaga(summingAggregateLong(activities, teamMembers, "M"));
         leaderBoard.setMsThuliMaga(summingAggregateLong(activities, teamMembers, "F"));
 
-        final ModelAndView mav = new ModelAndView("hv2022");
+        final ModelAndView mav = new ModelAndView("hv2023");
         mav.addObject("leaderBoard", leaderBoard);
         return mav;
     }
