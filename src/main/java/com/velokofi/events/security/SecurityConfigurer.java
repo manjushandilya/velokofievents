@@ -29,6 +29,8 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                                 "/error",
                                 "/documents/**",
                                 "/hungryvelos",
+                                "/hungryvelos2",
+                                "/hungryvelos3",
                                 "/pledge",
                                 "/beatYesterday",
                                 "/webjars/**",
