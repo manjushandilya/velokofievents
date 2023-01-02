@@ -103,6 +103,8 @@ public class DocumentController {
         STRAVA_ID_VS_NAME_MAP.put("44516714", "Amit Krishna");
         STRAVA_ID_VS_NAME_MAP.put("95295744", "Roopa Rangaswamy");
         STRAVA_ID_VS_NAME_MAP.put("85359369", "Madhusudan Bangalore Prabhakar");
+        STRAVA_ID_VS_NAME_MAP.put("108585310", "Adithya B");
+        STRAVA_ID_VS_NAME_MAP.put("96400359", "Swathi Sreenath");
     }
 
     @Autowired
