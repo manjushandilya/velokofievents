@@ -4,7 +4,8 @@
 
 <body th:fragment="topbar">
 
-<nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white" id="sidenavAccordion">
+<nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white"
+     id="sidenavAccordion">
     <!-- Navbar Brand-->
     <!-- * * Tip * * You can use text or an image for your navbar brand.-->
     <!-- * * * * * * When using an image, we recommend the SVG format.-->
@@ -24,16 +25,18 @@
             </button>
         </li>
         <li class="nav-item dropdown no-caret dropdown-user me-3 me-lg-4" th:if="${session.athleteProfile != null}">
-            <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage"
-               href="javascript:void(0);" role="button" data-bs-toggle="dropdown"
-               aria-haspopup="true" aria-expanded="false">
-               <img class="img-fluid" th:src="${session.athleteProfile.profile_medium}"/>
+            <a aria-expanded="false" aria-haspopup="true"
+               class="btn btn-icon btn-transparent-dark dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);"
+               id="navbarDropdownUserImage" role="button">
+                <img class="img-fluid" th:src="${session.athleteProfile.profile_medium}"/>
             </a>
-            <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownUserImage">
+            <div aria-labelledby="navbarDropdownUserImage"
+                 class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up">
                 <h6 class="dropdown-header d-flex align-items-center">
                     <img class="dropdown-user-img" th:src="${session.athleteProfile.profile_medium}"/>
                     <div class="dropdown-user-details">
-                        <div class="dropdown-user-details-name" th:text="${session.athleteProfile.firstname + ' ' + session.athleteProfile.lastname}"/>
+                        <div class="dropdown-user-details-name"
+                             th:text="${session.athleteProfile.firstname + ' ' + session.athleteProfile.lastname}"/>
                     </div>
                 </h6>
             </div>

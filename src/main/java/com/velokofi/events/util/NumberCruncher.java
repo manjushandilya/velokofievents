@@ -2,8 +2,8 @@ package com.velokofi.events.util;
 
 import com.velokofi.events.VeloKofiEventsApplication;
 import com.velokofi.events.model.AthleteActivity;
-import com.velokofi.events.model.hungryvelos.Team;
-import com.velokofi.events.model.hungryvelos.TeamMember;
+import com.velokofi.events.model.Team;
+import com.velokofi.events.model.TeamMember;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -39,9 +39,9 @@ public final class NumberCruncher {
     }
 
     public static List<Map.Entry<String, Double>> summingAggregateDoubleNoLimit(final List<AthleteActivity> activities,
-                                                                         final List<TeamMember> teamMembers,
-                                                                         final String gender,
-                                                                         final VeloKofiEventsApplication.MetricType metricType) {
+                                                                                final List<TeamMember> teamMembers,
+                                                                                final String gender,
+                                                                                final VeloKofiEventsApplication.MetricType metricType) {
         final Map<String, Double> aggregateMap = activities.stream()
                 .filter(a -> filterBasedOnGender(a.getAthlete(), teamMembers, gender))
                 .collect(groupingBy(
@@ -69,9 +69,9 @@ public final class NumberCruncher {
     }
 
     public static List<Map.Entry<String, Double>> averagingAggregateDoubleNoLimit(final List<AthleteActivity> activities,
-                                                                           final List<TeamMember> teamMembers,
-                                                                           final String gender,
-                                                                           final VeloKofiEventsApplication.MetricType metricType) {
+                                                                                  final List<TeamMember> teamMembers,
+                                                                                  final String gender,
+                                                                                  final VeloKofiEventsApplication.MetricType metricType) {
         final Map<String, Double> aggregateMap = activities.stream()
                 .filter(a -> filterBasedOnGender(a.getAthlete(), teamMembers, gender))
                 .collect(groupingBy(
@@ -99,8 +99,8 @@ public final class NumberCruncher {
     }
 
     public static List<Map.Entry<String, Long>> summingAggregateLongNoLimit(final List<AthleteActivity> activities,
-                                                                     final List<TeamMember> teamMembers,
-                                                                     final String gender) {
+                                                                            final List<TeamMember> teamMembers,
+                                                                            final String gender) {
 
         final Map<String, Long> map = activities.stream()
                 .filter(a -> getGenderFromId(a.getAthlete().getId(), teamMembers).equalsIgnoreCase(gender))
@@ -193,7 +193,7 @@ public final class NumberCruncher {
         return new BigDecimal(val).setScale(2, RoundingMode.HALF_UP).doubleValue();
     }
 
-    public static BigDecimal round(final BigDecimal input){
+    public static BigDecimal round(final BigDecimal input) {
         return input.round(
                 new MathContext(
                         input.toBigInteger().toString().length(),

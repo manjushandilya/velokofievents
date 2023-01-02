@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="Events by VeloKofi" />
-    <meta name="author" content="manjax@velokofi.com" />
+    <meta charset="utf-8"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+    <meta content="Events by VeloKofi" name="description"/>
+    <meta content="manjax@velokofi.com" name="author"/>
     <title>Hungry Velos 2.0: VeloKofi Events</title>
-    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/litepicker/dist/css/litepicker.css" rel="stylesheet" />
-    <link href="css/styles.css" rel="stylesheet" />
-    <link rel="icon" type="image/x-icon" href="assets/img/favicon.png" />
-    <script data-search-pseudo-elements defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.28.0/feather.min.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/litepicker/dist/css/litepicker.css" rel="stylesheet"/>
+    <link href="css/styles.css" rel="stylesheet"/>
+    <link href="assets/img/favicon.png" rel="icon" type="image/x-icon"/>
+    <script crossorigin="anonymous" data-search-pseudo-elements
+            defer
+            src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
+    <script crossorigin="anonymous"
+            src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.28.0/feather.min.js"></script>
 </head>
 <body class="nav-sticky">
 
@@ -32,9 +35,10 @@
                                 </h1>
                                 <div class="page-header-subtitle">A six week long challenge starting from
                                     <b>00:00 on 08 Jan 2022 </b> and ending on
-                                    <b>23:59 on 18 Feb 2022</b> to encourage the cyclist in all of us!</div>
+                                    <b>23:59 on 18 Feb 2022</b> to encourage the cyclist in all of us!
+                                </div>
                             </div>
-                            <nav class="mt-4 rounded" aria-label="breadcrumb">
+                            <nav aria-label="breadcrumb" class="mt-4 rounded">
                                 <ol class="breadcrumb px-3 py-2 rounded mb-0">
                                     <li class="breadcrumb-item">Home</li>
                                     <li class="breadcrumb-item active">Hungry Velos 2.0</li>
@@ -54,7 +58,8 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="me-3">
                                         <div class="text-white-75 small">Distance</div>
-                                        <div class="text-lg fw-bold" th:text="${leaderBoard.totalDistance} + ' kms'"></div>
+                                        <div class="text-lg fw-bold"
+                                             th:text="${leaderBoard.totalDistance} + ' kms'"></div>
                                     </div>
                                     <i class="feather-xl text-white-50" data-feather="info"></i>
                                 </div>
@@ -71,7 +76,8 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="me-3">
                                         <div class="text-white-75 small">Elevation Gain</div>
-                                        <div class="text-lg fw-bold" th:text="${leaderBoard.totalElevation} + 'mts'"></div>
+                                        <div class="text-lg fw-bold"
+                                             th:text="${leaderBoard.totalElevation} + 'mts'"></div>
                                     </div>
                                     <i class="feather-xl text-white-50" data-feather="arrow-up"></i>
                                 </div>
@@ -105,7 +111,8 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="me-3">
                                         <div class="text-white-75 small">Moving Time</div>
-                                        <div class="text-lg fw-bold" th:text="${leaderBoard.movingTimeInHumanReadableFormat}"></div>
+                                        <div class="text-lg fw-bold"
+                                             th:text="${leaderBoard.movingTimeInHumanReadableFormat}"></div>
                                     </div>
                                     <i class="feather-xl text-white-50" data-feather="calendar"></i>
                                 </div>
@@ -122,7 +129,8 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="me-3">
                                         <div class="text-white-75 small">Rider Average</div>
-                                        <div class="text-lg fw-bold" th:text="${leaderBoard.riderAverage} + ' kms'"></div>
+                                        <div class="text-lg fw-bold"
+                                             th:text="${leaderBoard.riderAverage} + ' kms'"></div>
                                     </div>
                                     <i class="feather-xl text-white-50" data-feather="octagon"></i>
                                 </div>
@@ -160,7 +168,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="chart-bar">
-                                    <canvas id="teamAvgDistanceChart" width="100%" height="30"></canvas>
+                                    <canvas height="30" id="teamAvgDistanceChart" width="100%"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -172,7 +180,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="chart-bar">
-                                    <canvas id="teamAvgElevationChart" width="100%" height="30"></canvas>
+                                    <canvas height="30" id="teamAvgElevationChart" width="100%"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -184,7 +192,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="chart-bar">
-                                    <canvas id="teamAvgRidesChart" width="100%" height="30"></canvas>
+                                    <canvas height="30" id="teamAvgRidesChart" width="100%"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -200,7 +208,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="chart-bar">
-                                    <canvas id="msAlemaariChart" width="100%" height="30"></canvas>
+                                    <canvas height="30" id="msAlemaariChart" width="100%"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -212,7 +220,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="chart-bar">
-                                    <canvas id="mrAlemaariChart" width="100%" height="30"></canvas>
+                                    <canvas height="30" id="mrAlemaariChart" width="100%"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -228,7 +236,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="chart-bar">
-                                    <canvas id="bettammaChart" width="100%" height="30"></canvas>
+                                    <canvas height="30" id="bettammaChart" width="100%"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -240,7 +248,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="chart-bar">
-                                    <canvas id="bettappaChart" width="100%" height="30"></canvas>
+                                    <canvas height="30" id="bettappaChart" width="100%"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -256,7 +264,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="chart-bar">
-                                    <canvas id="minchinaOtammaChart" width="100%" height="30"></canvas>
+                                    <canvas height="30" id="minchinaOtammaChart" width="100%"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -268,7 +276,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="chart-bar">
-                                    <canvas id="minchinaOtappaChart" width="100%" height="30"></canvas>
+                                    <canvas height="30" id="minchinaOtappaChart" width="100%"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -284,7 +292,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="chart-bar">
-                                    <canvas id="msThuliMagaChart" width="100%" height="30"></canvas>
+                                    <canvas height="30" id="msThuliMagaChart" width="100%"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -296,7 +304,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="chart-bar">
-                                    <canvas id="mrThuliMagaChart" width="100%" height="30"></canvas>
+                                    <canvas height="30" id="mrThuliMagaChart" width="100%"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -309,40 +317,40 @@
                     <div class="card-body">
                         <table id="individualSummaryTable">
                             <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Distance</th>
-                                    <th>Elevation</th>
-                                    <th>Avg Speed</th>
-                                    <th>Rides</th>
-                                    <th>Team</th>
-                                </tr>
+                            <tr>
+                                <th>Name</th>
+                                <th>Distance</th>
+                                <th>Elevation</th>
+                                <th>Avg Speed</th>
+                                <th>Rides</th>
+                                <th>Team</th>
+                            </tr>
                             </thead>
                             <tfoot>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Distance</th>
-                                    <th>Elevation</th>
-                                    <th>Avg Speed</th>
-                                    <th>Rides</th>
-                                    <th>Team</th>
-                                </tr>
+                            <tr>
+                                <th>Name</th>
+                                <th>Distance</th>
+                                <th>Elevation</th>
+                                <th>Avg Speed</th>
+                                <th>Rides</th>
+                                <th>Team</th>
+                            </tr>
                             </tfoot>
                             <tbody>
-                                <tr th:each="athleteSummary: ${leaderBoard.athleteSummaries}">
-                                    <td>
-                                        <img width="30" height="25"
-                                             th:src="${athleteSummary.gender == 'M' ? 'assets/img/undraw_profile.svg' : 'assets/img/undraw_profile_1.svg'}"/>
-                                        <span th:text="${athleteSummary.name}">Name</span>
-                                        <img width="25" height="25"
-                                             th:if="${athleteSummary.captain}" src="assets/img/star.png"/>
-                                    </td>
-                                    <td><span th:text="${athleteSummary.distance}">Distance</span></td>
-                                    <td><span th:text="${athleteSummary.elevation}">Elevation</span></td>
-                                    <td><span th:text="${athleteSummary.avgSpeed}">Avg Speed</span></td>
-                                    <td><span th:text="${athleteSummary.rides}">Rides</span></td>
-                                    <td><span th:text="${athleteSummary.team}">Team</span></td>
-                                </tr>
+                            <tr th:each="athleteSummary: ${leaderBoard.athleteSummaries}">
+                                <td>
+                                    <img height="25" th:src="${athleteSummary.gender == 'M' ? 'assets/img/undraw_profile.svg' : 'assets/img/undraw_profile_1.svg'}"
+                                         width="30"/>
+                                    <span th:text="${athleteSummary.name}">Name</span>
+                                    <img height="25" src="assets/img/star.png"
+                                         th:if="${athleteSummary.captain}" width="25"/>
+                                </td>
+                                <td><span th:text="${athleteSummary.distance}">Distance</span></td>
+                                <td><span th:text="${athleteSummary.elevation}">Elevation</span></td>
+                                <td><span th:text="${athleteSummary.avgSpeed}">Avg Speed</span></td>
+                                <td><span th:text="${athleteSummary.rides}">Rides</span></td>
+                                <td><span th:text="${athleteSummary.team}">Team</span></td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -402,10 +410,11 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script crossorigin="anonymous"
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/scripts.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+<script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+<script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"></script>
 <script src="js/datatables/datatables-simple-demo.js"></script>
 
 <script th:inline="javascript">
@@ -761,6 +770,7 @@
             }
         });
     };
+
 
 </script>
 

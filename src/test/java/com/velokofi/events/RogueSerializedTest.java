@@ -1,7 +1,7 @@
 package com.velokofi.events;
 
 import com.velokofi.events.model.AthleteActivity;
-import com.velokofi.events.model.hungryvelos.RogueActivities;
+import com.velokofi.events.model.hungryvelos2.RogueActivities;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;

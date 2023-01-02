@@ -30,35 +30,9 @@ public class BeatYesterdayPhasesSummary {
     private static final Double MAX_LONGEST_RIDE = 200.0;
     private static final Double MIN_TOTAL_DISTANCE = 500.0;
     private static final Double MAX_TOTAL_DISTANCE = 1200.0;
-
-    @Getter
-    @Setter
-    @ToString
-    public static class PhaseMetric {
-        private Double actualLongestRideDistance = 0.0;
-        private Double targetLongestRideDistance = 0.0;
-
-        private boolean longestRideDistanceTargetAchieved;
-
-        private Double actualTotalDistance = 0.0;
-        private Double targetTotalDistance = 0.0;
-
-        private boolean totalDistanceTargetAchieved;
-
-        public String print() {
-            final StringBuilder builder = new StringBuilder();
-            builder.append("LongestRide=").append(round(actualLongestRideDistance)).append("/").append(round(targetLongestRideDistance));
-            builder.append("(").append(longestRideDistanceTargetAchieved);
-            builder.append("), Distance=").append(round(actualTotalDistance)).append("/").append(round(targetTotalDistance));
-            builder.append("(").append(totalDistanceTargetAchieved).append(")");
-            return builder.toString();
-        }
-    }
-
     private final String athleteId;
     private final String athleteName;
     private final Map<Month, PhaseMetric> phaseMetrics;
-
     public BeatYesterdayPhasesSummary(
             final String athleteId, final String athleteName,
             final List<AthleteActivity> athleteActivities,
@@ -143,6 +117,30 @@ public class BeatYesterdayPhasesSummary {
         return athleteActivities.stream()
                 .filter(a -> isBetween(after, before, parse(a.getStart_date_local())))
                 .collect(toList());
+    }
+
+    @Getter
+    @Setter
+    @ToString
+    public static class PhaseMetric {
+        private Double actualLongestRideDistance = 0.0;
+        private Double targetLongestRideDistance = 0.0;
+
+        private boolean longestRideDistanceTargetAchieved;
+
+        private Double actualTotalDistance = 0.0;
+        private Double targetTotalDistance = 0.0;
+
+        private boolean totalDistanceTargetAchieved;
+
+        public String print() {
+            final StringBuilder builder = new StringBuilder();
+            builder.append("LongestRide=").append(round(actualLongestRideDistance)).append("/").append(round(targetLongestRideDistance));
+            builder.append("(").append(longestRideDistanceTargetAchieved);
+            builder.append("), Distance=").append(round(actualTotalDistance)).append("/").append(round(targetTotalDistance));
+            builder.append("(").append(totalDistanceTargetAchieved).append(")");
+            return builder.toString();
+        }
     }
 
 }

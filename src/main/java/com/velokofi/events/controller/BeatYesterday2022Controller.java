@@ -31,6 +31,11 @@ public class BeatYesterday2022Controller {
     @Autowired
     private OAuthorizedClientRepository authorizedClientRepo;
 
+    private static String apply(final OAuthorizedClient client) {
+        LOG.error("client.getAthleteName() is null for: " + client.getPrincipalName());
+        return client.getAthleteName() != null ? client.getAthleteName() : client.getPrincipalName();
+    }
+
     @GetMapping("/beatYesterday")
     public ModelAndView execute() throws Exception {
         final Month startMonth = Month.MAY, endMonth = Month.JULY;
@@ -77,11 +82,6 @@ public class BeatYesterday2022Controller {
 
     private ActivityStatisticsSummary fetch(final ActivityStatistics activityStatistics) {
         return new ActivityStatisticsSummary(activityStatistics);
-    }
-
-    private static String apply(final OAuthorizedClient client) {
-        LOG.error("client.getAthleteName() is null for: " + client.getPrincipalName());
-        return client.getAthleteName() != null ? client.getAthleteName() : client.getPrincipalName();
     }
 
 }

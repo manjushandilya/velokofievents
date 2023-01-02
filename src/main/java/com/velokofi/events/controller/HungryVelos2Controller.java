@@ -1,10 +1,10 @@
 package com.velokofi.events.controller;
 
 import com.velokofi.events.VeloKofiEventsApplication;
-import com.velokofi.events.model.AthleteActivity;
-import com.velokofi.events.model.AthleteSummary;
-import com.velokofi.events.model.hungryvelos.*;
-import com.velokofi.events.persistence.HungryVelos2022TeamsRepository;
+import com.velokofi.events.model.*;
+import com.velokofi.events.model.hungryvelos2.LeaderBoard;
+import com.velokofi.events.model.hungryvelos2.RogueActivities;
+import com.velokofi.events.persistence.HungryVelos2TeamsRepository;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -16,11 +16,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
+import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -32,17 +32,31 @@ import static java.util.stream.Collectors.*;
 @RestController
 @Getter
 @Setter
-public final class HungryVelos2022Controller {
+public final class HungryVelos2Controller {
 
-    private static final Logger LOG = LoggerFactory.getLogger(HungryVelos2022Controller.class);
+    private static final Logger LOG = LoggerFactory.getLogger(HungryVelos2Controller.class);
 
-    @Autowired
-    private HungryVelos2022TeamsRepository hungryVelos2022TeamsRepository;
+    private static final String HV2_START_TIMESTAMP; // 00:00:00 on 08 Jan 2022
 
-    public HungryVelos2022Controller() {
+    static {
+        final OffsetDateTime dateTime = OffsetDateTime.of(2022, 1, 8, 0, 0, 0, 0, VeloKofiEventsApplication.IST);
+        HV2_START_TIMESTAMP = String.valueOf(dateTime.toEpochSecond());
     }
 
-    @GetMapping("/hungryvelos")
+    private static final String HV2_END_TIMESTAMP; // 23:59:59 on 18 Feb 2022
+
+    static {
+        final OffsetDateTime dateTime = OffsetDateTime.of(2022, 2, 18, 23, 59, 59, 0, VeloKofiEventsApplication.IST);
+        HV2_END_TIMESTAMP = String.valueOf(dateTime.toEpochSecond());
+    }
+
+    @Autowired
+    private HungryVelos2TeamsRepository hungryVelos2TeamsRepository;
+
+    public HungryVelos2Controller() {
+    }
+
+    @GetMapping("/hungryvelos2")
     public ModelAndView execute() throws Exception {
         final LeaderBoard leaderBoard = new LeaderBoard();
         final Path path = Paths.get("src", "main", "resources", "static", "json", "hungryVelos2.json");
@@ -60,7 +74,7 @@ public final class HungryVelos2022Controller {
             activities.add(rogueActivity);
         }
 
-        final List<Team> teams = hungryVelos2022TeamsRepository.listTeams();
+        final List<Team> teams = hungryVelos2TeamsRepository.listTeams();
         final List<TeamMember> teamMembers = teams.stream().flatMap(t -> t.getMembers().stream()).collect(toList());
 
         { // event totals

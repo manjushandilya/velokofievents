@@ -88,17 +88,6 @@ public class AthleteActivity implements Serializable {
         return Objects.hash(id);
     }
 
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    @ToString(includeFieldNames = false)
-    public static final class Athlete implements Serializable {
-        private long id;
-
-        @CsvIgnore
-        private int resource_state;
-    }
-
     public String toCSV() {
         final StringBuilder sb = new StringBuilder();
         final String athleteId = String.valueOf(getAthlete().getId());
@@ -111,6 +100,17 @@ public class AthleteActivity implements Serializable {
                 .append(",").append(getTotal_elevation_gain())
                 .append(",").append(getElapsed_time());
         return sb.toString();
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @ToString(includeFieldNames = false)
+    public static final class Athlete implements Serializable {
+        private long id;
+
+        @CsvIgnore
+        private int resource_state;
     }
 
 }

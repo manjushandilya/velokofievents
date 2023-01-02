@@ -1,9 +1,9 @@
 package com.velokofi.events;
 
 import com.velokofi.events.model.AthleteActivity;
-import com.velokofi.events.model.hungryvelos.Team;
-import com.velokofi.events.model.hungryvelos.TeamMember;
-import com.velokofi.events.persistence.HungryVelos2022TeamsRepository;
+import com.velokofi.events.model.Team;
+import com.velokofi.events.model.TeamMember;
+import com.velokofi.events.persistence.HungryVelos2TeamsRepository;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -35,7 +35,7 @@ public class ActivityCountTest {
 
         System.out.println("allActivities.size(): " + allActivities.size());
 
-        final HungryVelos2022TeamsRepository hungryVelos2022TeamsRepository = new HungryVelos2022TeamsRepository();
+        final HungryVelos2TeamsRepository hungryVelos2022TeamsRepository = new HungryVelos2TeamsRepository();
 
         final List<Team> teams = hungryVelos2022TeamsRepository.listTeams();
         final List<TeamMember> teamMembers = teams.stream().flatMap(t -> t.getMembers().stream()).collect(toList());

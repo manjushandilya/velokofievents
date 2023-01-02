@@ -1,4 +1,4 @@
-package com.velokofi.events.model.hungryvelos;
+package com.velokofi.events.model.hungryvelos2;
 
 public interface TeamConstants {
 

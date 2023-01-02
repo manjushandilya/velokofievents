@@ -2,9 +2,9 @@ package com.velokofi.events.persistence;
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
-import com.velokofi.events.model.hungryvelos.Team;
-import com.velokofi.events.model.hungryvelos.TeamConstants;
-import com.velokofi.events.model.hungryvelos.TeamMember;
+import com.velokofi.events.model.Team;
+import com.velokofi.events.model.TeamMember;
+import com.velokofi.events.model.hungryvelos2.TeamConstants;
 import org.springframework.stereotype.Component;
 
 import java.io.StringReader;
@@ -14,7 +14,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 @Component
-public class HungryVelos2022TeamsRepository implements TeamConstants {
+public class HungryVelos2TeamsRepository implements TeamConstants {
 
     public List<Team> listTeams() throws Exception {
         final StringReader reader = new StringReader(TEAMS_CSV);

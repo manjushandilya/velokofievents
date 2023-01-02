@@ -1,5 +1,6 @@
 package com.velokofi.events.cron;
 
+import com.velokofi.events.VeloKofiEventsApplication;
 import com.velokofi.events.model.AthleteActivity;
 import com.velokofi.events.model.OAuthorizedClient;
 import com.velokofi.events.persistence.AthleteActivityRepository;
@@ -17,11 +18,13 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.velokofi.events.VeloKofiEventsApplication.*;
+import static com.velokofi.events.VeloKofiEventsApplication.MAPPER;
+import static com.velokofi.events.VeloKofiEventsApplication.MAX_ACTIVITIES_PER_PAGE;
 import static java.util.stream.Collectors.toList;
 
 @Component
@@ -30,16 +33,38 @@ import static java.util.stream.Collectors.toList;
 public class ActivityUpdater {
 
     private static final Logger LOG = LoggerFactory.getLogger(ActivityUpdater.class);
+
+    private static final String HV3_START_TIMESTAMP; // 00:00:00 on 01 Jan 2023
+
+    static {
+        final OffsetDateTime dateTime = OffsetDateTime.of(2023, 1, 1, 0, 0, 0, 0, VeloKofiEventsApplication.IST);
+        HV3_START_TIMESTAMP = String.valueOf(dateTime.toEpochSecond());
+    }
+
+    private static final String HV3_END_TIMESTAMP; // 23:59:59 on 31 Jan 2023
+
+    static {
+        final OffsetDateTime dateTime = OffsetDateTime.of(2023, 1, 31, 23, 59, 59, 0, VeloKofiEventsApplication.IST);
+        HV3_END_TIMESTAMP = String.valueOf(dateTime.toEpochSecond());
+    }
+
+    private static final List<String> SUPPORTED_RIDE_TYPES;
+
+    static {
+        SUPPORTED_RIDE_TYPES = new ArrayList<>();
+        SUPPORTED_RIDE_TYPES.add("Ride");
+        SUPPORTED_RIDE_TYPES.add("VirtualRide");
+    }
+
     @Autowired
     private AthleteActivityRepository athleteActivityRepo;
 
     @Autowired
     private OAuthorizedClientRepository authorizedClientRepo;
 
-    //@Scheduled(fixedDelay = 1 * 60 * 1000 * 60, initialDelay = 60 * 1000 * 60)
     @Scheduled(cron = "0 0 0 * * *")
     public void run() throws Exception {
-        fetch(TS_START, TS_END);
+        fetch(HV3_START_TIMESTAMP, HV3_END_TIMESTAMP);
     }
 
     public void fetch(final String after, final String before) throws Exception {
