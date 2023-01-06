@@ -32,5 +32,5 @@ spring:
     mongodb:
       username = doadmin
       password = m7Ja5rI13O2Ej908
-      host = mongodb+srv://db-mongodb-blr1-55579-94274d1e.mongo.ondigitalocean.com
+      host = mongodb+srv://private-db-mongodb-blr1-55579-c14ecfc5.mongo.ondigitalocean.com
       database = admin
